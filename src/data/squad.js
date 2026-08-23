@@ -20,6 +20,7 @@
 //     a decision once confirmed (would move to DEPARTURES in transfers.js, not just squad.js)
 
 export const SQUAD = [
+  {name:"O. Marmoush", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   {name:"S. ", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   // GOALKEEPERS
   {name:"A. Kinsky",      pos:"GK",e:"🇨🇿",apps:0, g:0,con:"2031+1",wc:null,   st:"NO.1 — NEW 5YR DEAL",  sc:"green"},

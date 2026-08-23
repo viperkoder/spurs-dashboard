@@ -107,6 +107,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"23 Aug",
+    text:"Something in De Zerbi's press conference phrasing around Bergvall — 'I don't know if he will stay or leave' — is being read at N17 as more candid than his earlier '100 per cent' line suggested. Whether that reflects a genuine shift in the manager's position or simply a response to a more direct question, those watching closely say the Bergvall situation feels less resolved than the public statements implied. Forest's expected improved bid may test that quickly."
+  },
+  {
+    date:"23 Aug",
+    text:"The double Man City raid landing on the same day as a 3-0 opening defeat has created an odd atmosphere around Hotspur Way — the transfer machinery is visibly still running at full speed even as the football side absorbed its first reality check of the De Zerbi era. Insiders suggest the Marmoush pursuit was locked in well before kick-off at Brentford, and that the result hasn't altered the club's window plans, but the optics of splashing nine-figure sums while sitting bottom of the table are not lost on anyone inside the building."
+  },
+  {
     date:"22 Aug",
     text:"Whispers from inside the Brentford matchday build-up suggest De Zerbi's '100 per cent' Bergvall declaration wasn't simply a diplomatic deflection — those around the training ground read it as a manager drawing a line in the sand, a signal that the squad-depth conversation has shifted since the window opened. Whether that's a genuine change of heart from the player or a manager protecting a number he can't afford to lose before registration closes is the question no one inside is answering cleanly."
   },
@@ -121,13 +129,5 @@ export const ANON_BRIEFS = [
   {
     date:"21 Aug",
     text:"There's a growing sense that Vicario's loan departure to Juventus, confirmed quietly without fanfare, has quietly accelerated a decision on the goalkeeper succession plan — the Verbruggen file, which had gone conspicuously silent, is said to be back on the desk. Whether the loan fee and saved wages actually move the needle on Brighton's asking price is another matter."
-  },
-  {
-    date:"20 Aug",
-    text:"Word filtering through from those close to the double-deal talks is that the Marmoush pursuit is not simply a consolation prize if the Savinho structure needed sweetening — insiders suggest De Zerbi has been pushing for both players as distinct additions serving different tactical roles, and that the Man City relationship opened a door rather than created a package. Whether the financial headroom exists to close both in the same window is the question being asked quietly at Hotspur Way."
-  },
-  {
-    date:"20 Aug",
-    text:"There's a growing sense around N17 that the Gakpo file hasn't been set aside despite Romano's latest update muddying the waters — the phrase doing the rounds is that 'Liverpool's answer depends on something that hasn't happened yet,' which those inside the building are interpreting as a dominoes situation rather than a dead end. The next move may not originate at Spurs."
   },
 ];
