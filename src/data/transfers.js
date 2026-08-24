@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:40, st:"warm", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:35, st:"warm", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -107,6 +107,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"24 Aug",
+    text:"The mood around the Gakpo pursuit has shifted noticeably in the last 24 hours — those close to the situation describe Liverpool's extra £10m demand not as a negotiating position but as a genuine reflection of how much they value keeping him. The phrase doing the rounds is that Spurs haven't walked away, but the gap feels bigger today than it did last week."
+  },
+  {
+    date:"24 Aug",
+    text:"Whispers from inside Hotspur Way suggest Daniel Munoz's reported hesitation about the move is being taken seriously enough that De Zerbi's staff are quietly exploring alternative options at right-back depth — though nothing concrete has been tabled elsewhere yet. The Munoz picture is described as genuinely open, not dead."
+  },
+  {
     date:"23 Aug",
     text:"Something in De Zerbi's press conference phrasing around Bergvall — 'I don't know if he will stay or leave' — is being read at N17 as more candid than his earlier '100 per cent' line suggested. Whether that reflects a genuine shift in the manager's position or simply a response to a more direct question, those watching closely say the Bergvall situation feels less resolved than the public statements implied. Forest's expected improved bid may test that quickly."
   },
@@ -121,13 +129,5 @@ export const ANON_BRIEFS = [
   {
     date:"22 Aug",
     text:"The shirt-number confirmation dropping Savinho, Marmoush and Gakpo hints into the same breath has tongues moving at N17 — the read among those paying close attention is that the number allocation exercise wasn't accidental, and that at least one of those three names is closer to done than the official silence suggests. The Gakpo picture, though, remains the murkiest: the phrase doing the rounds is that Liverpool's answer is tied to something that hasn't moved yet."
-  },
-  {
-    date:"21 Aug",
-    text:"Word filtering out of the Savinho talks is that the Man City relationship hasn't closed with one deal — those close to the negotiations suggest De Zerbi has been explicit that Marmoush serves a genuinely different tactical purpose to Savinho, and that the double raid was always the intent rather than a package sweetener. The question being asked quietly at Hotspur Way is whether the financial architecture can absorb both before the window shuts."
-  },
-  {
-    date:"21 Aug",
-    text:"There's a growing sense that Vicario's loan departure to Juventus, confirmed quietly without fanfare, has quietly accelerated a decision on the goalkeeper succession plan — the Verbruggen file, which had gone conspicuously silent, is said to be back on the desk. Whether the loan fee and saved wages actually move the needle on Brighton's asking price is another matter."
   },
 ];
