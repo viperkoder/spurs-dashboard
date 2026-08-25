@@ -30,11 +30,11 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:35, st:"warm", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:28, st:"warm", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
-    player:"Victor Osimhen", e:"🇳🇬", from:"Galatasaray", fee:"55m", like:38, st:"warm", date:"9 Aug",
+    player:"Victor Osimhen", e:"🇳🇬", from:"Galatasaray", fee:"55m", like:42, st:"warm", date:"9 Aug",
     brief:"Promoted from anonymous-only chatter (see ANON_BRIEFS 3-4 Aug) to a proper brief — this has now graduated to multiple named outlets reporting a formal approach. Tottenham have proposed £50-55m; Galatasaray want £65m, a £10-15m gap that's the main obstacle. Reports (Caught Offside, citing agent-industry sources; thehardtackle) say Spurs have 'received sporting approval to begin formal negotiations' and personal terms aren't expected to be a hurdle. Would be a 7th major signing after an already record summer (£230m+ spent on 6 arrivals), which is the real question mark — not the player's willingness, but whether the finances stack up. Also being weighed alongside continued interest in Cody Gakpo."
   },
   {
@@ -107,6 +107,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"25 Aug",
+    text:"The mood around Cody Gakpo has darkened in the last 24 hours — word is that Man City's reported interest has given Liverpool a fresh reason to dig in, and what felt like a negotiation is starting to feel like a standoff. Those close to the situation aren't saying Spurs have walked away, but the window is narrowing fast and the gap to Liverpool's valuation hasn't moved."
+  },
+  {
+    date:"25 Aug",
+    text:"The Bergvall situation continues to simmer beneath the surface at Hotspur Way. Forest's expected improved bid hasn't formally landed yet, but with De Zerbi publicly hedging his earlier certainty, the sense inside the building is that this one isn't settled — and that the manager's next press conference answer on the subject will be worth watching very carefully."
+  },
+  {
     date:"24 Aug",
     text:"The mood around the Gakpo pursuit has shifted noticeably in the last 24 hours — those close to the situation describe Liverpool's extra £10m demand not as a negotiating position but as a genuine reflection of how much they value keeping him. The phrase doing the rounds is that Spurs haven't walked away, but the gap feels bigger today than it did last week."
   },
@@ -121,13 +129,5 @@ export const ANON_BRIEFS = [
   {
     date:"23 Aug",
     text:"The double Man City raid landing on the same day as a 3-0 opening defeat has created an odd atmosphere around Hotspur Way — the transfer machinery is visibly still running at full speed even as the football side absorbed its first reality check of the De Zerbi era. Insiders suggest the Marmoush pursuit was locked in well before kick-off at Brentford, and that the result hasn't altered the club's window plans, but the optics of splashing nine-figure sums while sitting bottom of the table are not lost on anyone inside the building."
-  },
-  {
-    date:"22 Aug",
-    text:"Whispers from inside the Brentford matchday build-up suggest De Zerbi's '100 per cent' Bergvall declaration wasn't simply a diplomatic deflection — those around the training ground read it as a manager drawing a line in the sand, a signal that the squad-depth conversation has shifted since the window opened. Whether that's a genuine change of heart from the player or a manager protecting a number he can't afford to lose before registration closes is the question no one inside is answering cleanly."
-  },
-  {
-    date:"22 Aug",
-    text:"The shirt-number confirmation dropping Savinho, Marmoush and Gakpo hints into the same breath has tongues moving at N17 — the read among those paying close attention is that the number allocation exercise wasn't accidental, and that at least one of those three names is closer to done than the official silence suggests. The Gakpo picture, though, remains the murkiest: the phrase doing the rounds is that Liverpool's answer is tied to something that hasn't moved yet."
   },
 ];
