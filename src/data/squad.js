@@ -20,6 +20,7 @@
 //     a decision once confirmed (would move to DEPARTURES in transfers.js, not just squad.js)
 
 export const SQUAD = [
+  {name:"S. ", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   {name:"O. Marmoush", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   {name:"S. ", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   // GOALKEEPERS
@@ -62,7 +63,7 @@ export const SQUAD = [
 export const INJURIES = [
   {name:"Micky van de Ven",flag:"NL",emoji:"🇳🇱",pos:"CB",issue:"Minor pre-season issue — confirmed OUT for MD1 vs Brentford per official Tottenham team news (Google News: 'Pedro Porro, van de Ven out of opener at Brentford — Tottenham Hotspur official')",sev:"short",ret:"After 22 Aug — exact return TBC, unchanged"},
   {name:"Pape Matar Sarr", flag:"SN",emoji:"🇸🇳",pos:"CM",issue:"Hamstring pain — confirmed OUT for MD1 vs Brentford per official Tottenham team news",          sev:"short",ret:"After 22 Aug — described as not serious, unchanged"},
-  {name:"Xavi Simons",     flag:"NL",emoji:"🇳🇱",pos:"AM",issue:"ACL right knee",        sev:"long",  ret:"20 Feb 2027"},
+  {name:"Xavi Simons",     flag:"NL",emoji:"🇳🇱",pos:"AM",issue:"football.london headline 'Xavi Simons provides Tottenham injury update before Carabao Cup clash in transfer message' suggests Simons himself has commented on his situation. No change to severity — ACL remains a long-term injury — but flagging for human review in case the 'transfer message' element is relevant to a loan/exit rumour rather than purely a fitness update. Injury record unchanged: ACL right knee, return Feb 2027.",        sev:"long",  ret:"20 Feb 2027 (unchanged)"},
   {name:"Wilson Odobert",  flag:"FR",emoji:"🇫🇷",pos:"LW",issue:"ACL left knee",          sev:"long",  ret:"28 Nov 2026"},
   // NOTE: Kudus REMOVED from active injuries 17 Jul 2026 — back in full pre-season
   // training, targeting the Aug 22 opener at Brentford. See squad.js SQUAD entry.

@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:28, st:"warm", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:22, st:"cold", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -107,6 +107,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"26 Aug",
+    text:"Word filtering through from sources close to the Mateta situation is that Tottenham moved quickly after the Aston Villa bid failed — an approach described as exploratory but genuine, made 'in the last few hours' of a frantic window day. Whether De Zerbi truly wants the Crystal Palace man or whether this is window-dressing while the Gakpo pursuit stalls is the question doing the rounds at N17."
+  },
+  {
+    date:"26 Aug",
+    text:"The Marmoush pursuit has a different feel to the other striker links — insiders suggest De Zerbi specifically requested this one, with the reunion angle real rather than agent-driven. The caveat those close to the situation keep raising is the same one it always is at this club right now: does the budget actually stretch this far after a summer that's already broken records twice over?"
+  },
+  {
     date:"25 Aug",
     text:"The mood around Cody Gakpo has darkened in the last 24 hours — word is that Man City's reported interest has given Liverpool a fresh reason to dig in, and what felt like a negotiation is starting to feel like a standoff. Those close to the situation aren't saying Spurs have walked away, but the window is narrowing fast and the gap to Liverpool's valuation hasn't moved."
   },
@@ -121,13 +129,5 @@ export const ANON_BRIEFS = [
   {
     date:"24 Aug",
     text:"Whispers from inside Hotspur Way suggest Daniel Munoz's reported hesitation about the move is being taken seriously enough that De Zerbi's staff are quietly exploring alternative options at right-back depth — though nothing concrete has been tabled elsewhere yet. The Munoz picture is described as genuinely open, not dead."
-  },
-  {
-    date:"23 Aug",
-    text:"Something in De Zerbi's press conference phrasing around Bergvall — 'I don't know if he will stay or leave' — is being read at N17 as more candid than his earlier '100 per cent' line suggested. Whether that reflects a genuine shift in the manager's position or simply a response to a more direct question, those watching closely say the Bergvall situation feels less resolved than the public statements implied. Forest's expected improved bid may test that quickly."
-  },
-  {
-    date:"23 Aug",
-    text:"The double Man City raid landing on the same day as a 3-0 opening defeat has created an odd atmosphere around Hotspur Way — the transfer machinery is visibly still running at full speed even as the football side absorbed its first reality check of the De Zerbi era. Insiders suggest the Marmoush pursuit was locked in well before kick-off at Brentford, and that the result hasn't altered the club's window plans, but the optics of splashing nine-figure sums while sitting bottom of the table are not lost on anyone inside the building."
   },
 ];
