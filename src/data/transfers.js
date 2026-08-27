@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:22, st:"cold", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:52, st:"warm", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -107,6 +107,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"27 Aug",
+    text:"Whispers doing the rounds suggest Tottenham are involved in a three-horse race for a 'giant striker' — the GiveMeSport headline is light on detail, but the inference from those close to the situation is that Marmoush's arrival hasn't closed the door on a more physical option up top. Whether that's a genuine pursuit or a negotiating play while the Osimhen gap remains unresolved is the question nobody at N17 is answering directly."
+  },
+  {
+    date:"27 Aug",
+    text:"The SpursWeb note about a 'wantaway £35m Tottenham star' potentially linking up with Eric Dier in late loan talks is generating quiet chatter — no primary source has named the player, but the Eric Dier connection points toward a club in Germany or Portugal. Those with an ear to the ground at Hotspur Way aren't denying it, but they're not confirming it either."
+  },
+  {
     date:"26 Aug",
     text:"Word filtering through from sources close to the Mateta situation is that Tottenham moved quickly after the Aston Villa bid failed — an approach described as exploratory but genuine, made 'in the last few hours' of a frantic window day. Whether De Zerbi truly wants the Crystal Palace man or whether this is window-dressing while the Gakpo pursuit stalls is the question doing the rounds at N17."
   },
@@ -121,13 +129,5 @@ export const ANON_BRIEFS = [
   {
     date:"25 Aug",
     text:"The Bergvall situation continues to simmer beneath the surface at Hotspur Way. Forest's expected improved bid hasn't formally landed yet, but with De Zerbi publicly hedging his earlier certainty, the sense inside the building is that this one isn't settled — and that the manager's next press conference answer on the subject will be worth watching very carefully."
-  },
-  {
-    date:"24 Aug",
-    text:"The mood around the Gakpo pursuit has shifted noticeably in the last 24 hours — those close to the situation describe Liverpool's extra £10m demand not as a negotiating position but as a genuine reflection of how much they value keeping him. The phrase doing the rounds is that Spurs haven't walked away, but the gap feels bigger today than it did last week."
-  },
-  {
-    date:"24 Aug",
-    text:"Whispers from inside Hotspur Way suggest Daniel Munoz's reported hesitation about the move is being taken seriously enough that De Zerbi's staff are quietly exploring alternative options at right-back depth — though nothing concrete has been tabled elsewhere yet. The Munoz picture is described as genuinely open, not dead."
   },
 ];
