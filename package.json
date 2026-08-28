@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node build.js",
     "check-secrets": "node scripts/check-secrets.js",
+    "update:table": "node automation/league-table-update.js",
     "test:matchday": "node scripts/test-matchday.js"
   },
   "devDependencies": {

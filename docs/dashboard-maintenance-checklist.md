@@ -43,6 +43,8 @@ confirmed result, injury, signing or departure.
 
 ## Matchday update
 
+- [ ] Full league table refresh runs independently after every club's completed match
+- [ ] Matchweeks spanning Friday–Monday remain live and update as results arrive
 - [ ] Matchday workflow becomes eligible at kickoff + 2 hours and retries until final evidence exists
 - [ ] One processed-fixture key prevents duplicate AI calls and double-counted player totals
 - [ ] Confirm final score from an authoritative source
@@ -52,7 +54,10 @@ confirmed result, injury, signing or departure.
 - [ ] Update injuries/suspensions only when confirmed
 - [ ] Rebuild, validate, publish and verify the live site
 
-The zero-cost 15-minute fixture gate does not call AI unless a match is due.
+The zero-cost 15-minute workflow refreshes the full 20-club table whenever any
+Premier League result changes it. This continues across the complete multi-day
+matchweek rather than stopping after Tottenham play. The fixture gate does not
+call AI unless a Tottenham match is due.
 An eligible match uses the configured Anthropic API for match reconciliation,
 then runs the existing transfer/injury sweep in the same coherent update.
 Extra-time, delayed, abandoned, missing or

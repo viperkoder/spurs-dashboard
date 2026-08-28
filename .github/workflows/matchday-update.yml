@@ -24,42 +24,53 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+
+      - name: Refresh full Premier League table
+        id: table
+        run: |
+          node automation/league-table-update.js
+          if git diff --quiet -- src/data/standings.js; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Reconcile eligible completed matches
         id: match
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          node automation/matchday-update.js
-          if git diff --quiet -- src/data/ automation/matchday-state.json; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
+          match_output=$(node automation/matchday-update.js)
+          echo "$match_output"
+          if grep -q '^Updated completed match:' <<< "$match_output"; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Refresh transfers, injuries and availability when match data changed
+      - name: Install build dependency
+        if: steps.table.outputs.changed == 'true' || steps.match.outputs.changed == 'true'
+        run: npm ci
+
+      - name: Refresh transfers, injuries and availability when Spurs match data changed
         if: steps.match.outputs.changed == 'true'
         run: |
           trap 'rm -f automation/.env' EXIT
           echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" > automation/.env
           node automation/update-dashboard.js
 
-      - name: Install build dependency
-        if: steps.match.outputs.changed == 'true'
-        run: npm ci
-
       - name: Test matchday guardrails
         run: node scripts/test-matchday.js
 
       - name: Validate and rebuild changed dashboard
-        if: steps.match.outputs.changed == 'true'
+        if: steps.table.outputs.changed == 'true' || steps.match.outputs.changed == 'true'
         run: |
           npm run check-secrets
           npm run build
 
       - name: Commit coherent matchday update
-        if: steps.match.outputs.changed == 'true'
+        if: steps.table.outputs.changed == 'true' || steps.match.outputs.changed == 'true'
         run: |
           git config user.name "thfc-matchday-bot"
           git config user.email "actions@users.noreply.github.com"

@@ -117,9 +117,14 @@ function validate(reconciliation, fixture, evidence) {
 
     let nextStandings = standingsSource;
     if (result.standings.length === 20) nextStandings = core.replaceExportedArray(nextStandings, 'STANDINGS', core.renderStandings(result.standings));
-    const last5 = existingArray(nextStandings, 'LAST5');
+    let last5 = existingArray(nextStandings, 'LAST5');
     const score = `${result.result.spurs}-${result.result.opponent}`;
     const outcome = result.result.spurs > result.result.opponent ? 'W' : result.result.spurs < result.result.opponent ? 'L' : 'D';
+    last5 = last5.filter(row => !(
+      row.date === result.result.dateLabel &&
+      row.home === result.result.homeCode &&
+      row.away === result.result.awayCode
+    ));
     last5.unshift({ date: result.result.dateLabel, home: result.result.homeCode, away: result.result.awayCode, score, r: outcome, scorer: result.result.scorers || '' });
     nextStandings = core.replaceExportedArray(nextStandings, 'LAST5', core.renderLastFive(last5));
     const scorers = existingArray(nextStandings, 'SCORERS');

@@ -21,12 +21,12 @@ export const PRESEASON = [
   {opponent:"Chelsea",          venue:"N", date:"2026-08-01T10:45:00", score:"2-1", note:"Sydney Super Cup — Sydney, Australia"},
   {opponent:"Getafe",           venue:"N", date:"2026-08-08T15:00:00", score:"1-1", note:"Behind closed doors — Hotspur Way (70 minutes)"},
   {opponent:"Hoffenheim",       venue:"H", date:"2026-08-15T15:00:00", score:"3-0", note:"Tottenham Hotspur Stadium"},
-  {opponent:"Hoffenheim",       venue:"N", date:"2026-08-16T15:00:00", score:null, note:"Behind closed doors — Training Centre"},
+  {opponent:"Hoffenheim",       venue:"N", date:"2026-08-16T15:00:00", score:"2-2", note:"Behind closed doors — Training Centre"},
 ];
 
 // mw = Premier League matchweek number (order as officially released).
 export const PREMIER_LEAGUE = [
-  {mw:1,  opponent:"Brentford",             venue:"A", date:"2026-08-22T17:30:00", score:null, provisional:true, tv:"Sky Sports"},
+  {mw:1,  opponent:"Brentford",             venue:"A", date:"2026-08-22T17:30:00", score:"0-3", provisional:true, tv:"Sky Sports"},
   {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T15:00:00", score:null, provisional:true},
   {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00", score:null, provisional:true},
   {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T15:00:00", score:null, provisional:true},

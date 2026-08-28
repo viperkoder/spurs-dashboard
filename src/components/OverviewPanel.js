@@ -151,7 +151,7 @@ export function OverviewPanel({liveNews}){
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:18}}>
         <div>
-          <WH lg>Pre-Season Form — Last 5</WH>
+          <WH lg>Recent Form — Last 5</WH>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {LAST5.map((r,i)=>{
               const c=r.r==="W"?P.green:r.r==="D"?P.amber:P.red;

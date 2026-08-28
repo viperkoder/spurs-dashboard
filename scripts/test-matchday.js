@@ -1,5 +1,6 @@
 const assert = require('assert');
 const core = require('../automation/matchday-core');
+const { validateStandings } = require('../automation/league-table-update');
 
 const fixtures = `export const PREMIER_LEAGUE = [
   {mw:1, opponent:"Brentford", venue:"A", date:"2026-08-22T17:30:00", score:null},
@@ -19,4 +20,12 @@ assert.match(core.replaceExportedArray('export const SCORERS = [];', 'SCORERS', 
 
 const squad = 'export const SQUAD = [\n  {name:"M. Tel", pos:"LW", apps:0, g:0},\n];';
 assert.match(core.updateSquad(squad, [{ name: 'Mathys Tel', appearance: 1, goals: 2 }]), /apps:1, g:2/);
+
+const clubs = Array.from({ length: 20 }, (_, i) => ({
+  team: i === 19 ? 'Tottenham Hotspur' : `Club ${i + 1}`,
+  rank: i + 1, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0,
+}));
+const tableSource = `export const STANDINGS = [\n${clubs.map(c => `  {team:"${c.team}"},`).join('\n')}\n];`;
+assert.doesNotThrow(() => validateStandings(clubs, tableSource));
+assert.throws(() => validateStandings(clubs.slice(0, 19), tableSource), /20 clubs/);
 console.log('matchday tests passed');
