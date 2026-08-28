@@ -43,12 +43,20 @@ confirmed result, injury, signing or departure.
 
 ## Matchday update
 
+- [ ] Matchday workflow becomes eligible at kickoff + 2 hours and retries until final evidence exists
+- [ ] One processed-fixture key prevents duplicate AI calls and double-counted player totals
 - [ ] Confirm final score from an authoritative source
 - [ ] Update fixture score and next-match pointer
 - [ ] Update league table and Spurs P/W/D/L/GF/GA/GD/PTS
 - [ ] Update last five, scorers, assists and player appearances
 - [ ] Update injuries/suspensions only when confirmed
 - [ ] Rebuild, validate, publish and verify the live site
+
+The zero-cost 15-minute fixture gate does not call AI unless a match is due.
+An eligible match uses the configured Anthropic API for match reconciliation,
+then runs the existing transfer/injury sweep in the same coherent update.
+Extra-time, delayed, abandoned, missing or
+conflicting matches fail closed and retry without changing dashboard data.
 
 ## Season rollover
 

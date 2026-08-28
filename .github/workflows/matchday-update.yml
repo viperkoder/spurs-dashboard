@@ -1,0 +1,73 @@
+name: Matchday update
+
+on:
+  schedule:
+    # Cheap fixture gate runs every 15 minutes. Paid AI work runs only after
+    # kickoff + 2 hours and only when final structured evidence exists.
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: thfc-dashboard-writes
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Reconcile eligible completed matches
+        id: match
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node automation/matchday-update.js
+          if git diff --quiet -- src/data/ automation/matchday-state.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Refresh transfers, injuries and availability when match data changed
+        if: steps.match.outputs.changed == 'true'
+        run: |
+          trap 'rm -f automation/.env' EXIT
+          echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" > automation/.env
+          node automation/update-dashboard.js
+
+      - name: Install build dependency
+        if: steps.match.outputs.changed == 'true'
+        run: npm ci
+
+      - name: Test matchday guardrails
+        run: node scripts/test-matchday.js
+
+      - name: Validate and rebuild changed dashboard
+        if: steps.match.outputs.changed == 'true'
+        run: |
+          npm run check-secrets
+          npm run build
+
+      - name: Commit coherent matchday update
+        if: steps.match.outputs.changed == 'true'
+        run: |
+          git config user.name "thfc-matchday-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/data/ docs/ automation/matchday-state.json automation/update-log.txt
+          if git diff --cached --quiet; then
+            echo "No verified matchday changes."
+          else
+            git commit -m "Automated matchday update — $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
+            git push origin main
+          fi

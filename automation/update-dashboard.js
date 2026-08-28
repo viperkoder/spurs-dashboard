@@ -566,7 +566,7 @@ function syncSquadWithTransfers(analysis) {
     const newEntries = toAdd.map(s => {
       // "Sandro Tonali" -> "S. Tonali", matching the existing naming convention
       const parts = s.player.trim().split(/\s+/);
-      const short = `${parts[0][0]}. ${parts.slice(1).join(' ')}`;
+      const short = parts.length === 1 ? parts[0] : `${parts[0][0]}. ${parts.slice(1).join(' ')}`;
       return `  {name:"${short}", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},`;
     }).join('\n');
     content = content.replace(
