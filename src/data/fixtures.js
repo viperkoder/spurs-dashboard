@@ -27,7 +27,7 @@ export const PRESEASON = [
 // mw = Premier League matchweek number (order as officially released).
 export const PREMIER_LEAGUE = [
   {mw:1,  opponent:"Brentford",             venue:"A", date:"2026-08-22T17:30:00", score:"0-3", provisional:true, tv:"Sky Sports"},
-  {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T15:00:00", score:null, provisional:true},
+  {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T16:30:00Z", score:null, provisional:false, tv:"Sky Sports", note:"Sun 30 Aug · 12:30 AM SGT"},
   {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00", score:null, provisional:true},
   {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T15:00:00", score:null, provisional:true},
   {mw:5,  opponent:"Aston Villa",           venue:"H", date:"2026-09-19T15:00:00", score:null, provisional:true},

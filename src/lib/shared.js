@@ -245,14 +245,14 @@ export function Bar({pct,color}){
 export function Clock(){
   const [t,setT]=useState(new Date());
   useEffect(()=>{const i=setInterval(()=>setT(new Date()),1000);return()=>clearInterval(i);},[]);
-  const p=n=>String(n).padStart(2,"0");
+  const time = new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Singapore",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).format(t);
   return (
     <div style={{textAlign:"right"}}>
       <div style={{fontSize:26,fontWeight:900,color:P.gold,letterSpacing:"0.05em",lineHeight:1,fontVariantNumeric:"tabular-nums"}}>
-        {p(t.getHours())}:{p(t.getMinutes())}<span className="blink" style={{color:P.goldDim}}>:</span>{p(t.getSeconds())}
+        {time.slice(0,5)}<span className="blink" style={{color:P.goldDim}}>:</span>{time.slice(6,8)}
       </div>
       <div style={{fontSize:10,color:P.muted,letterSpacing:"0.15em",marginTop:3,fontWeight:600}}>
-        {t.toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}).toUpperCase()}
+        {t.toLocaleDateString("en-GB",{timeZone:"Asia/Singapore",weekday:"short",day:"2-digit",month:"short",year:"numeric"}).toUpperCase()} · SGT
       </div>
     </div>
   );
@@ -285,7 +285,7 @@ export function Countdown(){
     <div style={{background:`linear-gradient(145deg,${P.bgCard},${P.bgPanel})`,border:`2px solid ${P.gold}`,borderRadius:8,padding:"14px 16px",textAlign:"center",boxShadow:`0 0 20px ${P.gold}22`}}>
       <div style={{fontSize:11,color:P.gold,letterSpacing:"0.18em",marginBottom:10,fontWeight:900}}>NEXT MATCH</div>
       <div style={{fontSize:14,color:P.white,fontWeight:800,marginBottom:2}}>{match.opponent.toUpperCase()} {vs} · {match.comp}</div>
-      <div style={{fontSize:10,color:P.muted,marginBottom:12}}>{match.note}</div>
+      <div style={{fontSize:10,color:P.muted,marginBottom:12}}>{match.note || new Intl.DateTimeFormat("en-SG",{timeZone:"Asia/Singapore",weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit",hour12:true}).format(target)+" SGT"}</div>
       <div style={{display:"flex",gap:8,justifyContent:"center",alignItems:"baseline"}}>
         {[[p(d),"DAYS"],[p(h),"HRS"],[p(m),"MIN"],[p(s),"SEC"]].map(([v,l])=>(
           <div key={l} style={{textAlign:"center",flex:1}}>

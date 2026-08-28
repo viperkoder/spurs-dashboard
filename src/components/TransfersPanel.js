@@ -4,6 +4,8 @@ import { P } from '../data/theme.js';
 import { TRANSFER_BRIEFS, CONFIRMED, DEPARTURES } from '../data/transfers.js';
 import { WH, Chip, Bar, MONTHS_SHORT } from '../lib/shared.js';
 
+const transferPanelFee=fee=>/^(?:£|€|\$)|loan|free|undisclosed|tbc/i.test(fee)?fee:`£${fee}`;
+
 // Parses "6 Jul" style dates (year assumed 2026, matching the rest of this
 // season's data) so the header below can show the true latest brief date
 // instead of a hand-typed one that goes stale every time a brief is added.
@@ -40,7 +42,7 @@ export function TransfersPanel(){
                   <div style={{display:"flex",gap:6,marginTop:8}}><Chip label={s.role} color={P.cyan}/><Chip label="CONFIRMED" color={P.green}/></div>
                 </div>
                 <div style={{textAlign:"right"}}>
-                  <div style={{fontSize:16,fontWeight:900,color:P.gold}}>£{s.fee}</div>
+                  <div style={{fontSize:16,fontWeight:900,color:P.gold}}>{transferPanelFee(s.fee)}</div>
                   <div style={{fontSize:10,color:P.muted,marginTop:3}}>{s.date}</div>
                 </div>
               </div>
@@ -77,7 +79,7 @@ export function TransfersPanel(){
                       <span style={{fontSize:15,fontWeight:800,color:P.white}}>{r.player}</span>
                       <Chip label={r.st==="hot"?"FIRE HOT":r.st==="warm"?"WARM":"COLD"} color={stC(r.st)}/>
                       <span style={{fontSize:12,color:P.muted}}>from {r.from}</span>
-                      <span style={{fontSize:13,color:P.gold,fontWeight:800}}>£{r.fee}</span>
+                      <span style={{fontSize:13,color:P.gold,fontWeight:800}}>{transferPanelFee(r.fee)}</span>
                     </div>
                     <Bar pct={r.like} color={stC(r.st)}/>
                   </div>

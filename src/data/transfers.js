@@ -1,6 +1,6 @@
 // Transfer Intelligence — Summer 2026
 // Edit this file alone for transfer rumours, confirmed signings, departures.
-// Last manual verification pass: 21 Aug 2026 (cross-checked against Sky Sports and Reuters).
+// Last manual verification pass: 28 Aug 2026 (official club sources take priority).
 // Automation was down 4-17 Jul (stale project path + node PATH issue under
 // launchd) — fixed via automation/install-launchd.sh, see automation/SETUP.md.
 
@@ -49,6 +49,10 @@ export const TRANSFER_BRIEFS = [
 
 export const CONFIRMED = [
   {
+    player:"Omar Marmoush", e:"🇪🇬", from:"Manchester City", fee:"Season-long loan", role:"FW", date:"2026-08-27",
+    note:"Official Tottenham announcement: season-long loan with an obligation to make the move permanent in summer 2027. Shirt number 22; available for the Newcastle match."
+  },
+  {
     player:"Savinho", e:"🏳️", from:"Man City", fee:"£75m", role:"TBC", date:"2026-08-22",
     note:"Confirmed by BBC Sport ('Spurs agree £75m deal for Man City winger Savinho'). Previously listed as agreement reached/pending completion at 92% likelihood. Move to CONFIRMED. Upgrade from the prior 'club-to-club agreement' note — BBC Sport language 'agree' is sufficient for confirmation here. The Guardian also references the double deal in passing. Remove from TRANSFER_BRIEFS and add to CONFIRMED array. — auto-added, verify flag/role manually"
   },
@@ -85,7 +89,6 @@ export const CONFIRMED = [
 // contract (reported Oct 2025) — he was never a confirmed departure.
 // Earlier data appears to have misread a renewal story as an expiry.
 export const DEPARTURES = [
-  {player:"M. van de Ven (contract update, not departure)", note:"NOT a departure — flagging here for squad.js update only. BBC Sport confirms Van de Ven has signed a new long-term deal. squad.js already shows con:2029 and 'CORE — NEW LONG-TERM DEAL' but the contract end date may need updating once full terms are published. The BBC headline 'Van de Ven signs new long-term deal' and the earlier 'close to agreeing' headline confirm this is done."},
   {player:"D. Spence", note:"COMPLETED 15 Aug — permanent transfer to Inter Milan. Reported fee approximately £30m; contract to 2031. Confirmed by Inter, BBC, Sky, ESPN and Reuters."},
   {player:"Mikey Moore", note:"NEW 9 Aug — promoted from ANON_BRIEFS now that it's Romano-attributed. FC Köln have submitted an official bid for a season-long loan; Romano (exclusive, 2 Aug): 'negotiations at advanced stages with #THFC as deal could be completed next week with Moore open to the move.' Several other European clubs have shown interest but Köln are the clear frontrunners. Loan only, not a permanent exit."},
   {player:"C. Melia", note:"Lincoln City sign Spurs goalkeeper Melia on loan — confirmed per BBC Sport. Loan departure, no fee."},

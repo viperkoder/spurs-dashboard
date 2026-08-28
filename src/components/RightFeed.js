@@ -6,6 +6,8 @@ import { TRANSFER_BRIEFS, CONFIRMED } from '../data/transfers.js';
 import { INJURIES } from '../data/squad.js';
 import { WH, Bar, Countdown } from '../lib/shared.js';
 
+const rightFeedFee=fee=>/^(?:£|€|\$)|loan|free|undisclosed|tbc/i.test(fee)?fee:`£${fee}`;
+
 export function RightFeed({onNews,liveNews}){
   const stC=s=>s==='hot'?P.green:s==='warm'?P.amber:P.muted;
   const now=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
@@ -33,7 +35,7 @@ export function RightFeed({onNews,liveNews}){
                 <span style={{fontSize:10,background:P.green,color:P.bg,padding:'2px 6px',
                   borderRadius:3,fontWeight:900}}>DONE ✓</span>
               </div>
-              <div style={{fontSize:11,color:P.green,fontWeight:700}}>£{c.fee} — {c.from}</div>
+              <div style={{fontSize:11,color:P.green,fontWeight:700}}>{rightFeedFee(c.fee)} — {c.from}</div>
               <div style={{fontSize:10,color:P.muted,marginTop:2}}>{c.role!=='TBC'?c.role+' · ':''}{c.date}</div>
             </div>
           );})()}
@@ -44,7 +46,7 @@ export function RightFeed({onNews,liveNews}){
                 <span style={{fontSize:13,fontWeight:800,color:P.white}}>{r.e} {r.player}</span>
                 <span style={{fontSize:18,fontWeight:900,color:stC(r.st)}}>{r.like}%</span>
               </div>
-              <div style={{fontSize:11,color:P.muted,marginBottom:4}}>from {r.from} · £{r.fee}</div>
+              <div style={{fontSize:11,color:P.muted,marginBottom:4}}>from {r.from} · {rightFeedFee(r.fee)}</div>
               <Bar pct={r.like} color={stC(r.st)}/>
             </div>
           ))}

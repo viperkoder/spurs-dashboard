@@ -31,12 +31,14 @@ confirmed result, injury, signing or departure.
 - [ ] Squad: arrivals, departures, loans, positions, contracts and availability
 - [ ] Injuries: active list only; remove resolved entries; verify return estimates
 - [ ] Fixtures: dates, kick-offs, venue, TV, cup draws, postponements and results
+- [ ] Confirmed kick-offs use an explicit UTC offset and display in Singapore time (SGT); never leave a TV-selected fixture as a timezone-less provisional time
 - [ ] League table: P/W/D/L/GF/GA/GD/PTS, ordering and qualification/relegation flags
 - [ ] Season analysis: table-driven totals, league averages and zero-match state
 - [ ] Last five: correct competition context, ordering, scores and scorers
 - [ ] Top scorers: competitive apps, goals and assists for the current season only
 - [ ] Finances: confirmed fees, add-ons, sell-ons, live targets and completed exits
 - [ ] Transfers ↔ squad ↔ finances cross-reference has no contradictions
+- [ ] Contract renewals remain in squad/contract data and never appear as departures
 - [ ] World Cup/special-event modules are current or explicitly archived
 - [ ] Footer verification date and visible season labels are accurate
 - [ ] Live Pages deployment inspected after publishing

@@ -8,6 +8,7 @@ const fixtures = `export const PREMIER_LEAGUE = [
 
 // August is BST: 17:30 UK kickoff is 16:30 UTC; eligibility begins 18:30 UTC.
 assert.equal(core.ukLocalTimeMs('2026-08-22T17:30:00'), Date.parse('2026-08-22T16:30:00Z'));
+assert.equal(core.ukLocalTimeMs('2026-08-29T16:30:00Z'), Date.parse('2026-08-29T16:30:00Z'));
 assert.equal(core.dueFixtures(fixtures, { processed: [] }, new Date('2026-08-22T18:29:59Z')).length, 0);
 assert.equal(core.dueFixtures(fixtures, { processed: [] }, new Date('2026-08-22T18:30:00Z')).length, 1);
 const due = core.dueFixtures(fixtures, { processed: [] }, new Date('2026-08-22T18:30:00Z'))[0];

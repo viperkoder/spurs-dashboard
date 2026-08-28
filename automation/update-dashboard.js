@@ -370,10 +370,13 @@ function applyTransferUpdates(analysis) {
     }
   }
 
-  // Append new departures — same dedupe guard as CONFIRMED above
+  // Append new departures — same dedupe guard as CONFIRMED above. Reject
+  // obvious contract/renewal stories: they belong in squad data, never in
+  // the departures feed (this previously misclassified Van de Ven).
   if (analysis.newDepartures.length > 0) {
     const toAdd = analysis.newDepartures.filter(
-      d => !playerExistsIn(content, 'DEPARTURES', d.player)
+      d => !playerExistsIn(content, 'DEPARTURES', d.player) &&
+        !/contract|renewal|new deal|not (?:a )?departure/i.test(`${d.player} ${d.note}`)
     );
     if (toAdd.length > 0) {
       const newEntries = toAdd.map(d =>

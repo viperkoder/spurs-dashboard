@@ -37,6 +37,9 @@ function dueFixtures(source, state, now = new Date()) {
 }
 
 function ukLocalTimeMs(isoWithoutZone) {
+  // Confirmed fixtures may carry an explicit UTC offset/Z so browsers,
+  // GitHub Actions and Singapore viewers all count down to one instant.
+  if (/[zZ]$|[+-]\d{2}:\d{2}$/.test(isoWithoutZone)) return Date.parse(isoWithoutZone);
   const match = isoWithoutZone.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
   if (!match) return NaN;
   const [, year, month, day, hour, minute, second] = match.map(Number);
