@@ -107,6 +107,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"28 Aug",
+    text:"Word doing the rounds near Hotspur Way is that De Zerbi has been pushing hard behind the scenes for one more addition before the window slams shut — the manager himself dropped the word 'bombas' in his presser, plural, which those inside the building are reading as a signal that the shopping list isn't quite finished. Whether the budget genuinely stretches to a ninth signing or whether that's a negotiating posture while the Sarr funds are still being counted is the question nobody is answering directly."
+  },
+  {
+    date:"28 Aug",
+    text:"The name of Szoboszlai's Liverpool teammate has been floated in connection with a late Spurs move for full-back cover, and there's a separate whisper about a part-exchange involving Richarlison in a deal for a high-value winger. Neither has a named journalist behind it yet, but the volume of chatter at this late stage of the window suggests De Zerbi's backroom staff are still working the phones — whether either lead is genuine or deadline-day noise is anyone's guess."
+  },
+  {
     date:"27 Aug",
     text:"Whispers doing the rounds suggest Tottenham are involved in a three-horse race for a 'giant striker' — the GiveMeSport headline is light on detail, but the inference from those close to the situation is that Marmoush's arrival hasn't closed the door on a more physical option up top. Whether that's a genuine pursuit or a negotiating play while the Osimhen gap remains unresolved is the question nobody at N17 is answering directly."
   },
@@ -121,13 +129,5 @@ export const ANON_BRIEFS = [
   {
     date:"26 Aug",
     text:"The Marmoush pursuit has a different feel to the other striker links — insiders suggest De Zerbi specifically requested this one, with the reunion angle real rather than agent-driven. The caveat those close to the situation keep raising is the same one it always is at this club right now: does the budget actually stretch this far after a summer that's already broken records twice over?"
-  },
-  {
-    date:"25 Aug",
-    text:"The mood around Cody Gakpo has darkened in the last 24 hours — word is that Man City's reported interest has given Liverpool a fresh reason to dig in, and what felt like a negotiation is starting to feel like a standoff. Those close to the situation aren't saying Spurs have walked away, but the window is narrowing fast and the gap to Liverpool's valuation hasn't moved."
-  },
-  {
-    date:"25 Aug",
-    text:"The Bergvall situation continues to simmer beneath the surface at Hotspur Way. Forest's expected improved bid hasn't formally landed yet, but with De Zerbi publicly hedging his earlier certainty, the sense inside the building is that this one isn't settled — and that the manager's next press conference answer on the subject will be worth watching very carefully."
   },
 ];

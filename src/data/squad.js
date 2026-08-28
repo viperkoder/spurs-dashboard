@@ -41,7 +41,6 @@ export const SQUAD = [
   {name:"A. Gray",        pos:"CM",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:0, g:0,con:"2030",  wc:null,   st:"CORE (also covers DM/RB)",sc:"green"},
   {name:"L. Bergvall",    pos:"CM",e:"🇸🇪",apps:0, g:0,con:"2031",  wc:null,   st:"REQUESTED — FOREST BID REJ.",sc:"red"},
   {name:"C. Gallagher",   pos:"CM",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:0, g:0,con:"2031",  wc:null,   st:"CORE",                 sc:"green"},
-  {name:"PM. Sarr",       pos:"CM",e:"🇸🇳",apps:0, g:0,con:"2030",  wc:"SEN",  st:"OUT MD1 — HAMSTRING PAIN",sc:"amber"},
   {name:"R. Bentancur",   pos:"DM",e:"🇺🇾",apps:0, g:0,con:"2029",  wc:"URU",  st:"NEW CONTRACT — SIGNED OCT '25, STAYS (also covers CM)",sc:"green"},
   {name:"S. Tonali",      pos:"DM",e:"🇮🇹",apps:0, g:0,con:"TBC",   wc:null,   st:"NEW — £100m RECORD, 6YR (reported)", sc:"cyan"},
   {name:"J. Maddison",    pos:"AM",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:0, g:0,con:"2028",  wc:null,   st:"AVAILABLE MD1",          sc:"green"},
