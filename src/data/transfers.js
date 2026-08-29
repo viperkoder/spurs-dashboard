@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:62, st:"hot", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:52, st:"warm", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -89,6 +89,7 @@ export const CONFIRMED = [
 // contract (reported Oct 2025) — he was never a confirmed departure.
 // Earlier data appears to have misread a renewal story as an expiry.
 export const DEPARTURES = [
+  {player:"J. Donley", note:"BBC Sport confirms: Luton Town have signed Tottenham forward Donley on loan. Season-long loan; no fee. Corroborated by SpursWeb ('Tottenham send player De Zerbi loves on loan to Luton Town for the season') and talkSPORT/Google News ('Wilshere lands Spurs youngster on loan despite historic north London rivalry'). Add to DEPARTURES as a confirmed loan exit."},
   {player:"K. Danso", note:"Tottenham have rejected a loan move to Sunderland for Kevin Danso — confirmed by BBC Sport. Danso stays at Spurs; loan exit blocked. Update DEPARTURES to reflect this is not proceeding. Squad status unchanged — remains listed as CORE CB."},
   {player:"D. Spence", note:"COMPLETED 15 Aug — permanent transfer to Inter Milan. Reported fee approximately £30m; contract to 2031. Confirmed by Inter, BBC, Sky, ESPN and Reuters."},
   {player:"Mikey Moore", note:"NEW 9 Aug — promoted from ANON_BRIEFS now that it's Romano-attributed. FC Köln have submitted an official bid for a season-long loan; Romano (exclusive, 2 Aug): 'negotiations at advanced stages with #THFC as deal could be completed next week with Moore open to the move.' Several other European clubs have shown interest but Köln are the clear frontrunners. Loan only, not a permanent exit."},
@@ -112,6 +113,14 @@ export const DEPARTURES = [
 export const ANON_BRIEFS = [
   {
     date:"29 Aug",
+    text:"De Zerbi's repeated use of 'bombas' — plural — at his pre-Newcastle presser is being read inside Hotspur Way as more than a turn of phrase. Word is the manager has been pushing hard for at least one more addition before the window closes, and that the Sarr situation is directly connected to whether the funds are there to make it happen. Nothing signed, nothing agreed — but the shopping list may not be as finished as the club's public messaging suggests."
+  },
+  {
+    date:"29 Aug",
+    text:"A forward's name has been quietly doing the rounds in conversations around Hotspur Way in the final days of the window — the suggestion being that Marmoush's arrival hasn't entirely closed the door on a more traditional centre-forward option. De Zerbi's hint about 'one more forward' at his press conference has done little to quieten the speculation, though no named journalist has put their name to a specific target yet."
+  },
+  {
+    date:"29 Aug",
     text:"Word filtering through the end-of-window noise is that Tottenham have made a concrete approach for a physical centre-forward as a complement to Marmoush — Jean-Philippe Mateta's name is the one being whispered, with a bargain valuation reportedly emerging after Aston Villa failed to land him. Those close to the situation suggest De Zerbi's staff have not closed the door on a more traditional No.9 despite the Egyptian's arrival, and that the next 48 hours will tell the story."
   },
   {
@@ -125,13 +134,5 @@ export const ANON_BRIEFS = [
   {
     date:"29 Aug",
     text:"A late move for a physical striker is reportedly being explored, with Jean-Philippe Mateta's name circulating after a bargain valuation surfaced following Aston Villa's failed bid — those close to the situation suggest Marmoush's arrival hasn't closed the door on a more traditional No.9. A separate thread involves a winger of significant value and a potential part-exchange, but no named journalist has put their name to either lead yet."
-  },
-  {
-    date:"28 Aug",
-    text:"Word doing the rounds near Hotspur Way is that De Zerbi has been pushing hard behind the scenes for one more addition before the window slams shut — the manager himself dropped the word 'bombas' in his presser, plural, which those inside the building are reading as a signal that the shopping list isn't quite finished. Whether the budget genuinely stretches to a ninth signing or whether that's a negotiating posture while the Sarr funds are still being counted is the question nobody is answering directly."
-  },
-  {
-    date:"28 Aug",
-    text:"The name of Szoboszlai's Liverpool teammate has been floated in connection with a late Spurs move for full-back cover, and there's a separate whisper about a part-exchange involving Richarlison in a deal for a high-value winger. Neither has a named journalist behind it yet, but the volume of chatter at this late stage of the window suggests De Zerbi's backroom staff are still working the phones — whether either lead is genuine or deadline-day noise is anyone's guess."
   },
 ];
