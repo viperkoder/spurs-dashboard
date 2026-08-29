@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:55, st:"hot", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:62, st:"hot", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -112,6 +112,14 @@ export const DEPARTURES = [
 export const ANON_BRIEFS = [
   {
     date:"29 Aug",
+    text:"Word filtering through the end-of-window noise is that Tottenham have made a concrete approach for a physical centre-forward as a complement to Marmoush — Jean-Philippe Mateta's name is the one being whispered, with a bargain valuation reportedly emerging after Aston Villa failed to land him. Those close to the situation suggest De Zerbi's staff have not closed the door on a more traditional No.9 despite the Egyptian's arrival, and that the next 48 hours will tell the story."
+  },
+  {
+    date:"29 Aug",
+    text:"A Monaco winger has quietly entered the conversation at Hotspur Way, with one intriguing wrinkle: Pape Sarr's name is reportedly being floated as part of the equation going the other way. Nothing has a named journalist behind it yet, and it may be nothing more than deadline-day creative accounting — but the volume of chatter around Sarr's future suggests his injury absence hasn't dampened interest from elsewhere."
+  },
+  {
+    date:"29 Aug",
     text:"Word filtering out of N17 is that De Zerbi has been pushing hard for one more addition before the window closes — his use of 'bombas' (plural) at his pre-Newcastle press conference is being read internally as a signal that the shopping list isn't quite finished. Whether that's a genuine pursuit or a manager managing expectations while the Sarr sale funds are still being counted is the question nobody is answering directly."
   },
   {
@@ -125,13 +133,5 @@ export const ANON_BRIEFS = [
   {
     date:"28 Aug",
     text:"The name of Szoboszlai's Liverpool teammate has been floated in connection with a late Spurs move for full-back cover, and there's a separate whisper about a part-exchange involving Richarlison in a deal for a high-value winger. Neither has a named journalist behind it yet, but the volume of chatter at this late stage of the window suggests De Zerbi's backroom staff are still working the phones — whether either lead is genuine or deadline-day noise is anyone's guess."
-  },
-  {
-    date:"27 Aug",
-    text:"Whispers doing the rounds suggest Tottenham are involved in a three-horse race for a 'giant striker' — the GiveMeSport headline is light on detail, but the inference from those close to the situation is that Marmoush's arrival hasn't closed the door on a more physical option up top. Whether that's a genuine pursuit or a negotiating play while the Osimhen gap remains unresolved is the question nobody at N17 is answering directly."
-  },
-  {
-    date:"27 Aug",
-    text:"The SpursWeb note about a 'wantaway £35m Tottenham star' potentially linking up with Eric Dier in late loan talks is generating quiet chatter — no primary source has named the player, but the Eric Dier connection points toward a club in Germany or Portugal. Those with an ear to the ground at Hotspur Way aren't denying it, but they're not confirming it either."
   },
 ];
