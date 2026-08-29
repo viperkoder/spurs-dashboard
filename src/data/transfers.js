@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:52, st:"warm", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:55, st:"hot", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -89,6 +89,7 @@ export const CONFIRMED = [
 // contract (reported Oct 2025) — he was never a confirmed departure.
 // Earlier data appears to have misread a renewal story as an expiry.
 export const DEPARTURES = [
+  {player:"K. Danso", note:"Tottenham have rejected a loan move to Sunderland for Kevin Danso — confirmed by BBC Sport. Danso stays at Spurs; loan exit blocked. Update DEPARTURES to reflect this is not proceeding. Squad status unchanged — remains listed as CORE CB."},
   {player:"D. Spence", note:"COMPLETED 15 Aug — permanent transfer to Inter Milan. Reported fee approximately £30m; contract to 2031. Confirmed by Inter, BBC, Sky, ESPN and Reuters."},
   {player:"Mikey Moore", note:"NEW 9 Aug — promoted from ANON_BRIEFS now that it's Romano-attributed. FC Köln have submitted an official bid for a season-long loan; Romano (exclusive, 2 Aug): 'negotiations at advanced stages with #THFC as deal could be completed next week with Moore open to the move.' Several other European clubs have shown interest but Köln are the clear frontrunners. Loan only, not a permanent exit."},
   {player:"C. Melia", note:"Lincoln City sign Spurs goalkeeper Melia on loan — confirmed per BBC Sport. Loan departure, no fee."},
@@ -110,6 +111,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"29 Aug",
+    text:"Word filtering out of N17 is that De Zerbi has been pushing hard for one more addition before the window closes — his use of 'bombas' (plural) at his pre-Newcastle press conference is being read internally as a signal that the shopping list isn't quite finished. Whether that's a genuine pursuit or a manager managing expectations while the Sarr sale funds are still being counted is the question nobody is answering directly."
+  },
+  {
+    date:"29 Aug",
+    text:"A late move for a physical striker is reportedly being explored, with Jean-Philippe Mateta's name circulating after a bargain valuation surfaced following Aston Villa's failed bid — those close to the situation suggest Marmoush's arrival hasn't closed the door on a more traditional No.9. A separate thread involves a winger of significant value and a potential part-exchange, but no named journalist has put their name to either lead yet."
+  },
+  {
     date:"28 Aug",
     text:"Word doing the rounds near Hotspur Way is that De Zerbi has been pushing hard behind the scenes for one more addition before the window slams shut — the manager himself dropped the word 'bombas' in his presser, plural, which those inside the building are reading as a signal that the shopping list isn't quite finished. Whether the budget genuinely stretches to a ninth signing or whether that's a negotiating posture while the Sarr funds are still being counted is the question nobody is answering directly."
   },
@@ -124,13 +133,5 @@ export const ANON_BRIEFS = [
   {
     date:"27 Aug",
     text:"The SpursWeb note about a 'wantaway £35m Tottenham star' potentially linking up with Eric Dier in late loan talks is generating quiet chatter — no primary source has named the player, but the Eric Dier connection points toward a club in Germany or Portugal. Those with an ear to the ground at Hotspur Way aren't denying it, but they're not confirming it either."
-  },
-  {
-    date:"26 Aug",
-    text:"Word filtering through from sources close to the Mateta situation is that Tottenham moved quickly after the Aston Villa bid failed — an approach described as exploratory but genuine, made 'in the last few hours' of a frantic window day. Whether De Zerbi truly wants the Crystal Palace man or whether this is window-dressing while the Gakpo pursuit stalls is the question doing the rounds at N17."
-  },
-  {
-    date:"26 Aug",
-    text:"The Marmoush pursuit has a different feel to the other striker links — insiders suggest De Zerbi specifically requested this one, with the reunion angle real rather than agent-driven. The caveat those close to the situation keep raising is the same one it always is at this club right now: does the budget actually stretch this far after a summer that's already broken records twice over?"
   },
 ];

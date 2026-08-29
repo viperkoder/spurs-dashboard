@@ -25,12 +25,14 @@ export const STANDINGS = [
 
 // Latest first. Competitive and pre-season results may appear together.
 export const LAST5 = [
-  {date:"22 Aug",home:"BRE",away:"TOT",score:"3-0",r:"L",scorer:""},
+  {date:"22 Aug",home:"BRE",away:"TOT",score:"0-3",r:"L",scorer:""},
   {date:"15 Aug",home:"TOT",away:"HOF",score:"3-0",r:"W",scorer:"Richarlison; Moore ×2"},
-  {date:"8 Aug", home:"TOT",away:"GET",score:"1-1",r:"D",scorer:"Gallagher"},
-  {date:"1 Aug", home:"TOT",away:"CHE",score:"2-1",r:"W",scorer:"Tonali; Richarlison"},
+  {date:"8 Aug",home:"TOT",away:"GET",score:"1-1",r:"D",scorer:"Gallagher"},
+  {date:"1 Aug",home:"TOT",away:"CHE",score:"2-1",r:"W",scorer:"Tonali; Richarlison"},
   {date:"29 Jul",home:"TOT",away:"SYD",score:"1-1",r:"W",scorer:"Tel · won 4-2 pens"},
 ];
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.
-export const SCORERS = [];
+export const SCORERS = [
+
+];
