@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:52, st:"warm", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:12, st:"cold", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -89,6 +89,7 @@ export const CONFIRMED = [
 // contract (reported Oct 2025) — he was never a confirmed departure.
 // Earlier data appears to have misread a renewal story as an expiry.
 export const DEPARTURES = [
+  {player:"Pape Sarr", note:"Move to Juventus now reported as agreed on player terms, with Spurs pushing for an obligation-to-buy clause rather than a pure loan. Multiple outlets corroborate: Get Italian Football News ('Juventus seal move for Tottenham's Pape Sarr'), SpursWeb ('Juventus agree Pape Sarr terms'), Google News/blackwhitereadallover.com (Juve in talks with Spurs for Sarr after Kessié deal fell through). This is stronger than the previous anonymous-only DEPARTURES note but not yet fully confirmed — treat as highly advanced/likely, not sealed. Promote from anon-level note to a named-source departure brief pending official confirmation. Update DEPARTURES entry accordingly."},
   {player:"J. Donley", note:"BBC Sport confirms: Luton Town have signed Tottenham forward Donley on loan. Season-long loan; no fee. Corroborated by SpursWeb ('Tottenham send player De Zerbi loves on loan to Luton Town for the season') and talkSPORT/Google News ('Wilshere lands Spurs youngster on loan despite historic north London rivalry'). Add to DEPARTURES as a confirmed loan exit."},
   {player:"K. Danso", note:"Tottenham have rejected a loan move to Sunderland for Kevin Danso — confirmed by BBC Sport. Danso stays at Spurs; loan exit blocked. Update DEPARTURES to reflect this is not proceeding. Squad status unchanged — remains listed as CORE CB."},
   {player:"D. Spence", note:"COMPLETED 15 Aug — permanent transfer to Inter Milan. Reported fee approximately £30m; contract to 2031. Confirmed by Inter, BBC, Sky, ESPN and Reuters."},
@@ -112,6 +113,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"30 Aug",
+    text:"Word from inside Hotspur Way is that De Zerbi has privately told the board three more players have asked to leave before the window shuts — names haven't surfaced yet, but the manager made the admission publicly enough that the list is expected to become clearer in the next 24 hours. Whether Spurs act on any of those requests or simply hold firm on valuations is the question the window will answer."
+  },
+  {
+    date:"30 Aug",
+    text:"There's a late-window thread doing the rounds involving a 6ft 5 centre-forward with 19 goal contributions last season — Spurs and Manchester United are both credited with interest, but nothing has a named journalist behind it yet. The timing, with De Zerbi openly hinting at 'one more forward,' means it won't stay quiet for long if there's anything to it."
+  },
+  {
     date:"29 Aug",
     text:"De Zerbi's repeated use of 'bombas' — plural — at his pre-Newcastle presser is being read inside Hotspur Way as more than a turn of phrase. Word is the manager has been pushing hard for at least one more addition before the window closes, and that the Sarr situation is directly connected to whether the funds are there to make it happen. Nothing signed, nothing agreed — but the shopping list may not be as finished as the club's public messaging suggests."
   },
@@ -126,13 +135,5 @@ export const ANON_BRIEFS = [
   {
     date:"29 Aug",
     text:"A Monaco winger has quietly entered the conversation at Hotspur Way, with one intriguing wrinkle: Pape Sarr's name is reportedly being floated as part of the equation going the other way. Nothing has a named journalist behind it yet, and it may be nothing more than deadline-day creative accounting — but the volume of chatter around Sarr's future suggests his injury absence hasn't dampened interest from elsewhere."
-  },
-  {
-    date:"29 Aug",
-    text:"Word filtering out of N17 is that De Zerbi has been pushing hard for one more addition before the window closes — his use of 'bombas' (plural) at his pre-Newcastle press conference is being read internally as a signal that the shopping list isn't quite finished. Whether that's a genuine pursuit or a manager managing expectations while the Sarr sale funds are still being counted is the question nobody is answering directly."
-  },
-  {
-    date:"29 Aug",
-    text:"A late move for a physical striker is reportedly being explored, with Jean-Philippe Mateta's name circulating after a bargain valuation surfaced following Aston Villa's failed bid — those close to the situation suggest Marmoush's arrival hasn't closed the door on a more traditional No.9. A separate thread involves a winger of significant value and a potential part-exchange, but no named journalist has put their name to either lead yet."
   },
 ];

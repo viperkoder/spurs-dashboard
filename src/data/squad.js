@@ -20,6 +20,7 @@
 //     a decision once confirmed (would move to DEPARTURES in transfers.js, not just squad.js)
 
 export const SQUAD = [
+  {name:"I. Ndiaye", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   {name:"O. Marmoush", pos:"ST", e:"🇪🇬", apps:1, g:0, con:"LOAN 2027", wc:null, st:"NO.22 — LOAN WITH OBLIGATION", sc:"cyan"},
   // GOALKEEPERS
   {name:"A. Kinsky",      pos:"GK",e:"🇨🇿",apps:2, g:0,con:"2031+1",wc:null,   st:"NO.1 — NEW 5YR DEAL",  sc:"green"},
@@ -51,14 +52,12 @@ export const SQUAD = [
   {name:"M. Tel",         pos:"LW",e:"🇫🇷",apps:2, g:0,con:"2031",  wc:null,   st:"PERMANENT — CORE (£30m, signed Jun '25)",sc:"green"},
   {name:"W. Odobert",     pos:"LW",e:"🇫🇷",apps:0, g:0,con:"2029",  wc:null,   st:"ACL — NOV 2026 (return needs re-check)",sc:"red"},
   {name:"D. Solanke",     pos:"ST",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:2, g:0,con:"2030",  wc:null,   st:"AVAILABLE MD1",          sc:"green"},
-  {name:"Richarlison",    pos:"ST",e:"🇧🇷",apps:1, g:0,con:"2027",  wc:null,   st:"SALE EXPECTED",        sc:"amber"},
   {name:"D. Scarlett",    pos:"ST",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:0, g:0,con:"2027",  wc:null,   st:"BACK FROM HIBS LOAN — DEPTH",sc:"muted"},
 ];
 
 // Injury Centre — active injuries only. Source: premierinjuries.com
 export const INJURIES = [
   {name:"Micky van de Ven",flag:"NL",emoji:"🇳🇱",pos:"CB",issue:"Minor pre-season issue — confirmed OUT for MD1 vs Brentford per official Tottenham team news (Google News: 'Pedro Porro, van de Ven out of opener at Brentford — Tottenham Hotspur official')",sev:"short",ret:"After 22 Aug — exact return TBC, unchanged"},
-  {name:"Pape Matar Sarr", flag:"SN",emoji:"🇸🇳",pos:"CM",issue:"football.london injury round-up 'Maddison, Kudus, Sarr - Tottenham injury news and return dates ahead of Newcastle' and 'Eight players to miss Tottenham vs Newcastle' confirm Sarr is among those missing for the Newcastle fixture. Return date still TBC but he is confirmed out for this match.",          sev:"short",ret:"TBC — confirmed out vs Newcastle"},
   {name:"Xavi Simons",     flag:"NL",emoji:"🇳🇱",pos:"AM",issue:"football.london headline 'Xavi Simons provides Tottenham injury update before Carabao Cup clash in transfer message' suggests Simons himself has commented on his situation. No change to severity — ACL remains a long-term injury — but flagging for human review in case the 'transfer message' element is relevant to a loan/exit rumour rather than purely a fitness update. Injury record unchanged: ACL right knee, return Feb 2027.",        sev:"long",  ret:"20 Feb 2027 (unchanged)"},
   {name:"Wilson Odobert",  flag:"FR",emoji:"🇫🇷",pos:"LW",issue:"ACL left knee",          sev:"long",  ret:"28 Nov 2026"},
   // NOTE: Kudus REMOVED from active injuries 17 Jul 2026 — back in full pre-season
