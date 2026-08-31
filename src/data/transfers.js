@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:12, st:"cold", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:10, st:"cold", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -113,6 +113,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"31 Aug",
+    text:"Word doing the rounds in late-window circles is that Spurs have made a shock approach for a former Chelsea player as a direct response to the Danso-to-Sunderland collapse — the suggestion being that De Zerbi's staff identified a defensive alternative almost immediately after the loan rejection was confirmed. Chelsea are said to have given the green light on their end, but nothing from a named journalist has landed yet, and the identity of the player remains unconfirmed."
+  },
+  {
+    date:"31 Aug",
+    text:"A whisper has surfaced that Souza's time at Hotspur Way may be shorter than expected — Porto are mentioned as a potential loan destination before the window shuts. The Brazilian full-back only arrived in January, and sources close to the situation are tight-lipped, but the volume of chatter around the left-back position makes it one to watch into the final hours of deadline day."
+  },
+  {
     date:"30 Aug",
     text:"Word from inside Hotspur Way is that De Zerbi has privately told the board three more players have asked to leave before the window shuts — names haven't surfaced yet, but the manager made the admission publicly enough that the list is expected to become clearer in the next 24 hours. Whether Spurs act on any of those requests or simply hold firm on valuations is the question the window will answer."
   },
@@ -127,13 +135,5 @@ export const ANON_BRIEFS = [
   {
     date:"29 Aug",
     text:"A forward's name has been quietly doing the rounds in conversations around Hotspur Way in the final days of the window — the suggestion being that Marmoush's arrival hasn't entirely closed the door on a more traditional centre-forward option. De Zerbi's hint about 'one more forward' at his press conference has done little to quieten the speculation, though no named journalist has put their name to a specific target yet."
-  },
-  {
-    date:"29 Aug",
-    text:"Word filtering through the end-of-window noise is that Tottenham have made a concrete approach for a physical centre-forward as a complement to Marmoush — Jean-Philippe Mateta's name is the one being whispered, with a bargain valuation reportedly emerging after Aston Villa failed to land him. Those close to the situation suggest De Zerbi's staff have not closed the door on a more traditional No.9 despite the Egyptian's arrival, and that the next 48 hours will tell the story."
-  },
-  {
-    date:"29 Aug",
-    text:"A Monaco winger has quietly entered the conversation at Hotspur Way, with one intriguing wrinkle: Pape Sarr's name is reportedly being floated as part of the equation going the other way. Nothing has a named journalist behind it yet, and it may be nothing more than deadline-day creative accounting — but the volume of chatter around Sarr's future suggests his injury absence hasn't dampened interest from elsewhere."
   },
 ];

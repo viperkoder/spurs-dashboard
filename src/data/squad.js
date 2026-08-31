@@ -57,7 +57,7 @@ export const SQUAD = [
 
 // Injury Centre — active injuries only. Source: premierinjuries.com
 export const INJURIES = [
-  {name:"Micky van de Ven",flag:"NL",emoji:"🇳🇱",pos:"CB",issue:"Minor pre-season issue — confirmed OUT for MD1 vs Brentford per official Tottenham team news (Google News: 'Pedro Porro, van de Ven out of opener at Brentford — Tottenham Hotspur official')",sev:"short",ret:"After 22 Aug — exact return TBC, unchanged"},
+  {name:"Micky van de Ven",flag:"NL",emoji:"🇳🇱",pos:"CB",issue:"Football.london reports van de Ven has 'revealed the truth about a strange secret injury battle' — suggesting a previously undisclosed or downplayed issue beyond the MD1 minor pre-season note. He has since been named captain and appeared vs Newcastle, so this may be historical context rather than a new active injury. Flag for human review to determine whether the 'secret' issue changes his severity rating or return status.",sev:"short",ret:"Available — playing, no change to current status pending human review"},
   {name:"Xavi Simons",     flag:"NL",emoji:"🇳🇱",pos:"AM",issue:"football.london headline 'Xavi Simons provides Tottenham injury update before Carabao Cup clash in transfer message' suggests Simons himself has commented on his situation. No change to severity — ACL remains a long-term injury — but flagging for human review in case the 'transfer message' element is relevant to a loan/exit rumour rather than purely a fitness update. Injury record unchanged: ACL right knee, return Feb 2027.",        sev:"long",  ret:"20 Feb 2027 (unchanged)"},
   {name:"Wilson Odobert",  flag:"FR",emoji:"🇫🇷",pos:"LW",issue:"ACL left knee",          sev:"long",  ret:"28 Nov 2026"},
   // NOTE: Kudus REMOVED from active injuries 17 Jul 2026 — back in full pre-season
