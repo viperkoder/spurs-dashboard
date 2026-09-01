@@ -68,8 +68,8 @@ export const PREMIER_LEAGUE = [
 
 // opponent is "TBD" until the relevant round's draw has happened.
 export const CUPS = [
-  {comp:"Carabao Cup", round:"Round 2",              opponent:"TBD", venue:"TBD", date:"2026-08-26T19:45:00", score:null},
-  {comp:"Carabao Cup", round:"Round 3",               opponent:"TBD", venue:"TBD", date:"2026-09-09T19:45:00", score:null, note:"Exact midweek (9 or 16 Sep) TBC — split across two dates due to other clubs' European fixtures"},
+  {comp:"Carabao Cup", round:"Round 2",              opponent:"Charlton Athletic", venue:"H", date:"2026-08-26T18:45:00Z", score:"5-1", note:"Mikey Moore, Dominic Solanke, Kevin Danso, Savio, Ben Davies"},
+  {comp:"Carabao Cup", round:"Round 3",              opponent:"Liverpool", venue:"A", date:"2026-09-15T19:00:00Z", score:null, note:"Tue 15 Sep · 8:00 PM BST / Wed 16 Sep · 3:00 AM SGT · Sky Sports Main Event and ITV4"},
   {comp:"Carabao Cup", round:"Round 4",               opponent:"TBD", venue:"TBD", date:"2026-10-28T19:45:00", score:null},
   {comp:"Carabao Cup", round:"Round 5",               opponent:"TBD", venue:"TBD", date:"2026-12-16T19:45:00", score:null},
   {comp:"Carabao Cup", round:"Semi-Final (1st Leg)",  opponent:"TBD", venue:"TBD", date:"2027-01-13T19:45:00", score:null},
