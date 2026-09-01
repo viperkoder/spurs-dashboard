@@ -89,6 +89,7 @@ export const CONFIRMED = [
 // contract (reported Oct 2025) — he was never a confirmed departure.
 // Earlier data appears to have misread a renewal story as an expiry.
 export const DEPARTURES = [
+  {player:"Kota Takai", note:"CONFIRMED loan exit — BBC Sport reports 'Tottenham transfer news: Kota Takai joins Sint-Truidense VV on loan', corroborated by official club source tottenhamhotspur.com ('Takai joins Sint-Truidense VV on loan'). Season-long loan. Update DEPARTURES and update squad.js entry for Takai to reflect active loan away."},
   {player:"Pape Sarr", note:"Move to Juventus now reported as agreed on player terms, with Spurs pushing for an obligation-to-buy clause rather than a pure loan. Multiple outlets corroborate: Get Italian Football News ('Juventus seal move for Tottenham's Pape Sarr'), SpursWeb ('Juventus agree Pape Sarr terms'), Google News/blackwhitereadallover.com (Juve in talks with Spurs for Sarr after Kessié deal fell through). This is stronger than the previous anonymous-only DEPARTURES note but not yet fully confirmed — treat as highly advanced/likely, not sealed. Promote from anon-level note to a named-source departure brief pending official confirmation. Update DEPARTURES entry accordingly."},
   {player:"J. Donley", note:"BBC Sport confirms: Luton Town have signed Tottenham forward Donley on loan. Season-long loan; no fee. Corroborated by SpursWeb ('Tottenham send player De Zerbi loves on loan to Luton Town for the season') and talkSPORT/Google News ('Wilshere lands Spurs youngster on loan despite historic north London rivalry'). Add to DEPARTURES as a confirmed loan exit."},
   {player:"K. Danso", note:"Tottenham have rejected a loan move to Sunderland for Kevin Danso — confirmed by BBC Sport. Danso stays at Spurs; loan exit blocked. Update DEPARTURES to reflect this is not proceeding. Squad status unchanged — remains listed as CORE CB."},
@@ -113,6 +114,14 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
+    date:"1 Sept",
+    text:"Word reaching the edges of N17 is that Richarlison's 'never again' statement has landed harder inside Hotspur Way than the club's public silence suggests — sources close to the dressing room indicate De Zerbi's staff were caught off guard by the timing and tone of the post, with the manager now having to manage the fallout with a squad already navigating a chaotic deadline day. Whether Richarlison pulls on a Spurs shirt again this season is, quietly, an open question."
+  },
+  {
+    date:"1 Sept",
+    text:"There's a thread doing the rounds that Spurs made a late approach for a former Chelsea player as defensive insurance once the Danso-to-Sunderland situation became messy — the suggestion being that the Adarabioyo deal was not the only name on De Zerbi's emergency CB shortlist as the clock ticked down. Nothing from a named journalist has landed to confirm a second defensive target, but the volume of late movement in that area of the squad is worth watching."
+  },
+  {
     date:"31 Aug",
     text:"Word doing the rounds in late-window circles is that Spurs have made a shock approach for a former Chelsea player as a direct response to the Danso-to-Sunderland collapse — the suggestion being that De Zerbi's staff identified a defensive alternative almost immediately after the loan rejection was confirmed. Chelsea are said to have given the green light on their end, but nothing from a named journalist has landed yet, and the identity of the player remains unconfirmed."
   },
@@ -127,13 +136,5 @@ export const ANON_BRIEFS = [
   {
     date:"30 Aug",
     text:"There's a late-window thread doing the rounds involving a 6ft 5 centre-forward with 19 goal contributions last season — Spurs and Manchester United are both credited with interest, but nothing has a named journalist behind it yet. The timing, with De Zerbi openly hinting at 'one more forward,' means it won't stay quiet for long if there's anything to it."
-  },
-  {
-    date:"29 Aug",
-    text:"De Zerbi's repeated use of 'bombas' — plural — at his pre-Newcastle presser is being read inside Hotspur Way as more than a turn of phrase. Word is the manager has been pushing hard for at least one more addition before the window closes, and that the Sarr situation is directly connected to whether the funds are there to make it happen. Nothing signed, nothing agreed — but the shopping list may not be as finished as the club's public messaging suggests."
-  },
-  {
-    date:"29 Aug",
-    text:"A forward's name has been quietly doing the rounds in conversations around Hotspur Way in the final days of the window — the suggestion being that Marmoush's arrival hasn't entirely closed the door on a more traditional centre-forward option. De Zerbi's hint about 'one more forward' at his press conference has done little to quieten the speculation, though no named journalist has put their name to a specific target yet."
   },
 ];

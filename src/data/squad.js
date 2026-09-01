@@ -20,6 +20,9 @@
 //     a decision once confirmed (would move to DEPARTURES in transfers.js, not just squad.js)
 
 export const SQUAD = [
+  {name:"T. Adarabioyo", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
+  {name:"M. Mudryk", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
+  {name:"K. Danso", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   {name:"I. Ndiaye", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
   {name:"O. Marmoush", pos:"ST", e:"🇪🇬", apps:1, g:0, con:"LOAN 2027", wc:null, st:"NO.22 — LOAN WITH OBLIGATION", sc:"cyan"},
   // GOALKEEPERS
@@ -31,7 +34,6 @@ export const SQUAD = [
   {name:"M. Senesi",      pos:"CB",e:"🇦🇷",apps:1, g:0,con:"2030",  wc:null,   st:"NEW — FREE",           sc:"cyan"},
   {name:"M. van de Ven",  pos:"CB",e:"🇳🇱",apps:1, g:0,con:"2029",  wc:"NED",  st:"CAPTAIN — OUT MD1, MINOR ISSUE",sc:"amber"},
   {name:"R. Dragusin",    pos:"CB",e:"🇷🇴",apps:0, g:0,con:"2030",  wc:null,   st:"BACKUP",               sc:"muted"},
-  {name:"K. Takai",       pos:"CB",e:"🇯🇵",apps:0, g:0,con:"2029",  wc:null,   st:"BACK FROM GLADBACH LOAN — DEPTH",sc:"muted"},
   {name:"P. Porro",       pos:"RB",e:"🇪🇸",apps:1, g:0,con:"2030",  wc:"ESP",  st:"OUT MD1 — BUILDING FITNESS",sc:"amber"},
   {name:"D. Udogie",      pos:"LB",e:"🇮🇹",apps:2, g:0,con:"2030",  wc:null,   st:"AVAILABLE MD1",          sc:"green"},
   {name:"A. Robertson",   pos:"LB",e:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",apps:2, g:0,con:"TBC",   wc:null,   st:"NEW — FREE",           sc:"cyan"},
