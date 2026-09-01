@@ -30,7 +30,7 @@ export const TRANSFER_BRIEFS = [
   // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
   // that PSG were firmly leading the race.
   {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:10, st:"cold", date:"16 Aug",
+    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:18, st:"cold", date:"16 Aug",
     brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
   },
   {
@@ -115,6 +115,14 @@ export const DEPARTURES = [
 export const ANON_BRIEFS = [
   {
     date:"1 Sept",
+    text:"Whispers from the edges of deadline day suggest Archie Gray attracted serious late interest — Spurs fielded 'a number of enquiries' according to club-adjacent sources, but the club responded by holding firm. Whether that stance survives into January, with Gray's playing time still up for debate under De Zerbi, is a question that hasn't gone away."
+  },
+  {
+    date:"1 Sept",
+    text:"Word doing the rounds is that Lucas Bergvall's deadline day situation was stranger than the public standoff suggested — a Tottenham insider reportedly dropped a 'shock update' on his status as the clock ticked down, and it wasn't simply a case of Forest's bid being rejected and everything going quiet. The full picture of where Bergvall's head is at, and whether De Zerbi sees a path back for him, feels like unfinished business heading into the first international break."
+  },
+  {
+    date:"1 Sept",
     text:"Word reaching the edges of N17 is that Richarlison's 'never again' statement has landed harder inside Hotspur Way than the club's public silence suggests — sources close to the dressing room indicate De Zerbi's staff were caught off guard by the timing and tone of the post, with the manager now having to manage the fallout with a squad already navigating a chaotic deadline day. Whether Richarlison pulls on a Spurs shirt again this season is, quietly, an open question."
   },
   {
@@ -128,13 +136,5 @@ export const ANON_BRIEFS = [
   {
     date:"31 Aug",
     text:"A whisper has surfaced that Souza's time at Hotspur Way may be shorter than expected — Porto are mentioned as a potential loan destination before the window shuts. The Brazilian full-back only arrived in January, and sources close to the situation are tight-lipped, but the volume of chatter around the left-back position makes it one to watch into the final hours of deadline day."
-  },
-  {
-    date:"30 Aug",
-    text:"Word from inside Hotspur Way is that De Zerbi has privately told the board three more players have asked to leave before the window shuts — names haven't surfaced yet, but the manager made the admission publicly enough that the list is expected to become clearer in the next 24 hours. Whether Spurs act on any of those requests or simply hold firm on valuations is the question the window will answer."
-  },
-  {
-    date:"30 Aug",
-    text:"There's a late-window thread doing the rounds involving a 6ft 5 centre-forward with 19 goal contributions last season — Spurs and Manchester United are both credited with interest, but nothing has a named journalist behind it yet. The timing, with De Zerbi openly hinting at 'one more forward,' means it won't stay quiet for long if there's anything to it."
   },
 ];

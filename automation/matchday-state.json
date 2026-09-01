@@ -3,12 +3,16 @@
     "2026-08-15T15:00:00|Hoffenheim|Friendly",
     "2026-08-16T15:00:00|Hoffenheim|Friendly",
     "2026-08-22T17:30:00|Brentford|Premier League",
-    "2026-08-29T16:30:00Z|Newcastle United|Premier League"
+    "2026-08-29T16:30:00Z|Newcastle United|Premier League",
+    "2026-08-26T18:45:00Z|Charlton Athletic|Carabao Cup"
   ],
   "lastProcessed": {
-    "fixture": "2026-08-29T16:30:00Z|Newcastle United|Premier League",
-    "eventId": "401879312",
-    "at": "2026-08-29T18:52:23.733Z",
-    "injuryNotes": []
+    "fixture": "2026-08-26T18:45:00Z|Charlton Athletic|Carabao Cup",
+    "eventId": "401908140",
+    "at": "2026-09-01T17:54:54.140Z",
+    "injuryNotes": [
+      "Micky van de Ven received treatment for an injury in the 90th minute (delay logged by ESPN at 90'); he was able to continue until full time. Human review recommended to confirm whether this requires an injury-centre update.",
+      "Kevin Danso received treatment for an injury immediately after scoring in the 67th minute (delay logged by ESPN); he remained on the pitch. Human review recommended."
+    ]
   }
 }

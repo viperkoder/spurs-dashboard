@@ -25,8 +25,8 @@ export const STANDINGS = [
 
 // Latest first. Competitive and pre-season results may appear together.
 export const LAST5 = [
+  {date:"26 Aug",home:"TOT",away:"CHA",score:"5-1",r:"W",scorer:"Moore 41'; Solanke 45'; Danso 67'; Sávio 82'; Davies 85'"},
   {date:"29 Aug",home:"TOT",away:"NEW",score:"0-2",r:"L",scorer:""},
-  {date:"26 Aug",home:"TOT",away:"CHA",score:"5-1",r:"W",scorer:"Moore; Solanke; Danso; Savio; Davies"},
   {date:"22 Aug",home:"BRE",away:"TOT",score:"0-3",r:"L",scorer:""},
   {date:"15 Aug",home:"TOT",away:"HOF",score:"3-0",r:"W",scorer:"Richarlison; Moore ×2"},
   {date:"8 Aug",home:"TOT",away:"GET",score:"1-1",r:"D",scorer:"Gallagher"},
@@ -34,9 +34,13 @@ export const LAST5 = [
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.
 export const SCORERS = [
-  {name:"Mikey Moore",g:1,a:0,apps:1},
-  {name:"Dominic Solanke",g:1,a:0,apps:1},
-  {name:"Kevin Danso",g:1,a:0,apps:1},
+  {name:"Mikey Moore",g:2,a:1,apps:2},
+  {name:"Ben Davies",g:2,a:0,apps:2},
+  {name:"Dominic Solanke",g:2,a:0,apps:2},
+  {name:"Kevin Danso",g:2,a:0,apps:2},
   {name:"Savio",g:1,a:1,apps:1},
-  {name:"Ben Davies",g:1,a:0,apps:1},
+  {name:"Sávio",g:1,a:1,apps:1},
+  {name:"Archie Gray",g:0,a:1,apps:1},
+  {name:"Mateus Fernandes",g:0,a:1,apps:1},
+  {name:"Rodrigo Bentancur",g:0,a:1,apps:1},
 ];
