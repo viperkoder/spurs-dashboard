@@ -1,60 +1,29 @@
 // Transfer Intelligence — Summer 2026
 // Edit this file alone for transfer rumours, confirmed signings, departures.
-// Last manual verification pass: 28 Aug 2026 (official club sources take priority).
+// Last manual verification pass: 3 Sep 2026 (official club sources take priority).
 // Automation was down 4-17 Jul (stale project path + node PATH issue under
 // launchd) — fixed via automation/install-launchd.sh, see automation/SETUP.md.
 
-export const TRANSFER_BRIEFS = [
-  // NOTE: Fernandes REMOVED — confirmed signing as of 1 Jul 2026
-  // NOTE: Tonali REMOVED — confirmed signing as of 3 Jul 2026, see CONFIRMED below
-  // NOTE: Rafael Leao REMOVED 9 Aug 2026 — interest cooled, never became a
-  // formal pursuit. Talks pre-World Cup were "exploratory rather than
-  // formal" and did not progress; De Zerbi's staff have shifted focus to
-  // other attacking options that better fit budget/tactics. (Yahoo Sports,
-  // 9 Aug) Re-add only if fresh reporting revives it.
-  {
-    player:"Carlos Baleba", e:"🇨🇲", from:"Brighton", fee:"100m", like:32, st:"warm", date:"14 Jul (no update since)",
-    brief:"One of three De Zerbi ex-Brighton targets (with Verbruggen; Van Hecke already signed). De Zerbi worked closely with Baleba at Brighton — 37 games together — and rates him highly. His valuation has climbed sharply since De Zerbi signed him for £23.3m in 2024, with reports now pricing him as high as £100m, which has cooled the pace of any move. Man Utd interest previously reported has gone quiet; Spurs could revisit if that move stays dead. Club acknowledges landing all three Brighton targets in one window is unlikely. STATUS CHECK 9 Aug: no fresh reporting found since mid-June — trimmed a few points to reflect the lead has genuinely gone quiet, not just under-covered. Not marked dead; revisit if reporting resumes."
-  },
-  {
-    player:"Bart Verbruggen", e:"🇳🇱", from:"Brighton", fee:"30m", like:30, st:"warm", date:"14 Jul (no update since)",
-    brief:"Still De Zerbi's preferred long-term No.1 — Dubravka was always a short-term/backup solution. Verbruggen remains attracting interest from elsewhere in Europe, so competition is a live risk. Vicario sale proceeds earmarked to help fund this move. Considered the more advanced of the two remaining Brighton targets given goalkeeper is a clearer positional priority than a third-choice CM. STATUS CHECK 9 Aug: no fresh reporting found since ~June — genuinely quiet, likelihood trimmed slightly to reflect the gap, not treated as dead."
-  },
-  // NOTE: Vuskovic REMOVED — sale to Brighton confirmed, see DEPARTURES below
-  // NOTE: Eli Junior Kroupi REMOVED 9 Aug 2026 — dead. Bournemouth told him
-  // directly he won't be sold this summer; club is preparing for its first
-  // Europa League campaign and plans to reassess his value in ~a year.
-  // "The Kroupi dream is over" per one outlet. (The i Paper via HotspurHQ,
-  // Spurs Web — 9 Aug)
-  // NOTE: Maghnes Akliouche REMOVED 9 Aug 2026 — confirmed gone to PSG,
-  // "Here We Go" (Fabrizio Romano). Matches this brief's own prior read
-  // that PSG were firmly leading the race.
-  {
-    player:"Cody Gakpo", e:"🇳🇱", from:"Liverpool", fee:"60m+", like:18, st:"cold", date:"16 Aug",
-    brief:"Reactivated after fresh Dutch and German reporting. Tottenham have opened concrete discussions and Gakpo is reportedly receptive, but Liverpool have not approved a sale and reports of a completed agreement are disputed. Treat as a live negotiation, not a done deal; Liverpool's replacement plans may determine whether it advances."
-  },
-  {
-    player:"Victor Osimhen", e:"🇳🇬", from:"Galatasaray", fee:"55m", like:42, st:"warm", date:"9 Aug",
-    brief:"Promoted from anonymous-only chatter (see ANON_BRIEFS 3-4 Aug) to a proper brief — this has now graduated to multiple named outlets reporting a formal approach. Tottenham have proposed £50-55m; Galatasaray want £65m, a £10-15m gap that's the main obstacle. Reports (Caught Offside, citing agent-industry sources; thehardtackle) say Spurs have 'received sporting approval to begin formal negotiations' and personal terms aren't expected to be a hurdle. Would be a 7th major signing after an already record summer (£230m+ spent on 6 arrivals), which is the real question mark — not the player's willingness, but whether the finances stack up. Also being weighed alongside continued interest in Cody Gakpo."
-  },
-  {
-    player:"Endrick", e:"🇧🇷", from:"Real Madrid", fee:"Loan", like:35, st:"warm", date:"9 Aug",
-    brief:"Real Madrid forward, spent last season on loan at Lyon, now drawing interest from up to 8 Premier League clubs (Chelsea, Arsenal, Liverpool, Man City, Man Utd, Tottenham, Aston Villa, Fulham per TEAMtalk). The detail that favours Spurs: Real Madrid's own preference is a straight loan with no purchase option, and Tottenham are one of only three interested clubs (with Villa and Fulham) willing to do a loan-only deal — Chelsea, Arsenal, Liverpool, City and Man Utd have all said they'd only consider it with a buy option attached, which clashes with what Real actually want. That structural fit is a genuine edge, but with so many suitors circling Pérez's decision, treat as a real but competitive loan pursuit rather than advanced."
-  },
-  {
-    player:"Georges Mikautadze", e:"🇬🇪", from:"Villarreal", fee:"TBC (€50-60m mooted, unconfirmed)", like:26, st:"warm", date:"9 Aug",
-    brief:"Georgian forward (13 goals, 6 assists in 32 La Liga appearances last season; joint-top scorer at Euro 2024), seen as a possible fit given Solanke's injury and Kolo Muani's struggles in front of goal. Sourced to Paul O'Keefe (7 Aug) — one of the anonymous accounts already on the Twitter Pulse tracking list — who is explicit that 'no formal approach has yet been made,' just close monitoring. Per the project's own weighting rule, anon-only/no-Newsworthy-corroboration chatter caps around 45%; this is earlier-stage than that (pre-approach), so kept well under. Fee figures floating in some outlets (€50-60m) are unconfirmed by a named source — treat as market chatter, not a real asking price yet."
-  },
-];
+// The English summer window closed on 1 Sep. Archived targets are removed
+// rather than left looking live; the section reopens for January reporting.
+export const TRANSFER_BRIEFS = [];
 
 export const CONFIRMED = [
+  {
+    player:"Tosin Adarabioyo", e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", from:"Chelsea", fee:"£10m reported", role:"CB", date:"2026-09-01",
+    note:"Official Tottenham signing. Premier League-experienced centre-back; assigned shirt number 4. Sky Sports reported a £10m fee."
+  },
+  {
+    player:"Mykhailo Mudryk", e:"🇺🇦", from:"Chelsea", fee:"Season-long loan", role:"LW", date:"2026-09-01",
+    note:"Official Tottenham loan for 2026/27. Reported £75m option to buy; the option is not booked as committed spend."
+  },
   {
     player:"Omar Marmoush", e:"🇪🇬", from:"Manchester City", fee:"Season-long loan", role:"FW", date:"2026-08-27",
     note:"Official Tottenham announcement: season-long loan with an obligation to make the move permanent in summer 2027. Shirt number 22; available for the Newcastle match."
   },
   {
-    player:"Savinho", e:"🏳️", from:"Man City", fee:"£75m", role:"TBC", date:"2026-08-22",
-    note:"Confirmed by BBC Sport ('Spurs agree £75m deal for Man City winger Savinho'). Previously listed as agreement reached/pending completion at 92% likelihood. Move to CONFIRMED. Upgrade from the prior 'club-to-club agreement' note — BBC Sport language 'agree' is sufficient for confirmation here. The Guardian also references the double deal in passing. Remove from TRANSFER_BRIEFS and add to CONFIRMED array. — auto-added, verify flag/role manually"
+    player:"Savio", e:"🇧🇷", from:"Manchester City", fee:"£85m reported", role:"RW", date:"2026-08-22",
+    note:"Confirmed signing and already debuted against Charlton. Reported £85m total package."
   },
   {
     player:"Sandro Tonali", e:"🇮🇹", from:"Newcastle", fee:"100m", role:"DM", date:"2026-07-03",
@@ -89,21 +58,23 @@ export const CONFIRMED = [
 // contract (reported Oct 2025) — he was never a confirmed departure.
 // Earlier data appears to have misread a renewal story as an expiry.
 export const DEPARTURES = [
-  {player:"Kota Takai", note:"CONFIRMED loan exit — BBC Sport reports 'Tottenham transfer news: Kota Takai joins Sint-Truidense VV on loan', corroborated by official club source tottenhamhotspur.com ('Takai joins Sint-Truidense VV on loan'). Season-long loan. Update DEPARTURES and update squad.js entry for Takai to reflect active loan away."},
-  {player:"Pape Sarr", note:"Move to Juventus now reported as agreed on player terms, with Spurs pushing for an obligation-to-buy clause rather than a pure loan. Multiple outlets corroborate: Get Italian Football News ('Juventus seal move for Tottenham's Pape Sarr'), SpursWeb ('Juventus agree Pape Sarr terms'), Google News/blackwhitereadallover.com (Juve in talks with Spurs for Sarr after Kessié deal fell through). This is stronger than the previous anonymous-only DEPARTURES note but not yet fully confirmed — treat as highly advanced/likely, not sealed. Promote from anon-level note to a named-source departure brief pending official confirmation. Update DEPARTURES entry accordingly."},
+  {player:"Dane Scarlett", note:"COMPLETED 1 Sep — permanent transfer to Leyton Orient; fee undisclosed. Confirmed by Tottenham."},
+  {player:"Kevin Danso", note:"COMPLETED 1 Sep — Sunderland loan for 2026/27 with a performance-related obligation to buy. Confirmed by Tottenham."},
+  {player:"Pape Matar Sarr", note:"COMPLETED 1 Sep — Juventus loan for 2026/27 with a performance-related obligation to buy. Confirmed by Tottenham."},
+  {player:"Souza", note:"COMPLETED — season-long loan to FC Porto."},
+  {player:"Mikey Moore", note:"COMPLETED — season-long loan to FC Köln."},
+  {player:"Kota Takai", note:"COMPLETED — season-long loan to Sint-Truidense VV. Confirmed by Tottenham."},
   {player:"J. Donley", note:"BBC Sport confirms: Luton Town have signed Tottenham forward Donley on loan. Season-long loan; no fee. Corroborated by SpursWeb ('Tottenham send player De Zerbi loves on loan to Luton Town for the season') and talkSPORT/Google News ('Wilshere lands Spurs youngster on loan despite historic north London rivalry'). Add to DEPARTURES as a confirmed loan exit."},
-  {player:"K. Danso", note:"Tottenham have rejected a loan move to Sunderland for Kevin Danso — confirmed by BBC Sport. Danso stays at Spurs; loan exit blocked. Update DEPARTURES to reflect this is not proceeding. Squad status unchanged — remains listed as CORE CB."},
-  {player:"D. Spence", note:"COMPLETED 15 Aug — permanent transfer to Inter Milan. Reported fee approximately £30m; contract to 2031. Confirmed by Inter, BBC, Sky, ESPN and Reuters."},
-  {player:"Mikey Moore", note:"NEW 9 Aug — promoted from ANON_BRIEFS now that it's Romano-attributed. FC Köln have submitted an official bid for a season-long loan; Romano (exclusive, 2 Aug): 'negotiations at advanced stages with #THFC as deal could be completed next week with Moore open to the move.' Several other European clubs have shown interest but Köln are the clear frontrunners. Loan only, not a permanent exit."},
+  {player:"G. Vicario", note:"COMPLETED — loan to Inter Milan with a reported £8.6m option to buy."},
+  {player:"R. Dragusin", note:"COMPLETED — Fiorentina loan with a reported £21.5m obligation to buy."},
+  {player:"D. Spence", note:"COMPLETED 15 Aug — permanent transfer to Inter Milan. Reported fee £24m."},
   {player:"C. Melia", note:"Lincoln City sign Spurs goalkeeper Melia on loan — confirmed per BBC Sport. Loan departure, no fee."},
   {player:"Manor Solomon", note:"COMPLETED — permanent transfer to West Ham. Reported initial fee £5m, potentially £7m with add-ons, plus a 10% sell-on clause."},
-  {player:"N. Lankshear", note:"Middlesbrough sign Tottenham striker Lankshear — confirmed per BBC Sport. Permanent departure; no fee reported in headline."},
+  {player:"N. Lankshear", note:"COMPLETED — permanent transfer to Middlesbrough; reported £14m plus sell-on and matching rights."},
+  {player:"A. Phillips", note:"COMPLETED — permanent transfer to Middlesbrough; reported £7m plus up to £13m in add-ons."},
+  {player:"A. Devine", note:"COMPLETED — permanent transfer to Preston North End; reported £6m plus sell-on and matching rights."},
   {player:"M. Akhamrich", note:"Tottenham winger Akhamrich joins Leyton Orient on loan — confirmed per BBC Sport. Loan move, no fee."},
-  {player:"G. Vicario", note:"Juventus CEO Giovanni Carnevali has confirmed direct interest; Spalletti has spoken to Vicario personally. Spurs have set a €15m asking price (negotiable). Complication: Vicario wants ~€4m/yr after tax, above Juve's wage discipline, and Juve's actual first choice is Aston Villa's Emi Martínez (who Villa won't sell) — Vicario is the fallback. A loan-with-option is being discussed as a compromise. Drags into August."},
   {player:"C. Romero", note:"COMPLETED — permanent transfer to Atlético Madrid for a reported £34m, with Spurs retaining a 15% sell-on clause. Four-year contract plus an optional year."},
-  {player:"P. Sarr", note:"NEW 31 Jul (Twitter Pulse, anonymous-sourced only — no Newsworthy corroboration yet, treat as early-stage): Aston Villa preparing a bid, described as holding 'serious interest.' Personal terms reportedly not expected to be an issue. A German club is also credited with interest."},
-  {player:"L. Bergvall", note:"Handed in a transfer request citing lack of first-team football (112 mins under De Zerbi all season). Nottingham Forest had an opening £38m bid rejected and are expected to return with an improved offer — the chance to work under Oliver Glasner is reportedly a big pull for the player. Spurs are willing to sell but only on their valuation; will keep him if it isn't met."},
-  {player:"Richarlison", note:"Spurs are ready to sell with a year left on his deal, partly to manage Profit & Sustainability Rules headroom after the Fernandes/Tonali spend. Asking price reported between €20-30m. Juventus have joined the race as a fallback if their move for PSG's Kolo Muani fails; an unnamed Turkish club and Orlando City (MLS) have also been mentioned, Everton links have gone cold."},
   {player:"J. Palhinha", note:"Loan spell ended and Tottenham's move to sign him permanently is now 100% dead (reliable reporting, 10 Jul) — the player has posted a farewell message to Spurs fans, contract expired 30 Jun. No permanent destination confirmed yet: Sporting CP are the most consistent link (Palhinha open to a return to Portugal) with Bayern wanting a sale rather than a loan; Benfica, Juventus and Aston Villa also mentioned."},
   {player:"Luka Vuskovic", note:"Sale to Brighton agreed — £46m (BBC), with a significant sell-on clause. 19-year-old Croatian CB had never made a senior Spurs appearance."},
   {player:"Y. Bissouma",     note:"Released — contract expired Jun 30 (Official)"},
@@ -114,27 +85,7 @@ export const DEPARTURES = [
 // Anonymous transfer intelligence — sourced from SpursWeb/insider aggregators
 export const ANON_BRIEFS = [
   {
-    date:"1 Sept",
-    text:"Whispers from the edges of deadline day suggest Archie Gray attracted serious late interest — Spurs fielded 'a number of enquiries' according to club-adjacent sources, but the club responded by holding firm. Whether that stance survives into January, with Gray's playing time still up for debate under De Zerbi, is a question that hasn't gone away."
-  },
-  {
-    date:"1 Sept",
-    text:"Word doing the rounds is that Lucas Bergvall's deadline day situation was stranger than the public standoff suggested — a Tottenham insider reportedly dropped a 'shock update' on his status as the clock ticked down, and it wasn't simply a case of Forest's bid being rejected and everything going quiet. The full picture of where Bergvall's head is at, and whether De Zerbi sees a path back for him, feels like unfinished business heading into the first international break."
-  },
-  {
-    date:"1 Sept",
-    text:"Word reaching the edges of N17 is that Richarlison's 'never again' statement has landed harder inside Hotspur Way than the club's public silence suggests — sources close to the dressing room indicate De Zerbi's staff were caught off guard by the timing and tone of the post, with the manager now having to manage the fallout with a squad already navigating a chaotic deadline day. Whether Richarlison pulls on a Spurs shirt again this season is, quietly, an open question."
-  },
-  {
-    date:"1 Sept",
-    text:"There's a thread doing the rounds that Spurs made a late approach for a former Chelsea player as defensive insurance once the Danso-to-Sunderland situation became messy — the suggestion being that the Adarabioyo deal was not the only name on De Zerbi's emergency CB shortlist as the clock ticked down. Nothing from a named journalist has landed to confirm a second defensive target, but the volume of late movement in that area of the squad is worth watching."
-  },
-  {
-    date:"31 Aug",
-    text:"Word doing the rounds in late-window circles is that Spurs have made a shock approach for a former Chelsea player as a direct response to the Danso-to-Sunderland collapse — the suggestion being that De Zerbi's staff identified a defensive alternative almost immediately after the loan rejection was confirmed. Chelsea are said to have given the green light on their end, but nothing from a named journalist has landed yet, and the identity of the player remains unconfirmed."
-  },
-  {
-    date:"31 Aug",
-    text:"A whisper has surfaced that Souza's time at Hotspur Way may be shorter than expected — Porto are mentioned as a potential loan destination before the window shuts. The Brazilian full-back only arrived in January, and sources close to the situation are tight-lipped, but the volume of chatter around the left-back position makes it one to watch into the final hours of deadline day."
+    date:"3 Sept",
+    text:"The English window is closed and Tottenham's incoming business is complete. Richarlison is the one remaining live exit thread because Turkey's window is still open; Trabzonspor interest is reported, but no club agreement has been reached."
   },
 ];

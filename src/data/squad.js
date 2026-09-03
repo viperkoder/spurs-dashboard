@@ -1,7 +1,7 @@
 // First Team Squad — 2026/27 competitive season
 // wc: World Cup 2026 tag — ONLY players officially confirmed in their nation's 26-man squad.
 // Sources: FA official (englandfootball.com), CBF/FIFA, FFF, KNVB, SFA, FBF
-// UPDATED 2026-08-21 — reconciled against official Brentford team news and Reuters:
+// UPDATED 2026-09-03 — reconciled after the English summer window closed:
 //   - Removed two malformed blank "S." players created by automation.
 //   - Micky van de Ven named captain; he, Pedro Porro and Pape Sarr miss MD1.
 //   - Maddison, Solanke, Udogie and Fernandes confirmed available for MD1.
@@ -20,10 +20,9 @@
 //     a decision once confirmed (would move to DEPARTURES in transfers.js, not just squad.js)
 
 export const SQUAD = [
-  {name:"T. Adarabioyo", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
-  {name:"M. Mudryk", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
-  {name:"K. Danso", pos:"TBC", e:"🏳️", apps:1, g:1, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
-  {name:"I. Ndiaye", pos:"TBC", e:"🏳️", apps:0, g:0, con:"TBC", wc:null, st:"NEW — auto-added, verify pos/contract manually", sc:"cyan"},
+  {name:"T. Adarabioyo", pos:"CB", e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", apps:0, g:0, con:"TBC", wc:null, st:"NO.4 — SIGNED FROM CHELSEA", sc:"cyan"},
+  {name:"M. Mudryk", pos:"LW", e:"🇺🇦", apps:0, g:0, con:"LOAN 2027", wc:null, st:"SEASON-LONG LOAN — OPTION TO BUY", sc:"cyan"},
+  {name:"Savio", pos:"RW", e:"🇧🇷", apps:1, g:1, con:"TBC", wc:null, st:"NEW — SIGNED FROM MAN CITY", sc:"cyan"},
   {name:"O. Marmoush", pos:"ST", e:"🇪🇬", apps:1, g:0, con:"LOAN 2027", wc:null, st:"NO.22 — LOAN WITH OBLIGATION", sc:"cyan"},
   // GOALKEEPERS
   {name:"A. Kinsky",      pos:"GK",e:"🇨🇿",apps:3, g:0,con:"2031+1",wc:null,   st:"NO.1 — NEW 5YR DEAL",  sc:"green"},
@@ -33,12 +32,10 @@ export const SQUAD = [
   {name:"JP van Hecke",   pos:"CB",e:"🇳🇱",apps:3, g:0,con:"2031",  wc:"NED",  st:"NEW — €52m 5YR",       sc:"cyan"},
   {name:"M. Senesi",      pos:"CB",e:"🇦🇷",apps:1, g:0,con:"2030",  wc:null,   st:"NEW — FREE",           sc:"cyan"},
   {name:"M. van de Ven",  pos:"CB",e:"🇳🇱",apps:2, g:0,con:"2029",  wc:"NED",  st:"CAPTAIN — OUT MD1, MINOR ISSUE",sc:"amber"},
-  {name:"R. Dragusin",    pos:"CB",e:"🇷🇴",apps:0, g:0,con:"2030",  wc:null,   st:"BACKUP",               sc:"muted"},
   {name:"P. Porro",       pos:"RB",e:"🇪🇸",apps:2, g:0,con:"2030",  wc:"ESP",  st:"OUT MD1 — BUILDING FITNESS",sc:"amber"},
   {name:"D. Udogie",      pos:"LB",e:"🇮🇹",apps:3, g:0,con:"2030",  wc:null,   st:"AVAILABLE MD1",          sc:"green"},
   {name:"A. Robertson",   pos:"LB",e:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",apps:2, g:0,con:"TBC",   wc:null,   st:"NEW — FREE",           sc:"cyan"},
   {name:"B. Davies",      pos:"LB",e:"🏴󠁧󠁢󠁷󠁬󠁳󠁿",apps:1, g:1,con:"2027",  wc:null,   st:"RENEWED JUN 10",       sc:"green"},
-  {name:"Souza",          pos:"LB",e:"🇧🇷",apps:0, g:0,con:"TBC (long-term)",wc:null, st:"SIGNED JAN '26 — SANTOS, €15m",sc:"cyan"},
   // MIDFIELDERS
   {name:"A. Gray",        pos:"CM",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:3, g:0,con:"2030",  wc:null,   st:"CORE (also covers DM/RB)",sc:"green"},
   {name:"L. Bergvall",    pos:"CM",e:"🇸🇪",apps:2, g:0,con:"2031",  wc:null,   st:"REQUESTED — FOREST BID REJ.",sc:"red"},
@@ -54,7 +51,6 @@ export const SQUAD = [
   {name:"M. Tel",         pos:"LW",e:"🇫🇷",apps:3, g:0,con:"2031",  wc:null,   st:"PERMANENT — CORE (£30m, signed Jun '25)",sc:"green"},
   {name:"W. Odobert",     pos:"LW",e:"🇫🇷",apps:0, g:0,con:"2029",  wc:null,   st:"ACL — NOV 2026 (return needs re-check)",sc:"red"},
   {name:"D. Solanke",     pos:"ST",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:3, g:1,con:"2030",  wc:null,   st:"AVAILABLE MD1",          sc:"green"},
-  {name:"D. Scarlett",    pos:"ST",e:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",apps:0, g:0,con:"2027",  wc:null,   st:"BACK FROM HIBS LOAN — DEPTH",sc:"muted"},
 ];
 
 // Injury Centre — active injuries only. Source: premierinjuries.com

@@ -11,10 +11,14 @@
 // flagged in `note` — treat as indicative, not exact, until a fee is
 // officially confirmed in GBP.
 //
-// Last verified: 21 Aug 2026.
+// Last verified: 3 Sep 2026, after the English summer window closed.
 
 // ── Done deals — money already committed ────────────────────────────────
 export const CONFIRMED_SPEND = [
+  {player:"Tosin Adarabioyo", from:"Chelsea",    fee:10,  note:"Sky Sports reported £10m"},
+  {player:"Mykhailo Mudryk",  from:"Chelsea",    fee:0,   note:"Season-long loan; reported £75m option is not committed spend"},
+  {player:"Omar Marmoush",     from:"Man City",   fee:55,  note:"Season-long loan with reported £55m obligation; future obligation shown here"},
+  {player:"Savio",             from:"Man City",   fee:85,  note:"Reported total package"},
   {player:"Sandro Tonali",     from:"Newcastle",  fee:100, note:"Initial £92.5m, could rise to £100m with add-ons"},
   {player:"Mateus Fernandes",  from:"West Ham",   fee:85,  note:"Club record fee"},
   {player:"JP van Hecke",      from:"Brighton",   fee:52,  note:""},
@@ -35,32 +39,29 @@ export const CONFIRMED_SPEND = [
 // neither headline reported a fee — listed here as undisclosed rather than
 // omitted, so the panel doesn't silently miss a real departure.
 export const CONFIRMED_INCOME = [
+  {player:"Kevin Danso",       to:"Sunderland",       fee:25,  note:"Loan with performance-related obligation; future fee shown"},
+  {player:"Pape Matar Sarr",   to:"Juventus",         fee:24.4,note:"Loan with performance-related obligation; reported €28m converted at €1 = £0.87"},
+  {player:"Radu Dragusin",     to:"Fiorentina",       fee:21.5,note:"Loan with reported obligation; future fee shown"},
+  {player:"Guglielmo Vicario", to:"Inter Milan",      fee:8.6, note:"Loan with reported option; optional future fee, not guaranteed"},
+  {player:"Ashley Phillips",   to:"Middlesbrough",    fee:7,   note:"Initial fee; up to £13m additional add-ons reported"},
+  {player:"Alfie Devine",      to:"Preston North End",fee:6,   note:"Plus reported sell-on and matching rights"},
   {player:"Cristian Romero",    to:"Atlético Madrid", fee:34,  note:"Reported fee; Spurs retain a 15% sell-on clause"},
-  {player:"Djed Spence",        to:"Inter Milan",     fee:30,  note:"Reported fee; permanent deal to 2031"},
+  {player:"Djed Spence",        to:"Inter Milan",     fee:24,  note:"Reported fee; permanent deal"},
   {player:"Manor Solomon",      to:"West Ham",        fee:5,   note:"Initial fee; could rise to £7m plus 10% sell-on"},
   {player:"Luka Vuskovic",      to:"Brighton",       fee:46,  note:"Plus a significant sell-on clause"},
   {player:"Antonio Veliz",      to:"Bahia",          fee:7.8, note:"Plus add-ons + 20% sell-on"},
   {player:"Yves Bissouma",      to:"—",              fee:0,   note:"Released — wage saving only, no fee"},
-  {player:"N. Lankshear",       to:"Middlesbrough",  fee:0,   note:"Fee undisclosed in reporting — verify and update if a figure surfaces"},
+  {player:"N. Lankshear",       to:"Middlesbrough",  fee:14,  note:"Reported fee plus sell-on and matching rights"},
   {player:"M. Akhamrich",       to:"Leyton Orient",  fee:0,   note:"Loan move, no fee — wage saving only while out"},
 ];
 
 // ── In progress — nothing here is booked. `likelihood` is the same
 // editorial-judgment estimate used on the Transfers tab, not betting odds. ──
 export const IN_PROGRESS_SALES = [
-  {player:"Richarlison",      to:"Juventus (fallback) / Turkey / Orlando City", askGBP:21, likelihood:65, note:"€20-30m asking range, using midpoint. PSR/SCR-driven sale."},
-  {player:"Guglielmo Vicario",to:"Juventus (loan+option discussed)",            askGBP:13, likelihood:65, note:"€15m asking price, described as negotiable"},
-  {player:"Lucas Bergvall",   to:"Nottingham Forest (£38m bid rejected)",       askGBP:38, likelihood:55, note:"Forest expected to return with an improved offer"},
+  {player:"Richarlison",      to:"Trabzonspor", askGBP:25, likelihood:55, note:"English window closed, but Turkey remains open; personal terms reported agreed while Spurs rejected £15m and £20m bids."},
 ];
 
-export const IN_PROGRESS_BUYS = [
-  {player:"Savinho",           from:"Man City",    feeGBP:85, likelihood:92, note:"Reported £75m guaranteed plus £10m add-ons; agreement reached, completion not yet announced by either club"},
-  {player:"Cody Gakpo",        from:"Liverpool",   feeGBP:60, likelihood:52, note:"Live talks reported; Liverpool approval not confirmed"},
-  {player:"Victor Osimhen",    from:"Galatasaray", feeGBP:55, likelihood:40},
-  {player:"Endrick",           from:"Real Madrid", feeGBP:0,  likelihood:35, note:"Loan; fee not confirmed"},
-  {player:"Carlos Baleba",     from:"Brighton",    feeGBP:100,likelihood:32},
-  {player:"Bart Verbruggen",   from:"Brighton",    feeGBP:30, likelihood:30},
-];
+export const IN_PROGRESS_BUYS = [];
 
 // Context blurb for the panel header — kept as data so it's a one-line edit
 // if the framing needs to change as SCR reporting becomes more common than PSR.
