@@ -33,20 +33,13 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { isRecoverableAiUnavailable, workflowWarning } = require('./ai-resilience');
 
 // ── Load API key from local .env (never committed, never shared) ───────────
 const ENV_PATH = path.join(__dirname, '.env');
-if (!fs.existsSync(ENV_PATH)) {
-  console.error('Missing automation/.env — copy .env.example to .env and add your API key.');
-  process.exit(1);
-}
-const envText = fs.readFileSync(ENV_PATH, 'utf8');
+const envText = fs.existsSync(ENV_PATH) ? fs.readFileSync(ENV_PATH, 'utf8') : '';
 const apiKeyMatch = envText.match(/ANTHROPIC_API_KEY=(.+)/);
 const API_KEY = apiKeyMatch ? apiKeyMatch[1].trim() : null;
-if (!API_KEY || API_KEY.startsWith('sk-ant-YOUR')) {
-  console.error('ANTHROPIC_API_KEY not set in automation/.env');
-  process.exit(1);
-}
 
 const ROOT = path.join(__dirname, '..');
 const SRC = path.join(ROOT, 'src');
@@ -215,6 +208,9 @@ function readFile(relPath) {
 
 // ── Ask Claude to compare fresh news against current dashboard data ─────────
 async function analyzeWithClaude(headlines, currentTransfers, currentSquad) {
+  if (!API_KEY || API_KEY.startsWith('sk-ant-YOUR')) {
+    throw new Error('ANTHROPIC_API_KEY is not configured');
+  }
   const headlinesText = headlines
     .slice(0, 60)
     .map(h => `[${h.source}${h.isCommunity ? ' — COMMUNITY/ANONYMOUS REPOST' : ''}] ${h.title}`)
@@ -609,24 +605,39 @@ function syncSquadWithTransfers(analysis) {
       return;
     }
 
-    console.log('Asking Claude to analyze changes...');
-    const analysis = await analyzeWithClaude(
-      headlines,
-      readFile('data/transfers.js'),
-      readFile('data/squad.js')
-    );
-
     let changed = false;
+    // Keep the free, deterministic refresh alive even when optional paid AI
+    // reconciliation is unavailable. This prevents stale news and scores.
+    changed = applyFixtureScores(headlines) || changed;
+    changed = updateNewsFallback(headlines) || changed;
+
+    let analysis = {
+      hasChanges: false,
+      summary: 'Deterministic news and score refresh completed; optional AI reconciliation was not needed.',
+      transferBriefsUpdates: [], newConfirmedSignings: [], newDepartures: [],
+      injuryUpdates: [], newWhispers: [], flaggedForHumanReview: [],
+    };
+    let aiDeferred = null;
+    console.log('Asking Claude to analyze changes...');
+    try {
+      analysis = await analyzeWithClaude(
+        headlines,
+        readFile('data/transfers.js'),
+        readFile('data/squad.js')
+      );
+    } catch (error) {
+      if (!isRecoverableAiUnavailable(error)) throw error;
+      aiDeferred = error.message;
+      workflowWarning(error.message);
+      analysis.summary = 'Free deterministic refresh completed. Optional AI transfer/injury reconciliation was deferred.';
+    }
+
     if (analysis.hasChanges) {
       changed = applyTransferUpdates(analysis) || changed;
     changed = syncSquadWithTransfers(analysis) || changed;
       changed = applyInjuryUpdates(analysis) || changed;
     }
     changed = applyWhisperUpdates(analysis) || changed;
-    changed = applyFixtureScores(headlines) || changed;
-    // News fallback refreshes daily regardless of hasChanges — this is the
-    // safety net the browser falls back to if live RSS fetch fails.
-    changed = updateNewsFallback(headlines) || changed;
 
     // Write changelog
     const logLines = [
@@ -637,6 +648,11 @@ function syncSquadWithTransfers(analysis) {
       `Summary: ${analysis.summary || 'No significant changes detected.'}`,
       '',
     ];
+    if (aiDeferred) {
+      logLines.push('WARNING: Optional AI reconciliation deferred. The free RSS/news/score refresh still completed.');
+      logLines.push(`Reason: ${aiDeferred}`);
+      logLines.push('');
+    }
     if (analysis.newWhispers && analysis.newWhispers.length > 0) {
       logLines.push(`🗣 Daily Whispers added: ${analysis.newWhispers.length}`);
       logLines.push('');

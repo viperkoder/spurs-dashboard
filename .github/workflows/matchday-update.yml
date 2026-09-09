@@ -82,3 +82,10 @@ jobs:
             git pull --rebase origin main
             git push origin main
           fi
+
+      - name: Publish run summary
+        if: always()
+        run: |
+          echo "## Matchday refresh" >> "$GITHUB_STEP_SUMMARY"
+          echo "Table refresh: ${{ steps.table.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Match reconciliation: ${{ steps.match.outcome }}" >> "$GITHUB_STEP_SUMMARY"

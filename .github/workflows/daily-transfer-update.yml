@@ -73,3 +73,13 @@ jobs:
             git pull --rebase origin main
             git push origin main
           fi
+
+      - name: Publish run summary
+        if: always()
+        run: |
+          echo "## Daily dashboard refresh" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f automation/update-log.txt ]; then
+            sed -n '1,80p' automation/update-log.txt >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No update log was produced. Inspect the failed step." >> "$GITHUB_STEP_SUMMARY"
+          fi

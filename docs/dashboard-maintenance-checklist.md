@@ -84,3 +84,9 @@ squad/injury updates, fixture-score detection and the Pages rebuild. League
 table calculations, scorer/appearance totals, finances, cup draws and season
 rollover still require deterministic maintenance. These are the next automation
 targets; until implemented, this checklist is mandatory.
+
+Optional Anthropic reconciliation must never block the free deterministic RSS,
+news-cache, fixture-score or league-table refresh. Low credit, rate limiting and
+temporary provider outages are recorded as visible GitHub Actions warnings and
+in `automation/update-log.txt`; they defer transfer/injury/whisper reconciliation
+without failing or hiding the deterministic update.

@@ -1,9 +1,0 @@
-# Never commit your API key
-automation/.env
-
-# Node
-node_modules/
-
-# Twitter Pulse scratch data (raw JSON fetches, not for the dashboard/repo)
-twitter-pulse-raw/
-.DS_Store

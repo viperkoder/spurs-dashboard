@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const core = require('./matchday-core');
+const { isRecoverableAiUnavailable, workflowWarning } = require('./ai-resilience');
 
 const ROOT = path.join(__dirname, '..');
 const FIXTURES_PATH = path.join(ROOT, 'src/data/fixtures.js');
@@ -9,7 +10,6 @@ const STANDINGS_PATH = path.join(ROOT, 'src/data/standings.js');
 const SQUAD_PATH = path.join(ROOT, 'src/data/squad.js');
 const STATE_PATH = path.join(__dirname, 'matchday-state.json');
 const API_KEY = process.env.ANTHROPIC_API_KEY;
-if (!API_KEY) throw new Error('ANTHROPIC_API_KEY is required');
 
 const COMPETITIONS = {
   'Premier League': 'eng.1',
@@ -56,6 +56,7 @@ async function findFinalEvent(fixture) {
 }
 
 async function askClaude(fixture, evidence, currentStandings, currentSquad) {
+  if (!API_KEY) throw new Error('ANTHROPIC_API_KEY is not configured');
   const prompt = `Reconcile one completed Tottenham match for a fan dashboard. Use ONLY the supplied ESPN structured evidence. Never infer a player appearance, goal, assist, injury, score or table number that is absent. Return JSON only.
 
 Fixture expected: ${JSON.stringify(fixture)}
@@ -108,7 +109,15 @@ function validate(reconciliation, fixture, evidence) {
     if (!evidence) { console.log(`Pending final evidence: ${fixture.opponent}`); continue; }
     const standingsSource = fs.readFileSync(STANDINGS_PATH, 'utf8');
     const squadSource = fs.readFileSync(SQUAD_PATH, 'utf8');
-    const result = await askClaude(fixture, evidence, standingsSource, squadSource);
+    let result;
+    try {
+      result = await askClaude(fixture, evidence, standingsSource, squadSource);
+    } catch (error) {
+      if (!isRecoverableAiUnavailable(error)) throw error;
+      workflowWarning(error.message);
+      console.log(`Pending optional AI reconciliation: ${fixture.opponent}`);
+      continue;
+    }
     if (!validate(result, fixture, evidence)) { console.log(`Reconciliation refused: ${fixture.opponent} — ${result.reason || 'invalid data'}`); continue; }
 
     let nextFixtures = fs.readFileSync(FIXTURES_PATH, 'utf8');
