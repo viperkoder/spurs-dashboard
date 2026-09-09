@@ -1,22 +1,8 @@
-01/09/2026, 17:54:55
-Headlines checked: 43 across 7 RSS sources + Twitter Pulse
+09/09/2026, 10:54:01
+Headlines checked: 39 across 7 RSS sources + Twitter Pulse
 Changes applied: YES
 
-Summary: Deadline day delivered several confirmed moves: Pape Sarr officially joins Juventus, Tosin Adarabioyo signs from Chelsea, Mykhailo Mudryk joins on loan from Chelsea, and Donley's loan to Luton is confirmed. Danso's loan to Sunderland was rejected and he stays. Cody Gakpo interest gets a slight nudge from fresh reporting. Iliman Ndiaye's deal appears to have been hijacked by Man City. Bergvall and Richarlison situations remain live and unresolved.
+Summary: Free deterministic refresh completed. Optional AI transfer/injury reconciliation was deferred.
 
-🗣 Daily Whispers added: 2
-
-⚠ FLAGGED FOR YOUR REVIEW (not auto-applied):
-  - Tosin Adarabioyo deal structure: multiple outlets confirm agreement and medical but the fee and whether this is a loan or permanent transfer remains unclear from headlines alone. Verify fee/structure and update squad.js pos/contract fields accordingly.
-  - Mykhailo Mudryk option-to-buy fee: SpursWeb references a 'staggering fee' to trigger the permanent option — exact figure not confirmed by a named journalist. Verify and add to the confirmed signing note once sourced.
-  - Iliman Ndiaye hijacked by Man City: talkSPORT reports Spurs' agreed deal was hijacked. If confirmed, Ndiaye should be removed from any transfer tracking entirely for this window. Check whether Man City have officially announced or if it remains talkSPORT-only.
-  - Dejan Kulusevski injury update: football.london headline references a '26-word injury update' posted by Kulusevski himself. Content unknown from headline — could confirm availability or flag a setback. Check his actual social post and update squad.js status field if needed.
-  - Archie Gray transfer enquiries: SpursWeb reports Tottenham 'responded to a number of enquiries' for Gray. No named journalist has confirmed a formal bid or advanced talks — worth monitoring but not actionable yet.
-  - Lucas Bergvall 'shock update': SpursWeb references a Tottenham insider revealing a shock Bergvall update on deadline day. Content is unspecified. If he completed a transfer or if his request was withdrawn, squad.js and DEPARTURES both need updating — check urgently.
-  - Richarlison 'more likely to go to Saudi Arabia than Everton': SpursWeb cites this framing on deadline day. If no move completed before the window shut, his DEPARTURES entry should be updated to reflect Saudi interest as the primary active thread, with Everton downgraded. Verify whether any deal was completed before the deadline.
-  - Tottenham confirm second Deadline Day transfer (London Evening Standard): headline implies at least two deadline day signings were officially confirmed by the club. If Adarabioyo and Mudryk are the two, this is consistent. But 'second' could imply a further announcement — verify whether a third or fourth signing was officially announced.
-  - BBC Sport headline 'Tottenham situation is not looking positive' and De Zerbi 'not angry' after two defeats: context suggests Spurs are bottom of the table after two losses. Squad.js and injury data may need a results/form field update — flagging for awareness rather than a data change.
-  - Tosin Adarabioyo listed in squad.js as 'NEW — auto-added, verify pos/contract manually' with emoji 🏳️ — nationality flag should be updated to 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (England) and position confirmed as CB. Update sc color and st field once contract structure is verified.
-  - Mudryk listed in squad.js as 'NEW — auto-added, verify pos/contract manually' with emoji 🏳️ — nationality flag should be updated to 🇺🇦 (Ukraine) and position confirmed as LW/W. Update sc and st fields once loan terms are verified.
-  - Pape Sarr squad.js entry: now that his departure to Juventus is confirmed, his squad.js SQUAD entry should be removed entirely and the two existing DEPARTURES entries consolidated into a single confirmed record.
-  - SpursWeb headline 'Tottenham announce £1.7m loan that could eventually net them an extra £22m' — identity of the player in this loan deal is not clear from the headline alone. Could relate to Takai (STVV) or another outgoing loan. Verify player identity and check whether a new DEPARTURES entry is needed.
+WARNING: Optional AI reconciliation deferred. The free RSS/news/score refresh still completed.
+Reason: Claude API error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CesjxhhyzTnHsDi5H4pEU"}
