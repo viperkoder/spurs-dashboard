@@ -7,6 +7,20 @@
 - **Season Analysis (Overview tab).** New win/draw/loss radial gauge and "Spurs vs league average" goals-scored/conceded comparison bars — an actual analyst insight (is the table position an attack problem or a defence problem?) built from data already in `standings.js`, using hand-rolled SVG charts (`lib/charts.js`) so no new dependency was needed.
 - **Zebra-striped tables, role badges, pitch-green accents** — visual language borrowed from FM/CM throughout Squad and Overview.
 
+## Future candidate — Matchday Simulator
+
+A deliberately small **PLAY / PREDICT MATCH** experience is approved as a future candidate beneath the Next Match card. It is a single-fixture management simulation, not a second full football-management game.
+
+- User selects the real Spurs XI, formation and a small set of tactical choices.
+- Opponent XI is selected automatically from real players using availability, recent usage (roughly the last three matches), positional fit and form where reliable data exists.
+- Match experience may include minute-by-minute events, half-time/tactical changes, substitutions, final statistics and player ratings.
+- A later auto-predict mode may select both teams, and a completed real fixture may compare the user's simulation, model simulation and actual result.
+- Do not add transfers, budgets, contracts, scouting, training or season-management systems to this module.
+- Treat outputs as football simulations informed by current data, not calibrated betting probabilities unless a prediction model is separately validated.
+- Keep the simulator modular. Reuse only proven match-engine concepts from the existing football-sim experiments rather than merging a full management game into this dashboard.
+
+This remains backlog work; it does not displace current dashboard data/reliability priorities.
+
 ## What's new in v5.0
 
 - **Real build pipeline.** JSX is now precompiled + minified ahead of time via esbuild, instead of being parsed live in the browser by Babel Standalone (~1.5MB library, gone entirely). Faster first paint, smaller download.
@@ -86,7 +100,7 @@ node build.js
 |-------------------------------------|---------------------------------|
 | A colour (gold, red, navy etc)      | `src/data/theme.js`             |
 | Font size on a specific tab         | `src/components/<Tab>Panel.js`  |
-| World Cup stats after a match       | `src/data/worldcup.js`          |
+| World Cup stats after a match       | `src/data/worldcup.js`           |
 | Add a transfer rumour               | `src/data/transfers.js`         |
 | Add a daily whisper                 | `src/data/transfers.js`         |
 | Update an injury return date        | `src/data/squad.js`             |
