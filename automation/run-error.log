@@ -1,0 +1,5 @@
+(cleared 17 Jul 2026 — previous entries were from the broken launchd setup:
+stale project path + unresolved `node` PATH under launchd. Both fixed via
+automation/install-launchd.sh, which also stopped writing errors to this file
+via bare `bash -l -c "node ..."` and now calls the resolved node binary
+directly. This file will repopulate on its own if a future run actually fails.)

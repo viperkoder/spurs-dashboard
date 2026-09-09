@@ -1,0 +1,4 @@
+(cleared 17 Jul 2026 during a manual audit — old entries duplicated what's
+already recorded in automation/update-log.txt, the last of which was 04/07/2026
+before the schedule broke. See update-log.txt for the historical change log;
+this file just captures raw stdout going forward.)
