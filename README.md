@@ -5,6 +5,7 @@
 - **Player detail cards.** Click any squad card (or use the top-bar search) to open a pop-up player card in the style of Football Manager / Championship Manager: role badge, season involvement bar, goal threat bar, contract timeline, and live injury cross-reference — all derived from real data already in `squad.js`, nothing fabricated.
 - **Quick search.** Top-bar search box filters the squad live as you type, FM-style — click a result to jump straight to that player's card.
 - **Season Analysis (Overview tab).** New win/draw/loss radial gauge and "Spurs vs league average" goals-scored/conceded comparison bars — an actual analyst insight (is the table position an attack problem or a defence problem?) built from data already in `standings.js`, using hand-rolled SVG charts (`lib/charts.js`) so no new dependency was needed.
+- **Season Stats.** Premier League results, starters, entered substitutes, unused bench and substitution boundaries live in one completed-match dataset. The player-usage table and fixture results derive from it, and the normal matchday update upserts it automatically.
 - **Zebra-striped tables, role badges, pitch-green accents** — visual language borrowed from FM/CM throughout Squad and Overview.
 
 ## Future candidate — Matchday Simulator
@@ -42,6 +43,7 @@ spurs-modular/
 │   ├── data/
 │   │   ├── theme.js         ← All colours. Change one value, updates everywhere.
 │   │   ├── standings.js     ← EPL table, last 5 results, top scorers
+│   │   ├── seasonStats.js    ← completed PL matches + player usage derivation
 │   │   ├── squad.js         ← Squad list + injury list
 │   │   ├── transfers.js     ← Rumours, confirmed signings, departures, daily whispers
 │   │   ├── finances.js      ← Summer spend/income, PSR/SCR net position (cross-ref transfers.js manually)
@@ -57,6 +59,8 @@ spurs-modular/
 │   │   ├── SquadPanel.js    ← Squad tab (clickable cards → PlayerDetail)
 │   │   ├── PlayerDetail.js  ← FM-style player pop-up card
 │   │   ├── InjuriesPanel.js ← Injuries tab
+│   │   ├── FixturesPanel.js ← fixture list and competition tabs
+│   │   ├── SeasonStatsPanel.js ← derived PL summary + player usage table
 │   │   ├── TransfersPanel.js← Transfers tab
 │   │   ├── FinancesPanel.js ← Finances tab (PSR/SCR spend, income, projected net position)
 │   │   ├── RecordsPanel.js  ← Records tab
@@ -142,9 +146,11 @@ If you ever *do* expose a real key by accident: revoke it immediately at console
 - **News**: Fetched live from Google News RSS on load, cached in localStorage for 24hrs.
   Change `NEWS_CACHE_TTL` in `src/data/news.js` to adjust.
 - **Daily automation**: News, whispers, transfer changes, selected squad/injury
-  changes, fixture-score detection and the Pages rebuild.
-- **Manual reconciliation**: League table, scorer/appearance totals, finances,
-  cup draws and season rollover. Follow the canonical maintenance checklist.
+  changes, non-league fixture-score detection and the Pages rebuild.
+- **Matchday automation**: League table plus Premier League result/line-up/
+  substitution ingestion; Season Stats recalculates from those match records.
+- **Manual reconciliation**: Scorer totals, finances, cup draws and season
+  rollover. Follow the canonical maintenance checklist.
 
 ---
 AUDERE EST FACERE · THFC 1882 · COYS

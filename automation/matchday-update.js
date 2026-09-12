@@ -8,6 +8,7 @@ const ROOT = path.join(__dirname, '..');
 const FIXTURES_PATH = path.join(ROOT, 'src/data/fixtures.js');
 const STANDINGS_PATH = path.join(ROOT, 'src/data/standings.js');
 const SQUAD_PATH = path.join(ROOT, 'src/data/squad.js');
+const SEASON_STATS_PATH = path.join(ROOT, 'src/data/seasonStats.js');
 const STATE_PATH = path.join(__dirname, 'matchday-state.json');
 const API_KEY = process.env.ANTHROPIC_API_KEY;
 
@@ -107,6 +108,17 @@ function validate(reconciliation, fixture, evidence) {
   for (const fixture of due) {
     const evidence = await findFinalEvent(fixture);
     if (!evidence) { console.log(`Pending final evidence: ${fixture.opponent}`); continue; }
+    // Player usage is deterministic from the same ESPN match evidence used by
+    // the normal match update. Fail closed before touching any dashboard file
+    // if a league lineup, substitution or minute boundary is incomplete.
+    const leagueMatch = core.leagueMatchFromEvidence(fixture, evidence);
+    let leagueUsageChanged = false;
+    if (leagueMatch) {
+      const seasonStatsSource = fs.readFileSync(SEASON_STATS_PATH, 'utf8');
+      const nextSeasonStats = core.upsertLeagueMatch(seasonStatsSource, leagueMatch);
+      leagueUsageChanged = nextSeasonStats !== seasonStatsSource;
+      if (leagueUsageChanged) fs.writeFileSync(SEASON_STATS_PATH, nextSeasonStats);
+    }
     const standingsSource = fs.readFileSync(STANDINGS_PATH, 'utf8');
     const squadSource = fs.readFileSync(SQUAD_PATH, 'utf8');
     let result;
@@ -116,13 +128,20 @@ function validate(reconciliation, fixture, evidence) {
       if (!isRecoverableAiUnavailable(error)) throw error;
       workflowWarning(error.message);
       console.log(`Pending optional AI reconciliation: ${fixture.opponent}`);
+      if (leagueUsageChanged) console.log(`Updated completed league usage: ${fixture.opponent}`);
       continue;
     }
-    if (!validate(result, fixture, evidence)) { console.log(`Reconciliation refused: ${fixture.opponent} — ${result.reason || 'invalid data'}`); continue; }
+    if (!validate(result, fixture, evidence)) {
+      console.log(`Reconciliation refused: ${fixture.opponent} — ${result.reason || 'invalid data'}`);
+      if (leagueUsageChanged) console.log(`Updated completed league usage: ${fixture.opponent}`);
+      continue;
+    }
 
-    let nextFixtures = fs.readFileSync(FIXTURES_PATH, 'utf8');
-    nextFixtures = core.applyFixtureScore(nextFixtures, fixture, result.result);
-    fs.writeFileSync(FIXTURES_PATH, nextFixtures);
+    if (fixture.competition !== 'Premier League') {
+      let nextFixtures = fs.readFileSync(FIXTURES_PATH, 'utf8');
+      nextFixtures = core.applyFixtureScore(nextFixtures, fixture, result.result);
+      fs.writeFileSync(FIXTURES_PATH, nextFixtures);
+    }
 
     let nextStandings = standingsSource;
     if (result.standings.length === 20) nextStandings = core.replaceExportedArray(nextStandings, 'STANDINGS', core.renderStandings(result.standings));

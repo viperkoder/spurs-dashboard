@@ -517,19 +517,29 @@ function findScoreInHeadline(title) {
 function applyFixtureScores(headlines) {
   let content = readFile('data/fixtures.js');
   let changed = false;
-  for (const h of headlines) {
-    if (!h.title) continue;
-    const found = findScoreInHeadline(h.title);
-    if (!found) continue;
-    // Match on the opponent's first significant word (handles "Manchester
-    // United" vs "Man Utd" style variance in headlines reasonably well).
-    const firstWord = found.oppName.split(/\s+/)[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp(`(opponent:"[^"]*${firstWord}[^"]*"[^}]*?score:)null`, 's');
-    if (re.test(content)) {
-      content = content.replace(re, `$1"${found.spurs}-${found.opp}"`);
-      changed = true;
-      console.log(`  ⚽ Score filled: vs ${found.oppName} — Tottenham ${found.spurs}-${found.opp}`);
+  // Premier League is intentionally excluded: the matchday workflow owns its
+  // one result+appearance record in seasonStats.js. RSS remains a conservative
+  // fallback for friendly and cup scores only.
+  for (const sectionName of ['PRESEASON', 'CUPS']) {
+    const sectionPattern = new RegExp(`export const ${sectionName} = \\[([\\s\\S]*?)\\n\\];`);
+    const sectionMatch = content.match(sectionPattern);
+    if (!sectionMatch) continue;
+    let section = sectionMatch[0];
+    for (const h of headlines) {
+      if (!h.title) continue;
+      const found = findScoreInHeadline(h.title);
+      if (!found) continue;
+      // Match on the opponent's first significant word (handles "Manchester
+      // United" vs "Man Utd" style variance in headlines reasonably well).
+      const firstWord = found.oppName.split(/\s+/)[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(`(opponent:"[^"]*${firstWord}[^"]*"[^}]*?score:)null`, 's');
+      if (re.test(section)) {
+        section = section.replace(re, `$1"${found.spurs}-${found.opp}"`);
+        changed = true;
+        console.log(`  ⚽ Score filled: vs ${found.oppName} — Tottenham ${found.spurs}-${found.opp}`);
+      }
     }
+    content = content.replace(sectionMatch[0], section);
   }
   if (changed) fs.writeFileSync(path.join(SRC, 'data/fixtures.js'), content);
   return changed;

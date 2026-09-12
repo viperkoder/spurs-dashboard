@@ -43,10 +43,15 @@ jobs:
         run: |
           match_output=$(node automation/matchday-update.js)
           echo "$match_output"
-          if grep -q '^Updated completed match:' <<< "$match_output"; then
+          if grep -Eq '^Updated completed (match|league usage):' <<< "$match_output"; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          if grep -q '^Updated completed match:' <<< "$match_output"; then
+            echo "full_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "full_changed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Install build dependency
@@ -54,7 +59,7 @@ jobs:
         run: npm ci
 
       - name: Refresh transfers, injuries and availability when Spurs match data changed
-        if: steps.match.outputs.changed == 'true'
+        if: steps.match.outputs.full_changed == 'true'
         run: |
           trap 'rm -f automation/.env' EXIT
           echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" > automation/.env
