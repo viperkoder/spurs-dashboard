@@ -1,6 +1,9 @@
 // Fixtures — Pre-Season, Premier League (all 38, official release 19 Jun 2026),
 // and domestic Cups (Carabao Cup + Emirates FA Cup) for 2026/27.
-// Edit this file alone to add/update fixtures, or to fill in a `score` once played.
+// Edit this file to add/update the schedule. Completed Premier League results
+// are joined from seasonStats.js so the fixture view and player usage cannot
+// drift; cup and pre-season scores remain local to this file.
+import { withLeagueResults } from './seasonStats.js';
 //
 // Source: tottenhamhotspur.com "Fixtures 2026/27 – list in full" (19 Jun 2026).
 // All Premier League dates/kickoff times are OFFICIAL but explicitly marked
@@ -8,11 +11,9 @@
 // is kept in the `provisional` flag on every PL fixture rather than a one-off
 // note, so it can't get lost as this file is edited over the season.
 //
-// `score` is null until played. The daily automation (update-dashboard.js)
-// scans headlines for full-time results and fills this in automatically,
-// matched by opponent name — see applyFixtureScores() there. If Spurs play
-// the same opponent twice before either leg is played, it fills the earlier
-// date first; worth a quick glance at update-log.txt on those weeks.
+// Premier League schedule rows never carry completed score values. The
+// matchday updater appends/replaces the matching completed record in
+// seasonStats.js, and withLeagueResults() exposes its score to every consumer.
 
 export const PRESEASON = [
   {opponent:"MK Dons",          venue:"N", date:"2026-07-22T15:00:00", score:"1-0", note:"Behind closed doors — Hotspur Way"},
@@ -25,10 +26,10 @@ export const PRESEASON = [
 ];
 
 // mw = Premier League matchweek number (order as officially released).
-export const PREMIER_LEAGUE = [
-  {mw:1,  opponent:"Brentford",             venue:"A", date:"2026-08-22T17:30:00", score:"0-3", provisional:true, tv:"Sky Sports"},
-  {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T16:30:00Z", score:"0-2", provisional:false, tv:"Sky Sports", note:"Sun 30 Aug · 12:30 AM SGT"},
-  {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00", score:null, provisional:true},
+export const PREMIER_LEAGUE_SCHEDULE = [
+  {mw:1,  opponent:"Brentford",             venue:"A", date:"2026-08-22T17:30:00+01:00", provisional:false, tv:"Sky Sports"},
+  {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T17:30:00+01:00", provisional:false, tv:"Sky Sports", note:"Sun 30 Aug · 12:30 AM SGT"},
+  {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00+01:00", provisional:false},
   {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T15:00:00", score:null, provisional:true},
   {mw:5,  opponent:"Aston Villa",           venue:"H", date:"2026-09-19T15:00:00", score:null, provisional:true},
   {mw:6,  opponent:"Manchester United",     venue:"A", date:"2026-10-10T15:00:00", score:null, provisional:true},
@@ -65,6 +66,8 @@ export const PREMIER_LEAGUE = [
   {mw:37, opponent:"Manchester United",     venue:"H", date:"2027-05-23T15:00:00", score:null, provisional:true},
   {mw:38, opponent:"Aston Villa",           venue:"A", date:"2027-05-30T16:00:00", score:null, provisional:true, note:"Final day — all matches kick off simultaneously"},
 ];
+
+export const PREMIER_LEAGUE = withLeagueResults(PREMIER_LEAGUE_SCHEDULE);
 
 // opponent is "TBD" until the relevant round's draw has happened.
 export const CUPS = [

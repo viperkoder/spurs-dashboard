@@ -7,6 +7,7 @@ import { OverviewPanel } from './OverviewPanel.js';
 import { SquadPanel } from './SquadPanel.js';
 import { InjuriesPanel } from './InjuriesPanel.js';
 import { FixturesPanel } from './FixturesPanel.js';
+import { SeasonStatsPanel } from './SeasonStatsPanel.js';
 import { TransfersPanel } from './TransfersPanel.js';
 import { FinancesPanel } from './FinancesPanel.js';
 import { RecordsPanel } from './RecordsPanel.js';
@@ -22,6 +23,7 @@ const NAV = [
   {id:"squad",     icon:"▦", label:"SQUAD"},
   {id:"injuries",  icon:"✚", label:"INJURIES"},
   {id:"fixtures",  icon:"▤", label:"FIXTURES"},
+  {id:"season",    icon:"Σ", label:"SEASON STATS"},
   {id:"transfers", icon:"⇄", label:"TRANSFERS"},
   {id:"finances",  icon:"£", label:"FINANCES"},
   {id:"records",   icon:"★", label:"RECORDS"},
@@ -74,6 +76,7 @@ export function App(){
     squad:<ErrorBoundary name="Squad"><SquadPanel onSelect={openPlayer}/></ErrorBoundary>,
     injuries:<ErrorBoundary name="Injuries"><InjuriesPanel/></ErrorBoundary>,
     fixtures:<ErrorBoundary name="Fixtures"><FixturesPanel/></ErrorBoundary>,
+    season:<ErrorBoundary name="Season Stats"><SeasonStatsPanel/></ErrorBoundary>,
     transfers:<ErrorBoundary name="Transfers"><TransfersPanel/></ErrorBoundary>,
     finances:<ErrorBoundary name="Finances"><FinancesPanel/></ErrorBoundary>,
     records:<ErrorBoundary name="Records"><RecordsPanel/></ErrorBoundary>,
