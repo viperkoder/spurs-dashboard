@@ -5,15 +5,17 @@
     "2026-08-22T17:30:00+01:00|Brentford|Premier League",
     "2026-08-29T17:30:00+01:00|Newcastle United|Premier League",
     "2026-08-26T18:45:00Z|Charlton Athletic|Carabao Cup",
-    "2026-09-05T15:00:00+01:00|Nottingham Forest|Premier League"
+    "2026-09-05T15:00:00+01:00|Nottingham Forest|Premier League",
+    "2026-09-12T15:00:00|Everton|Premier League",
+    "2026-09-12T17:30:00+01:00|Everton|Premier League",
+    "2026-09-15T19:00:00Z|Liverpool|Carabao Cup"
   ],
   "lastProcessed": {
-    "fixture": "2026-08-26T18:45:00Z|Charlton Athletic|Carabao Cup",
-    "eventId": "401908140",
-    "at": "2026-09-01T17:54:54.140Z",
+    "fixture": "2026-09-15T19:00:00Z|Liverpool|Carabao Cup",
+    "eventId": "401914257",
+    "at": "2026-09-16T10:22:26.181Z",
     "injuryNotes": [
-      "Micky van de Ven received treatment for an injury in the 90th minute (delay logged by ESPN at 90'); he was able to continue until full time. Human review recommended to confirm whether this requires an injury-centre update.",
-      "Kevin Danso received treatment for an injury immediately after scoring in the 67th minute (delay logged by ESPN); he remained on the pitch. Human review recommended."
+      "Pedro Porro available for Aston Villa, confirmed by Tottenham 16 September 2026: https://www.tottenhamhotspur.com/news/1090198/team-news-pedro-porro-available-for-villa-clash"
     ]
   }
 }

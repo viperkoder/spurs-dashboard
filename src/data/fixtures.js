@@ -30,7 +30,7 @@ export const PREMIER_LEAGUE_SCHEDULE = [
   {mw:1,  opponent:"Brentford",             venue:"A", date:"2026-08-22T17:30:00+01:00", provisional:false, tv:"Sky Sports"},
   {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T17:30:00+01:00", provisional:false, tv:"Sky Sports", note:"Sun 30 Aug · 12:30 AM SGT"},
   {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00+01:00", provisional:false},
-  {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T15:00:00", score:null, provisional:true},
+  {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T17:30:00+01:00", provisional:false},
   {mw:5,  opponent:"Aston Villa",           venue:"H", date:"2026-09-19T15:00:00", score:null, provisional:true},
   {mw:6,  opponent:"Manchester United",     venue:"A", date:"2026-10-10T15:00:00", score:null, provisional:true},
   {mw:7,  opponent:"Coventry City",         venue:"H", date:"2026-10-17T15:00:00", score:null, provisional:true},
@@ -71,13 +71,13 @@ export const PREMIER_LEAGUE = withLeagueResults(PREMIER_LEAGUE_SCHEDULE);
 
 // opponent is "TBD" until the relevant round's draw has happened.
 export const CUPS = [
-  {comp:"Carabao Cup", round:"Round 2",              opponent:"Charlton Athletic", venue:"H", date:"2026-08-26T18:45:00Z", score:"5-1", note:"Mikey Moore, Dominic Solanke, Kevin Danso, Savio, Ben Davies"},
-  {comp:"Carabao Cup", round:"Round 3",              opponent:"Liverpool", venue:"A", date:"2026-09-15T19:00:00Z", score:null, note:"Tue 15 Sep · 8:00 PM BST / Wed 16 Sep · 3:00 AM SGT · Sky Sports Main Event and ITV4"},
-  {comp:"Carabao Cup", round:"Round 4",               opponent:"TBD", venue:"TBD", date:"2026-10-28T19:45:00", score:null},
-  {comp:"Carabao Cup", round:"Round 5",               opponent:"TBD", venue:"TBD", date:"2026-12-16T19:45:00", score:null},
-  {comp:"Carabao Cup", round:"Semi-Final (1st Leg)",  opponent:"TBD", venue:"TBD", date:"2027-01-13T19:45:00", score:null},
-  {comp:"Carabao Cup", round:"Semi-Final (2nd Leg)",  opponent:"TBD", venue:"TBD", date:"2027-02-03T19:45:00", score:null},
-  {comp:"Carabao Cup", round:"Final",                 opponent:"TBD", venue:"N",   date:"2027-03-21T16:30:00", score:null, note:"Wembley Stadium"},
+  {comp:"Carabao Cup", round:"Round 2",              opponent:"Charlton Athletic", venue:"H", date:"2026-08-26T18:45:00Z", score:"5-1", note:"Mikey Moore, Dominic Solanke, Kevin Danso, Savio, Ben Davies",minutes:"Antonín Kinsky: 90 (0–90); Ben Davies: 90 (0–90); Jan Paul van Hecke: 64 (0–64); Destiny Udogie: 65 (0–65); Archie Gray: 90 (0–90); Rodrigo Bentancur: 65 (0–65); Mateus Fernandes: 90 (0–90); Lucas Bergvall: 90 (0–90); Dominic Solanke: 71 (0–71); Mathys Tel: 78 (0–78); Mikey Moore: 90 (0–90); Pedro Porro: 25 (65–90); Kevin Danso: 25 (65–90); Luca Williams-Barnett: 12 (78–90); Micky van de Ven: 26 (64–90); Sávio: 19 (71–90)",sourceEventId:"401908140",source:"https://www.espn.com/soccer/match/_/gameId/401908140",startingXI:"Antonín Kinsky; Ben Davies; Jan Paul van Hecke; Destiny Udogie; Archie Gray; Rodrigo Bentancur; Mateus Fernandes; Lucas Bergvall; Dominic Solanke; Mathys Tel; Mikey Moore",substitutions:"64' Micky van de Ven replaces Jan Paul van Hecke.; 65' Pedro Porro replaces Destiny Udogie.; 65' Kevin Danso replaces Rodrigo Bentancur.; 71' Sávio replaces Dominic Solanke.; 78' Luca Williams-Barnett replaces Mathys Tel.",unused:"Conor Gallagher; Martin Dúbravka; Richarlison; Andy Robertson"},
+  {comp:"Carabao Cup", round:"Round 3",              opponent:"Liverpool", venue:"A", date:"2026-09-15T19:00:00Z", score:"1-3", note:"Tue 15 Sep · 8:00 PM BST / Wed 16 Sep · 3:00 AM SGT · Sky Sports Main Event and ITV4",minutes:"Martin Dúbravka: 90 (0–90); Marcos Senesi: 90 (0–90); Tosin Adarabioyo: 90 (0–90); Destiny Udogie: 57 (0–57); Archie Gray: 90 (0–90); Conor Gallagher: 75 (0–75); Lucas Bergvall: 90 (0–90); Rodrigo Bentancur: 57 (0–57); Omar Marmoush: 90 (0–90); Mathys Tel: 85 (0–85); Mohammed Kudus: 75 (0–75); Mateus Fernandes: 33 (57–90); Sávio: 15 (75–90); Dominic Solanke: 5 (85–90); James Maddison: 15 (75–90); Andy Robertson: 33 (57–90)",sourceEventId:"401914257",source:"https://www.tottenhamhotspur.com/news/1090195/reds-progress-at-anfield",startingXI:"Martin Dúbravka; Marcos Senesi; Tosin Adarabioyo; Destiny Udogie; Archie Gray; Conor Gallagher; Lucas Bergvall; Rodrigo Bentancur; Omar Marmoush; Mathys Tel; Mohammed Kudus",substitutions:"57' Mateus Fernandes replaces Rodrigo Bentancur.; 57' Andy Robertson replaces Destiny Udogie.; 75' Sávio replaces Mohammed Kudus.; 75' James Maddison replaces Conor Gallagher.; 85' Dominic Solanke replaces Mathys Tel.",unused:"Micky van de Ven; Ben Davies; Antonín Kinsky; Jan Paul van Hecke"},
+  {comp:"Carabao Cup", round:"Round 4",               opponent:"TBD", venue:"TBD", date:"2026-10-28T19:45:00", score:null,eliminated:true,note:"Spurs eliminated in Round 3 — competition date only"},
+  {comp:"Carabao Cup", round:"Round 5",               opponent:"TBD", venue:"TBD", date:"2026-12-16T19:45:00", score:null,eliminated:true,note:"Spurs eliminated in Round 3 — competition date only"},
+  {comp:"Carabao Cup", round:"Semi-Final (1st Leg)",  opponent:"TBD", venue:"TBD", date:"2027-01-13T19:45:00", score:null,eliminated:true,note:"Spurs eliminated in Round 3 — competition date only"},
+  {comp:"Carabao Cup", round:"Semi-Final (2nd Leg)",  opponent:"TBD", venue:"TBD", date:"2027-02-03T19:45:00", score:null,eliminated:true,note:"Spurs eliminated in Round 3 — competition date only"},
+  {comp:"Carabao Cup", round:"Final",                 opponent:"TBD", venue:"N",   date:"2027-03-21T16:30:00", score:null,eliminated:true,note:"Spurs eliminated in Round 3 — competition date only"},
   {comp:"Emirates FA Cup", round:"Round 3",           opponent:"TBD", venue:"TBD", date:"2027-01-09T15:00:00", score:null},
   {comp:"Emirates FA Cup", round:"Round 4",           opponent:"TBD", venue:"TBD", date:"2027-02-13T15:00:00", score:null},
   {comp:"Emirates FA Cup", round:"Round 5",           opponent:"TBD", venue:"TBD", date:"2027-03-06T15:00:00", score:null},
@@ -94,5 +94,5 @@ export function getNextMatch(now){
     ...PREMIER_LEAGUE.map(f=>({...f, comp:`Premier League · MD${f.mw}`})),
     ...CUPS.map(f=>({...f, comp:`${f.comp} — ${f.round}`})),
   ].sort((a,b)=>new Date(a.date)-new Date(b.date));
-  return all.find(f => new Date(f.date) > now) || null;
+  return all.find(f => !f.eliminated && new Date(f.date) > now && f.score == null) || null;
 }

@@ -25,11 +25,19 @@ function FixtureRow({f, label}){
           {f.provisional && <span title="Official date, provisional — subject to TV rescheduling" style={{fontSize:9,color:P.muted,border:`1px solid ${P.border}`,borderRadius:3,padding:"1px 5px"}}>PROV</span>}
         </div>
         <div style={{fontSize:11,color:P.muted,marginTop:2}}>{dateLabel} · {timeLabel}{f.note?` — ${f.note}`:""}</div>
+        {f.startingXI && <details style={{fontSize:11,color:P.text,marginTop:5,lineHeight:1.7}}>
+          <summary style={{cursor:"pointer",color:P.gold}}>Line-up and substitutions</summary>
+          <div>Starting XI: {f.startingXI}</div>
+          <div>Used substitutes: {f.substitutions}</div>
+          <div>Unused bench: {f.unused}</div>
+          <div>Regulation minutes: {f.minutes}</div>
+          <a href={f.source} target="_blank" rel="noopener noreferrer" style={{color:P.gold}}>Match source</a>
+        </details>}
       </div>
       <div style={{textAlign:"right",flexShrink:0}}>
         {played
           ? <div style={{fontSize:18,fontWeight:900,color:P.green}}>{f.score}</div>
-          : <Chip label="Upcoming" color={P.muted}/>}
+          : <Chip label={f.eliminated?"Eliminated":"Upcoming"} color={P.muted}/>}
       </div>
     </div>
   );

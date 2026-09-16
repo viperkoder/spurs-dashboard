@@ -153,7 +153,8 @@ function validate(reconciliation, fixture, evidence) {
       row.home === result.result.homeCode &&
       row.away === result.result.awayCode
     ));
-    last5.unshift({ date: result.result.dateLabel, home: result.result.homeCode, away: result.result.awayCode, score, r: outcome, scorer: result.result.scorers || '' });
+    const displayScore = result.result.homeCode === 'TOT' ? score : `${result.result.opponent}-${result.result.spurs}`;
+    last5.unshift({ date: result.result.dateLabel, home: result.result.homeCode, away: result.result.awayCode, score: displayScore, r: outcome, scorer: result.result.scorers || '' });
     nextStandings = core.replaceExportedArray(nextStandings, 'LAST5', core.renderLastFive(last5));
     const scorers = existingArray(nextStandings, 'SCORERS');
     for (const p of result.players) {

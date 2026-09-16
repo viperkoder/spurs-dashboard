@@ -84,6 +84,19 @@ export function SeasonStatsPanel(){
       <div style={{fontSize:10,color:P.muted,lineHeight:1.6}}>
         Apps include starts and substitute appearances only; unused substitutes do not count. Minutes use official substitution boundaries across regulation time.
       </div>
+      <div style={{background:P.bgCard,border:`1px solid ${P.border}`,borderRadius:7,padding:14}}>
+        <WH>Match history</WH>
+        {[...LEAGUE_MATCHES].reverse().map(match=>(
+          <details key={match.mw} style={{padding:"10px 0",borderBottom:`1px solid ${P.border}`,fontSize:11,color:P.text,lineHeight:1.7}}>
+            <summary style={{cursor:"pointer",fontWeight:700,color:P.white}}>MD{match.mw} · {match.opponent} ({match.venue}) · Spurs {match.score.spurs}–{match.score.opponent}</summary>
+            <div>Starting XI: {match.appearances.filter(p=>p.started).map(p=>p.player).join(", ")}</div>
+            <div>Used substitutes: {match.appearances.filter(p=>!p.started).map(p=>`${p.player} (${p.on}–${p.off}, ${p.off-p.on} min)`).join(", ")||"None"}</div>
+            <div>Unused bench: {match.unused.join(", ")||"None"}</div>
+            <div>{match.appearances.map(p=>`${p.player}: ${p.off-p.on} min`).join(" · ")}</div>
+            <a href={match.sources[0]} target="_blank" rel="noopener noreferrer" style={{color:P.gold}}>Match source</a>
+          </details>
+        ))}
+      </div>
     </div>
   );
 }

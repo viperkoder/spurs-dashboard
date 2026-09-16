@@ -103,3 +103,37 @@ news-cache, fixture-score or league-table refresh. Low credit, rate limiting and
 temporary provider outages are recorded as visible GitHub Actions warnings and
 in `automation/update-log.txt`; they defer transfer/injury/whisper reconciliation
 without failing or hiding the deterministic update.
+
+## Post-match reconciliation — 16 September 2026
+
+- [x] Audited current GitHub main `19154cc`, repository rules, clean cloud checkout and matchday/Season Stats architecture. Viper's Mac clone is outside this environment and was not inspected.
+- [x] Added missing MD4 Spurs 0-0 Everton (12 September); ESPN final event `401879277` and official club match centre/highlights agree. Corrected kickoff to 17:30 BST / 00:30 SGT on 13 September. Eleven starts, five used substitutes, four unused; 990 minutes.
+- [x] Liverpool 3-1 Spurs, Carabao Cup Round 3 (15 September), final event `401914257`, cross-checked against the club's official report. Gallagher 69, Fernandes assist; recorded XI, five substitution boundaries and four unused players as flat audit fields in the existing cup fixture, exposed in expandable fixture details with regulation minutes. Cup fixture scores use Spurs perspective (1-3).
+- [x] Full 20-club ESPN table refreshed and arithmetic/club identity validated: Spurs P4 W0 D2 L2 GF0 GA5 GD-5, 2 points, 17th. Cup result excluded from league totals.
+- [x] LAST5 restored to descending chronology: Liverpool, Everton, Forest, Newcastle, Charlton. Reconciled existing squad appearances and competitive scorer materialisations from the four league match records plus the two cup rosters; eliminated doubled Charlton goals and duplicate Savio/Sávio entry. Six competitive team goals; pre-season excluded.
+- [x] Preserved Charlton and Liverpool source IDs/XIs/substitutions/unused bench on existing cup fixture records. Marked later Carabao calendar placeholders eliminated; they do not become eligible Spurs matches.
+- [x] Added expandable league match history to Season Stats, showing XI, used/unused substitutes, each player's regulation minutes and source links. All rows use existing league match records.
+- [x] Processed-fixture state reconciled to prevent duplicate cumulative increments. Preserved original Everton key alongside corrected kickoff key.
+- [x] Matchday regression suite, secret scan, build smoke checks and `git diff --check` passed. Verified 23 league players, 44 starts, 3,960 regulation minutes, eleven active players over every interval, six competitive goals and unique scorer identities.
+- [ ] Live Pages deployment: pending publishing verification.
+
+## Next Season Stats packet — on-pitch combinations V1
+
+Owner: Kody. Scope: extend the existing completed-match records and deterministic calculations; no separate statistics database, paid API or AI calculation loop.
+
+- [ ] Store source-backed chronological goal events (for/against, regulation period, stoppage time, source order) and match-specific player roles. Squad positions alone are insufficient: Gray played RB and Gallagher an attacking role at Liverpool. Preserve event ordering at substitutions, half-time and dismissals; exclude ambiguous event attribution rather than guess.
+- [ ] Reuse appearance intervals to split matches at substitutions, role changes and red cards. Keep the documented 90-minute denominator; correctly assign stoppage-time goals to the actual on-pitch lineup. Validate active-player counts over every interval, not just 990 aggregate minutes; handle dismissals before enabling affected matches.
+- [ ] Defence: aggregate actual back-line combinations, minutes together, match count, goals conceded, GA/90, goalless interval minutes and longest continuous goalless interval. Show opponent and match context; a goalless interval does not establish overall defensive quality.
+- [ ] Midfield: show central midfield combinations/personnel alongside each defensive combination and goals conceded/goalless intervals. Explicitly label on-pitch association, never individual blame or causation.
+- [ ] Attack: track the actual attacking three/four by match role, minutes together, match count, goals for and GF/90. Add shots/on-target/xG only when complete reliable event evidence supports consistent attribution; missing data is unavailable, never zero.
+- [ ] Show minutes, matches and audited event coverage alongside every rate. Below 270 shared minutes or three matches, label a small sample and suppress strongest/weakest rankings. Threshold is a configurable display guardrail, not proof of significance; even larger samples remain descriptive.
+- [ ] Backfill and score-reconcile all four league match event records before publishing comparisons. Start with league only; keep cups separate.
+- [ ] Replace incremental competitive scorer/squad updates with deterministic materialisation from existing league and cup match evidence, using canonical player identities. Existing cup audit fields are evidence, not a second totals database; cup ingestion and correction/idempotency require implementation before automatic cumulative recovery is claimed.
+- [ ] Tests: goal/substitution same-minute ordering, stoppage time, dismissals, role changes, incomplete data, sample guards, corrected-match reruns and no double counting. Review compact combination tables after those pass.
+
+Architecture review: existing `LEAGUE_MATCHES`, appearance intervals and `getPlayerUsage` support deterministic time-together statistics. They currently lack goal-event chronology and tactical role intervals. Keep combination intelligence separate from this verified post-match maintenance packet.
+
+### Verified update failure and follow-up
+
+- [x] Inspected failed Actions run `35061824343` (16 September): deterministic table refresh and Everton ingestion succeeded, then the test failed at `matches.length === 3` (`4 == 3`), preventing rebuild/commit. Regression assertions now use the stable original three-match sample while validating all live match intervals/totals.
+- [ ] Optional Anthropic reconciliation remains unavailable because of insufficient provider credit, confirmed in the same job log. Do not purchase credit. Prioritise zero-cost deterministic cup/result/scorer/squad materialisation in the next maintenance packet; this post-match correction does not claim to resolve that provider dependency.

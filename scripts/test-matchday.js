@@ -18,6 +18,7 @@ const cupFixtures = `export const CUPS = [
 ];`;
 const cupDue = core.dueFixtures(cupFixtures, { processed: [] }, new Date('2026-08-26T21:00:00Z'))[0];
 assert.match(core.applyFixtureScore(cupFixtures, cupDue, { spurs: 2, opponent: 1 }), /score:"2-1"/);
+assert.equal(core.dueFixtures(cupFixtures.replace('score:null', 'score:null,eliminated:true'), { processed: [] }, new Date('2026-08-26T21:00:00Z')).length, 0);
 
 const standings = core.renderStandings([{ team: 'Tottenham Hotspur', w: 1, d: 0, l: 0, gf: 2, ga: 1, gd: 1, pts: 3 }]);
 assert.match(standings[0], /isSpurs:true/);
@@ -31,8 +32,12 @@ const vm = require('vm');
 const seasonStatsSource = fs.readFileSync(require('path').join(__dirname, '../src/data/seasonStats.js'), 'utf8');
 const seasonContext = { Map };
 vm.runInNewContext(`${seasonStatsSource.replace(/^export\s+/gm, '')}\nthis.__season={LEAGUE_MATCHES,getLeagueSummary,getPlayerUsage,withLeagueResults};`, seasonContext);
-const matches = seasonContext.__season.LEAGUE_MATCHES;
-matches.forEach(core.validateLeagueMatch);
+const currentMatches = seasonContext.__season.LEAGUE_MATCHES;
+currentMatches.forEach(core.validateLeagueMatch);
+assert.equal(seasonContext.__season.getPlayerUsage(currentMatches).reduce((sum,p)=>sum+p.minutes,0),currentMatches.length*990);
+// Keep the original audited three-match regression sample stable as the
+// live season advances; synthetic rollover tests must not append MD4 twice.
+const matches = currentMatches.slice(0,3);
 const usage = seasonContext.__season.getPlayerUsage(matches);
 assert.equal(matches.length, 3);
 assert.deepEqual(JSON.parse(JSON.stringify(seasonContext.__season.getLeagueSummary(matches))), { played: 3, w: 0, d: 1, l: 2, points: 1 });
@@ -56,7 +61,8 @@ const rolled = seasonContext.__season.getPlayerUsage([...matches, synthetic]);
 const rolledKinsky = rolled.find(player => player.player === 'Antonín Kinsky');
 assert.deepEqual(JSON.parse(JSON.stringify(rolledKinsky)), { player: 'Antonín Kinsky', apps: 4, starts: 4, subApps: 0, minutes: 360, w: 1, d: 1, l: 2 });
 assert.equal(seasonContext.__season.withLeagueResults([{mw:4}], [...matches, synthetic])[0].score, '2-0');
-const upserted = core.getLeagueMatches(core.upsertLeagueMatch(seasonStatsSource, synthetic));
+const regressionSource = core.replaceExportedArray(seasonStatsSource, 'LEAGUE_MATCHES', [JSON.stringify(matches).slice(1,-1)]);
+const upserted = core.getLeagueMatches(core.upsertLeagueMatch(regressionSource, synthetic));
 assert.equal(upserted.length, 4);
 assert.equal(upserted.find(match => match.mw === 4).score.spurs, 2);
 
