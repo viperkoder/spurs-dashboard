@@ -35,6 +35,22 @@ vm.runInNewContext(`${seasonStatsSource.replace(/^export\s+/gm, '')}\nthis.__sea
 const currentMatches = seasonContext.__season.LEAGUE_MATCHES;
 currentMatches.forEach(core.validateLeagueMatch);
 assert.equal(seasonContext.__season.getPlayerUsage(currentMatches).reduce((sum,p)=>sum+p.minutes,0),currentMatches.length*990);
+const liveUsage = seasonContext.__season.getPlayerUsage(currentMatches);
+liveUsage.forEach(player => {
+  assert.equal(player.apps, player.starts + player.subApps);
+  assert.equal(player.apps, player.w + player.d + player.l);
+});
+assert.equal(currentMatches.reduce((sum,match)=>sum+match.appearances.filter(p=>p.started).length,0),currentMatches.length*11);
+assert.equal(seasonContext.__season.getLeagueSummary(currentMatches).played,currentMatches.length);
+// Re-ingesting a real audited match must replace it, never append or count it
+// twice. Verify both a legitimate missing-match backfill and an unchanged rerun.
+const latest = currentMatches[currentMatches.length-1];
+if (latest) {
+  const withoutLatest = core.replaceExportedArray(seasonStatsSource, 'LEAGUE_MATCHES', [JSON.stringify(currentMatches.slice(0,-1)).slice(1,-1)]);
+  const backfilled = core.upsertLeagueMatch(withoutLatest,latest);
+  assert.deepEqual(core.getLeagueMatches(backfilled),core.getLeagueMatches(seasonStatsSource));
+  assert.equal(core.upsertLeagueMatch(backfilled,latest),backfilled);
+}
 // Keep the original audited three-match regression sample stable as the
 // live season advances; synthetic rollover tests must not append MD4 twice.
 const matches = currentMatches.slice(0,3);
