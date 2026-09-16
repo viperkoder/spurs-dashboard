@@ -6,6 +6,20 @@ on:
     # kickoff + 2 hours and only when final structured evidence exists.
     - cron: "*/15 * * * *"
   workflow_dispatch: {}
+  # Exercise the real matchday job when its guardrails change. Data-only bot
+  # commits do not match these paths, so this cannot create a push loop.
+  push:
+    branches: [main]
+    paths:
+      - scripts/test-matchday.js
+      - automation/matchday-core.js
+      - .github/workflows/matchday-update.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/test-matchday.js
+      - automation/matchday-core.js
+      - .github/workflows/matchday-update.yml
 
 permissions:
   contents: write
@@ -59,7 +73,7 @@ jobs:
         run: npm ci
 
       - name: Refresh transfers, injuries and availability when Spurs match data changed
-        if: steps.match.outputs.full_changed == 'true'
+        if: github.event_name != 'pull_request' && steps.match.outputs.full_changed == 'true'
         run: |
           trap 'rm -f automation/.env' EXIT
           echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" > automation/.env
@@ -75,7 +89,7 @@ jobs:
           npm run build
 
       - name: Commit coherent matchday update
-        if: steps.table.outputs.changed == 'true' || steps.match.outputs.changed == 'true'
+        if: github.event_name != 'pull_request' && (steps.table.outputs.changed == 'true' || steps.match.outputs.changed == 'true')
         run: |
           git config user.name "thfc-matchday-bot"
           git config user.email "actions@users.noreply.github.com"
