@@ -108,14 +108,14 @@ export function OverviewPanel({liveNews}){
                 ? <><strong style={{color:P.amber}}>Pre-season:</strong> Competitive analysis will populate automatically once league results are entered.</>
                 : spurs && spurs.ga>leagueAvgGA && spurs.gf>=leagueAvgGF*0.9
                 ? <><strong style={{color:P.amber}}>Read:</strong> Attack was roughly league-average, but the defence conceded {(spurs.ga-leagueAvgGA).toFixed(1)} more goals than a typical side — the table position is a defensive problem more than an attacking one.</>
-                : <><strong style={{color:P.amber}}>Read:</strong> Comparing output to the {played}-game league average shows where the points actually went missing.</>}
+                : <><strong style={{color:P.amber}}>Read:</strong> Season totals compared with the league average per club; descriptive context, not a measure of individual responsibility.</>}
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <WH lg>2026/27 Premier League — Pre-Season Table</WH>
+        <WH lg>2026/27 Premier League{played===0?" — Pre-Season Table":" — League Table"}</WH>
         <div style={{overflowX:"auto"}}>
           <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
             <thead><tr style={{color:P.muted,fontSize:10,letterSpacing:"0.12em"}}>
@@ -145,7 +145,7 @@ export function OverviewPanel({liveNews}){
           </table>
         </div>
         <div style={{display:"flex",flexWrap:"wrap",gap:12,marginTop:10,fontSize:11,color:P.muted}}>
-          <span>All clubs start level; alphabetical order until Matchday 1.</span>
+          <span>{played===0?"All clubs start level; alphabetical order until Matchday 1.":"Current standings from completed Premier League matches."}</span>
           <span><span style={{color:P.gold}}>■</span> Tottenham</span>
         </div>
       </div>

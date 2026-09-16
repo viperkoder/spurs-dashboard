@@ -31,7 +31,7 @@ export const PREMIER_LEAGUE_SCHEDULE = [
   {mw:2,  opponent:"Newcastle United",      venue:"H", date:"2026-08-29T17:30:00+01:00", provisional:false, tv:"Sky Sports", note:"Sun 30 Aug · 12:30 AM SGT"},
   {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00+01:00", provisional:false},
   {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T17:30:00+01:00", provisional:false},
-  {mw:5,  opponent:"Aston Villa",           venue:"H", date:"2026-09-19T15:00:00", score:null, provisional:true},
+  {mw:5,  opponent:"Aston Villa",           venue:"H", date:"2026-09-19T12:30:00+01:00", provisional:false, note:"Sat 19 Sep · 12:30 PM BST / 7:30 PM SGT", source:"https://www.tottenhamhotspur.com/the-stadium/local"},
   {mw:6,  opponent:"Manchester United",     venue:"A", date:"2026-10-10T15:00:00", score:null, provisional:true},
   {mw:7,  opponent:"Coventry City",         venue:"H", date:"2026-10-17T15:00:00", score:null, provisional:true},
   {mw:8,  opponent:"Chelsea",               venue:"A", date:"2026-10-24T15:00:00", score:null, provisional:true},

@@ -13,6 +13,8 @@
 // updateNewsFallback(), which now filters every headline through
 // isSpursRelevant() before writing here (see shared.js + update-dashboard.js).
 export const NEWS = [
+  {title:"Reds progress at Anfield — Liverpool 3-1 Spurs", source:"THFC Official", date:"16 Sept 2026", tag:"Match", url:"https://www.tottenhamhotspur.com/news/1090195/reds-progress-at-anfield"},
+  {title:"Pedro Porro available for Villa clash", source:"THFC Official", date:"16 Sept 2026", tag:"Injury", url:"https://www.tottenhamhotspur.com/news/1090198/team-news-pedro-porro-available-for-villa-clash"},
   {title:"Tottenham without seven players for Liverpool Carabao Cup tie, but one key return", source:"SpursWeb", date:"15 Sept 2026", tag:"Injury", url:"https://www.spurs-web.com/spurs-news/tottenham-without-seven-players-for-liverpool-carabao-cup-tie-but-one-key-return/"},
   {title:"Tonali, Porro, Kulusevski - Tottenham injury news and return dates for Liverpool clash", source:"football.london", date:"15 Sept 2026", tag:"Injury", url:"https://www.football.london/tottenham-hotspur-fc/news/tottenham-injuries-porro-tonali-liverpool-34619051"},
   {title:"De Zerbi reveals if Kudus and Maddison can start for Tottenham vs Liverpool", source:"SpursWeb", date:"15 Sept 2026", tag:"Club", url:"https://www.spurs-web.com/spurs-news/de-zerbi-reveals-if-kudus-and-maddison-can-start-for-tottenham-vs-liverpool/"},

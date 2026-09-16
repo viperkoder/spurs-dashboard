@@ -23,7 +23,7 @@ export function SeasonStatsPanel(){
   });
   const setSortKey=key=>setSort(current=>({key,direction:current.key===key&&current.direction==="desc"?"asc":"desc"}));
   const coverage=LEAGUE_MATCHES.length
-    ? `MD1–MD${Math.max(...LEAGUE_MATCHES.map(match=>match.mw))} · through ${new Date(LEAGUE_MATCHES[LEAGUE_MATCHES.length-1].date).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}`
+    ? `MD1–MD${Math.max(...LEAGUE_MATCHES.map(match=>match.mw))} · through ${new Date(LEAGUE_MATCHES[LEAGUE_MATCHES.length-1].date).toLocaleDateString("en-GB",{timeZone:"Europe/London",day:"numeric",month:"short",year:"numeric"})}`
     : "No completed league matches";
 
   return (

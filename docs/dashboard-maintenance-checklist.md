@@ -115,7 +115,8 @@ without failing or hiding the deterministic update.
 - [x] Added expandable league match history to Season Stats, showing XI, used/unused substitutes, each player's regulation minutes and source links. All rows use existing league match records.
 - [x] Processed-fixture state reconciled to prevent duplicate cumulative increments. Preserved original Everton key alongside corrected kickoff key.
 - [x] Matchday regression suite, secret scan, build smoke checks and `git diff --check` passed. Verified 23 league players, 44 starts, 3,960 regulation minutes, eleven active players over every interval, six competitive goals and unique scorer identities.
-- [ ] Live Pages deployment: pending publishing verification.
+- [x] GitHub Build check and Pages deployment passed for `dac5402`; live Overview confirmed Liverpool 3-1 Spurs, latest-first LAST5, Spurs 17th/2 points, and corrected scorer totals. Live Season Stats verified all 23 usage rows and expandable Everton participation. Browser logs showed extension metadata errors only, no dashboard application error.
+- [x] Live QA follow-up corrected stale pre-season table labels, anchored coverage dates to UK match dates, added official post-match fallback headlines and confirmed the Villa kickoff at 12:30 BST / 19:30 SGT on 19 September against the official stadium local-information page. Follow-up matchday tests, secret scan, build and whitespace check passed.
 
 ## Next Season Stats packet — on-pitch combinations V1
 
