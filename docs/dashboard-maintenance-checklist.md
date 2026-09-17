@@ -125,8 +125,8 @@ phase is small, tested and reported before the next begins.
 
 - V2.1 — On-pitch data foundation (merged, PR #5, `3929974`)
 - V2.2 — Defensive combinations (discovery + event-model foundation merged,
-  PR #6, `9e815cb`; Defensive Combinations V1 implemented below)
-- V2.3 — Central midfield influence
+  PR #6, `9e815cb`; Defensive Combinations V1 merged, PR #7, `d2053d5`)
+- V2.3 — Central midfield influence (V1 implemented below; awaiting publish)
 - V2.4 — Attacking combinations
 - V2.5 — Dashboard integration, presentation and final validation
 
@@ -518,6 +518,98 @@ below; added no new database, provider or generic analytics framework.
       automation boundary" above and the V2.2 discovery section's evidence-
       gap note. This packet does not change that; it only consumes the
       `goals` data already in place.
+
+### V2.3 — Central Midfield Influence V1 — 18 September 2026
+
+Implements the first V2.3 packet: which central-midfield unit was on the
+pitch with each defensive unit, for how long, and how many goals were
+conceded during those shared spells. Purely descriptive — no causation
+claim. Reused `src/data/onPitch.js` and `src/data/matchEvents.js`
+unchanged; reused `src/data/defensiveCombinations.js`'s own defensive
+spell/goal-resolution functions unchanged for the defensive half of the
+shared-spell pairing. Added no new database, provider or generic
+combination framework.
+
+- [x] **Central-midfield membership**, derived from `src/data/squad.js`'s
+      own listed position and real match appearances in
+      `src/data/seasonStats.js` — not from any prior chat/completion-report
+      player list. Included: Lucas Bergvall, Conor Gallagher (squad.js CM),
+      Rodrigo Bentancur, Sandro Tonali (squad.js DM). Excluded, reviewed and
+      documented rather than silently omitted: Archie Gray (squad.js CM,
+      but real match-specific evidence already places him in the back line
+      for every league match he started — MW1, MW2, MW4 — per
+      `defensiveCombinations.js`'s existing `MATCH_SPECIFIC_DEFENSIVE_OVERRIDES`;
+      he was an unused substitute in MW3, so he contributes zero
+      central-midfield minutes across all four completed league matches and
+      is not double-counted); Mateus Fernandes, James Maddison, Xavi Simons
+      (squad.js AM — attacking midfield is not automatically central
+      midfield per the brief, and no match-specific evidence was gathered
+      placing any of them in a deeper central role).
+- [x] **Aggregation method:** new `src/data/midfieldInfluence.js` mirrors
+      `defensiveCombinations.js`'s spell-splitting/goal-resolution pattern
+      for central midfield (`getMatchMidfieldSpells`,
+      `resolveGoalCentralMidfieldCombination`, `getMidfieldUnitStats`), then
+      intersects the two independent spell partitions (defensive and
+      central-midfield) of the same match to build the midfield+defence
+      shared-spell table (`getMatchMidfieldDefensiveSpells`,
+      `getMidfieldDefensiveCombinationStats`). A substitution affecting
+      either unit starts a new shared segment; one affecting neither does
+      not. Identical combinations aggregate regardless of player ordering.
+      Goal attribution reuses `onPitch.getPlayersOnPitchAtGoal` for each
+      side independently; a goal only counts toward a shared combination
+      when both the defensive and central-midfield presence for it are
+      unambiguous — otherwise it is reported separately as unresolved.
+- [x] **Current results (all four completed league matches, including both
+      0-0s):** Midfield Units — 360 total minutes, 5 goals conceded (all
+      attributed), 0 unresolved, five distinct units, every one a small
+      sample:
+      - Bentancur, Tonali — 190 min, 4 matches, 2 GC, GC/90 0.95
+      - Gallagher, Bergvall, Tonali — 45 min, 1 match, 3 GC, GC/90 6.00
+      - Gallagher, Bentancur, Tonali — 83 min, 1 match, 0 GC
+      - Bergvall, Tonali — 27 min, 1 match, 0 GC
+      - Bentancur (alone) — 15 min, 1 match, 0 GC
+
+      Midfield + Defence — same 360 minutes and 5 goals conceded across
+      twelve distinct shared combinations (four matches, each split into
+      three merged segments by independent defensive/midfield
+      substitutions), every one a small sample; full breakdown is in the
+      expandable table on the Season Stats page.
+- [x] **Small-sample treatment:** identical guardrail to Defensive
+      Combinations V1 (270 shared minutes / 3 matches floor); every row is
+      labelled "SMALL SAMPLE" and excluded from best/worst language, none
+      hidden — including the 15-minute solo-Bentancur row.
+- [x] **UI:** a "CENTRAL MIDFIELD INFLUENCE" section added to the existing
+      Season Stats page (`src/components/SeasonStatsPanel.js`) — a Midfield
+      Units table, plus an expandable Midfield + Defence table (kept
+      collapsed by default since twelve small-sample rows would otherwise
+      clutter the page) — matching the existing panel's visual language. No
+      redesign, no chart.
+- [x] **Tests:** `scripts/test-midfield-influence.js` (new) covers an
+      unchanged midfield unit for a full match, a midfield substitution
+      splitting a spell (real MW4), a defensive substitution splitting a
+      shared spell while the midfield unit itself is unchanged (real MW1),
+      simultaneous/shared interval calculation, clean-sheet minutes with
+      zero conceded, a goal attributed only to the unit actually present
+      (real MW1 Kayode half-time-boundary case), order-independent
+      aggregation, the match-scoped Gray exclusion, and malformed/incomplete
+      data handled without throwing — plus real-data invariants (both
+      tables partition 360 minutes, attribute all 5 goals, 0 unresolved,
+      every row small-sample, twelve combined rows).
+- [x] `npm run test:onpitch`, `npm run test:matchevents`,
+      `npm run test:defensivecombinations`, `npm run test:midfieldinfluence`,
+      `npm run test:matchday`, `npm run check-secrets`, `node build.js` and
+      `git diff --check` all pass. Defensive Combinations V1 confirmed
+      unchanged: 360 total minutes, 5 conceded goals, 7 combinations, 0
+      unresolved. Season Stats V1, V2.1 and the entire Matchday updater
+      (`automation/matchday-*.js`, `.github/workflows/matchday-update.yml`)
+      are untouched.
+- [ ] **Publication blocked (recorded, not resolved):** this session's
+      GitHub proxy is not authorized for `viperkoder/spurs-dashboard`, so
+      the branch (`codex/season-stats-v2.3-central-midfield-influence-v1`,
+      verified commit `d0b66350e8ed9da79ce9c4d39d087407838ae668`, based on
+      verified main `d2053d56a176beaeb4922127593bd56877335787`) could not be
+      pushed or opened as a PR from this session. Preserved as a git bundle
+      delivered to Viper for Kody to apply and push.
 
 ## Next Season Stats packet — on-pitch combinations V1
 
