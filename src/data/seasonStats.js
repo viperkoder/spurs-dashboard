@@ -8,6 +8,16 @@
 // entering in the displayed 68th minute begins at 68; players still on the
 // pitch at full time end at 90. Therefore every no-red-card match reconciles to
 // 11 * 90 = 990 team-player minutes, without counting stoppage time twice.
+//
+// Optional `goals` field (Season Stats V2.2 foundation, added 18 September
+// 2026): a source-backed list of goal events for the match — see
+// src/data/matchEvents.js for the schema, validator and safe accessor, and
+// docs/dashboard-maintenance-checklist.md for the evidence behind each
+// match's entries. An empty array means genuinely zero goals for that match
+// (both 0-0 results below are fully reconciled, not merely unbackfilled);
+// a match predating this packet without the field at all would mean
+// "not yet reviewed" — every match currently in this file has been reviewed.
+// Never hand-edit a `goals` entry beyond what its `source` actually shows.
 
 export const LEAGUE_MATCHES = [
   {
@@ -126,6 +136,40 @@ export const LEAGUE_MATCHES = [
       "Luca Williams-Barnett",
       "Kevin Danso",
       "Ben Davies"
+    ],
+    "goals": [
+      {
+        "team": "opponent",
+        "scorer": "Keane Lewis-Potter",
+        "assist": "Dango Ouattara",
+        "minute": 12,
+        "stoppage": null,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.brentfordfc.com/en/news/article/match-reports-brentford-3-tottenham-hotspur-0-premier-league-22-08-2026"
+      },
+      {
+        "team": "opponent",
+        "scorer": "Vitaly Janelt",
+        "assist": "Mathias Jensen",
+        "minute": 33,
+        "stoppage": null,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.brentfordfc.com/en/news/article/match-reports-brentford-3-tottenham-hotspur-0-premier-league-22-08-2026",
+        "sourceNote": "Club report also credits a deflection off Nathan Collins in the buildup; Jensen is recorded as the assist."
+      },
+      {
+        "team": "opponent",
+        "scorer": "Michael Kayode",
+        "assist": null,
+        "minute": 45,
+        "stoppage": null,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.brentfordfc.com/en/news/article/match-reports-brentford-3-tottenham-hotspur-0-premier-league-22-08-2026",
+        "sourceNote": "Club report gives the minute as '45+' with no exact added-time digit; a header (Collins) and a blocked shot (Sangaré) both preceded the goal, so no single assist is recorded rather than guessing between them."
+      }
     ]
   },
   {
@@ -240,6 +284,28 @@ export const LEAGUE_MATCHES = [
       "Lucas Bergvall",
       "Conor Gallagher",
       "Marcos Senesi"
+    ],
+    "goals": [
+      {
+        "team": "opponent",
+        "scorer": "Anthony Elanga",
+        "assist": "Amar Dedic",
+        "minute": 62,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.nbcsports.com/soccer/live/tottenham-hotspur-vs-newcastle-live-updates-score-goals-highlights-stats-2026-august-29"
+      },
+      {
+        "team": "opponent",
+        "scorer": "Yoane Wissa",
+        "assist": "Nick Woltemade",
+        "minute": 72,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.nbcsports.com/soccer/live/tottenham-hotspur-vs-newcastle-live-updates-score-goals-highlights-stats-2026-august-29"
+      }
     ]
   },
   {
@@ -360,7 +426,8 @@ export const LEAGUE_MATCHES = [
       "Archie Gray",
       "Marcos Senesi",
       "Lucas Bergvall"
-    ]
+    ],
+    "goals": []
   },
   {
     "mw": 4,
@@ -480,7 +547,8 @@ export const LEAGUE_MATCHES = [
       "Ben Davies",
       "Conor Gallagher",
       "Martin Dúbravka"
-    ]
+    ],
+    "goals": []
   }
 ];
 

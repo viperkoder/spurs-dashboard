@@ -8,7 +8,8 @@
     "check-secrets": "node scripts/check-secrets.js",
     "update:table": "node automation/league-table-update.js",
     "test:matchday": "node scripts/test-matchday.js",
-    "test:onpitch": "node scripts/test-onpitch.js"
+    "test:onpitch": "node scripts/test-onpitch.js",
+    "test:matchevents": "node scripts/test-match-events.js"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"
