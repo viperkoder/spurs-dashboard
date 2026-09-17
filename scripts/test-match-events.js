@@ -75,24 +75,24 @@ for (const match of realMatches) {
     assert.deepEqual(result.ambiguous, [], `MW1 minute ${minute} should not be ambiguous`);
   });
 
-  // A genuine, honest discovery from real data: Kayode's goal is reported
-  // at minute 45 ("45+", first-half stoppage), and Tottenham made two
-  // half-time substitutions also recorded at minute 45 in the appearance
-  // schema (Gallagher/Bergvall off, Fernandes/Bentancur on). Football
-  // convention says a first-half stoppage-time goal necessarily precedes
-  // half-time substitutions (which happen during the actual break) — but
-  // the current on-pitch foundation has no period-aware resolution logic,
-  // only minute equality, so it correctly reports this as ambiguous rather
-  // than silently assuming either XI. This is documented in the checklist
-  // as a candidate small enhancement for a later packet (resolve H1-minute-45
-  // vs. HT-minute-45 using the `period` field), not fixed here.
+  // Resolved finding (Season Stats V2.2 Defensive Combinations V1, 18
+  // September 2026): Kayode's goal is reported at minute 45 ("45+",
+  // first-half stoppage, period H1), coinciding with two half-time
+  // substitutions also recorded at minute 45 (Gallagher/Bergvall off,
+  // Fernandes/Bentancur on). onPitch.js now resolves this deterministically
+  // using the goal's explicit `period: 'H1'` together with the project's own
+  // documented minute convention (a half-time substitution takes effect at
+  // the start of the second half) — not an invented event order. See
+  // scripts/test-onpitch.js's half-time-boundary tests for the general case;
+  // this is the real record that surfaced it.
   const kayodeGoal = goals.find(g => g.scorer === 'Michael Kayode');
   const kayodeResult = onPitch.getPlayersOnPitchAtGoal(match, kayodeGoal);
-  assert.ok(kayodeResult.ambiguous.includes('Conor Gallagher'));
-  assert.ok(kayodeResult.ambiguous.includes('Lucas Bergvall'));
-  assert.ok(kayodeResult.ambiguous.includes('Mateus Fernandes'));
-  assert.ok(kayodeResult.ambiguous.includes('Rodrigo Bentancur'));
-  assert.ok(kayodeResult.issues.some(i => i.includes('ambiguous')));
+  assert.deepEqual(kayodeResult.ambiguous, [], 'the half-time coincidence now resolves deterministically rather than staying ambiguous');
+  assert.ok(kayodeResult.onPitch.includes('Conor Gallagher'), 'played the entire first half, so was on the pitch for a first-half goal');
+  assert.ok(kayodeResult.onPitch.includes('Lucas Bergvall'), 'played the entire first half, so was on the pitch for a first-half goal');
+  assert.ok(!kayodeResult.onPitch.includes('Mateus Fernandes'), 'a half-time introduction plays no part of the first half');
+  assert.ok(!kayodeResult.onPitch.includes('Rodrigo Bentancur'), 'a half-time introduction plays no part of the first half');
+  assert.equal(kayodeResult.issues.length, 0);
 }
 
 // --- MW2 Newcastle 0-2: two sourced opponent goals -------------------------

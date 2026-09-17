@@ -205,18 +205,56 @@ export function getSubstitutionEvents(match, options = {}) {
 // finite `order`, the earlier one is treated as happening first. If either
 // is missing, or they are equal, ordering cannot be established and the
 // result is 'ambiguous' — never guessed.
-function resolveSameMinuteBoundary(appearance, goal, boundaryType) {
+function resolveSameMinuteBoundary(appearance, goal, boundaryType, duration) {
   const appearanceOrder = boundaryType === 'on' ? appearance.onOrder : appearance.offOrder;
   const goalOrder = goal.order;
-  if (!Number.isFinite(appearanceOrder) || !Number.isFinite(goalOrder) || appearanceOrder === goalOrder) {
-    return 'ambiguous';
+  if (Number.isFinite(appearanceOrder) && Number.isFinite(goalOrder) && appearanceOrder !== goalOrder) {
+    if (boundaryType === 'on') {
+      // Entering player: on the pitch for the goal only if they entered first.
+      return appearanceOrder < goalOrder ? 'on-pitch' : 'off-pitch';
+    }
+    // Departing player: on the pitch for the goal only if they left afterwards.
+    return appearanceOrder > goalOrder ? 'on-pitch' : 'off-pitch';
   }
-  if (boundaryType === 'on') {
-    // Entering player: on the pitch for the goal only if they entered first.
-    return appearanceOrder < goalOrder ? 'on-pitch' : 'off-pitch';
-  }
-  // Departing player: on the pitch for the goal only if they left afterwards.
-  return appearanceOrder > goalOrder ? 'on-pitch' : 'off-pitch';
+
+  const halfTimeResolution = resolveHalfTimeBoundary(appearance, goal, boundaryType, duration);
+  if (halfTimeResolution) return halfTimeResolution;
+
+  return 'ambiguous';
+}
+
+// Half-time boundary resolution (Season Stats V2.2 Defensive Combinations V1,
+// 18 September 2026) — the ONE same-minute case resolved without a real
+// order/onOrder/offOrder field, because it follows from facts this project
+// already records, not from an invented event order:
+//
+//   - A goal's `period: 'H1'` means the source itself reports the goal as
+//     happening in the first half.
+//   - This file's own documented minute convention (see the header comment
+//     and src/data/seasonStats.js) means a substitution recorded "at" the
+//     half-time boundary minute (half the match duration — 45' for a normal
+//     90-minute match) takes effect at the start of the second half: a
+//     departing starter is credited through that exact minute (they played
+//     the entire first half), and an entering substitute begins exactly
+//     then (they play no part of the first half).
+//
+// Put those two together and a first-half goal reported at that same
+// boundary minute cannot have happened after a half-time introduction, or
+// before a half-time departure — the half itself hasn't ended for the
+// departing player, and hasn't started yet for the entering one. This is
+// narrow by design: it only fires at the half-time boundary minute, and
+// only when the goal's `period` is explicitly 'H1' — never inferred when
+// `period` is absent, and never applied to any other minute (an ordinary
+// in-half same-minute conflict still has no such guarantee and stays
+// 'ambiguous', exactly as before).
+function resolveHalfTimeBoundary(appearance, goal, boundaryType, duration) {
+  if (goal.period !== 'H1') return null;
+  const halfTimeMinute = duration / 2;
+  if (goal.minute !== halfTimeMinute) return null;
+  // A player leaving exactly at half time played the entire first half.
+  if (boundaryType === 'off') return 'on-pitch';
+  // A player entering exactly at half time plays no part of the first half.
+  return 'off-pitch';
 }
 
 // Players on the pitch for a given goal event.
@@ -253,7 +291,7 @@ export function getPlayersOnPitchAtGoal(match, goal, options = {}) {
 
     if (enteredThisMinute || leftThisMinute) {
       const boundaryType = enteredThisMinute ? 'on' : 'off';
-      const resolution = resolveSameMinuteBoundary(appearance, goal, boundaryType);
+      const resolution = resolveSameMinuteBoundary(appearance, goal, boundaryType, duration);
       if (resolution === 'on-pitch') onPitch.push(appearance.player);
       else if (resolution === 'ambiguous') ambiguous.push(appearance.player);
       // 'off-pitch' resolutions contribute nothing — correctly excluded.

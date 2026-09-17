@@ -124,9 +124,8 @@ Owner: Kody reviews each phase gate; Viper authorizes the next phase. Each
 phase is small, tested and reported before the next begins.
 
 - V2.1 — On-pitch data foundation (merged, PR #5, `3929974`)
-- V2.2 — Defensive combinations (discovery + event-model foundation complete;
-  the defensive aggregation itself is not yet built — see "V2.2 — discovery
-  + event/tactical-role foundation" below)
+- V2.2 — Defensive combinations (discovery + event-model foundation merged,
+  PR #6, `9e815cb`; Defensive Combinations V1 implemented below)
 - V2.3 — Central midfield influence
 - V2.4 — Attacking combinations
 - V2.5 — Dashboard integration, presentation and final validation
@@ -405,6 +404,120 @@ Never filter the denominator to matches where goals were conceded. Apply the
 per-combination sample-size guardrail from the start; do not rank combinations
 from the current tiny sample. Still no ranking UI — a plain, labelled combination table is the
 target, matching the "do not build a full ranking UI yet" instruction.
+
+### V2.2 — Defensive Combinations V1 — 18 September 2026
+
+Implements the aggregation the discovery packet above recommended, using the
+`goals` field it added. Reused `src/data/onPitch.js` and
+`src/data/matchEvents.js` unchanged apart from the one boundary correction
+below; added no new database, provider or generic analytics framework.
+
+- [x] **Half-time boundary fix (authorized, narrowly scoped correction to
+      `src/data/onPitch.js`):** the V2.2 discovery packet's real-data finding
+      — Kayode's 45+ goal (period `H1`) coinciding with two half-time
+      substitutions also recorded at minute 45 — is now resolved
+      deterministically. `resolveSameMinuteBoundary` falls back to a new
+      `resolveHalfTimeBoundary` check before returning `ambiguous`: a player
+      leaving exactly at the half-time boundary minute (`matchDuration / 2`)
+      played the entire first half, and a player entering exactly then plays
+      no part of it. This fires ONLY when the goal's `period` is explicitly
+      `'H1'` and only at the boundary minute — never inferred, never applied
+      elsewhere. Ordinary order/onOrder/offOrder evidence still takes
+      priority when present. Regression tests added in
+      `scripts/test-onpitch.js` (the general case, a no-period guard, a
+      wrong-period guard, an away-from-boundary guard, and the real MW1
+      cross-check) and `scripts/test-match-events.js` (updated to assert the
+      Kayode case now resolves instead of staying ambiguous). Numerically,
+      this fix has **no effect on any of the four completed league matches'
+      defensive-combination numbers below** — none of MW1's half-time
+      substitutes (Gallagher, Bergvall, Fernandes, Bentancur) is a defender —
+      but it is a genuine correctness fix to the shared foundation, needed
+      before more matches make it matter.
+- [x] **Defensive-outfield identity:** centre-backs and full-backs/wing-backs
+      only; goalkeeper and central midfield excluded. Default is squad.js's
+      own CB/LB/RB position (Senesi, van Hecke, van de Ven, Tosin
+      Adarabioyo, Udogie, Robertson, Porro — an explicit whitelist of the
+      real players who have actually appeared, not a name-matching engine,
+      since squad.js and seasonStats.js spell names differently). One
+      documented override: Archie Gray (squad.js: "CM ... also covers
+      DM/RB") is treated as defensive-outfield in MW1, MW2 and MW4 — the
+      only three league matches he started — on the strength of independent
+      confirmed-lineup/formation reporting for each (WhoScored's
+      confirmed-lineup coverage places him in the back line in all three;
+      full citations are in the `MATCH_SPECIFIC_DEFENSIVE_OVERRIDES` doc
+      comment in `src/data/defensiveCombinations.js`). He was an unused
+      substitute in MW3, so no decision was needed there. No other player
+      needed an override. This module makes no formation claim (back three
+      vs. back four vs. back five) — it only reports which whitelisted
+      players were actually on the pitch together, however many that is;
+      MW2 genuinely has five recognized defenders on the pitch for the first
+      68 minutes (Porro, van de Ven, van Hecke, Robertson, Gray).
+- [x] **Aggregation method:** new `src/data/defensiveCombinations.js` (pure,
+      deterministic, reusable — the doc comment explains why midfield/
+      attacking combinations can reuse the same spell-splitting and
+      goal-attribution pattern later without a shared generic framework
+      being built prematurely). Each match is split into "defensive spells"
+      at every substitution that changes the defensive-outfield on-pitch set
+      (an attacking or central-midfield substitution does not start a new
+      spell). Each spell contributes its minutes and a match credit to its
+      exact player combination (order-independent), regardless of whether a
+      goal was conceded during it. Opponent goals are attributed to a
+      combination by reusing `onPitch.getPlayersOnPitchAtGoal`; a goal is
+      only counted when every defensive-outfield player's presence for it is
+      unambiguous — otherwise it is reported separately as unresolved, never
+      guessed onto a combination.
+- [x] **Current results (all four completed league matches, including both
+      0-0s):** 360 total combination-minutes (4 × 90, exactly partitioned),
+      5 total opponent goals all attributed, 0 unresolved. Seven distinct
+      combinations, every one a small sample (under 270 shared minutes or 3
+      matches) from this four-match season:
+      - Gray/van Hecke/Robertson/Senesi — 86 min, 1 match, 3 GC, GC/90 3.14
+      - Gray/van Hecke/Robertson/van de Ven — 85 min, 1 match, 0 GC
+      - Porro/Udogie/van de Ven/van Hecke — 83 min (MW2 + MW3), 2 matches, 1 GC, GC/90 1.08
+      - Gray/Porro/van de Ven/van Hecke/Robertson — 68 min, 1 match, 1 GC, GC/90 1.32
+      - Porro/Robertson/van de Ven/van Hecke — 29 min, 1 match, 0 GC
+      - Robertson/Tosin Adarabioyo/van de Ven/van Hecke — 5 min, 1 match, 0 GC
+      - Udogie/van Hecke/Robertson/Senesi — 4 min, 1 match, 0 GC
+- [x] **Small-sample treatment:** every combination above is labelled "SMALL
+      SAMPLE" in the UI and excluded from any best/worst ranking language;
+      none is hidden, including the sub-4-minute combination. The 270-
+      minute/3-match floor is unchanged from the standing guardrail
+      documented earlier in this file.
+- [x] **UI:** a "DEFENSIVE COMBINATIONS" table added to the existing Season
+      Stats page (`src/components/SeasonStatsPanel.js`) — Combination /
+      Minutes / Matches / Goals Conceded / GC/90 columns, a small-sample
+      badge per row, and a caption note — matching the existing panel's
+      visual language. No redesign, no chart (a plain table is the clearest
+      representation for seven rows).
+- [x] **Tests:** `scripts/test-defensive-combinations.js` (new) covers a
+      full-match unchanged combination, a substitution creating two spells
+      (real MW3 Udogie→Robertson), identical-combination aggregation across
+      matches and regardless of player order, a clean-sheet match
+      contributing zero-conceded minutes without being excluded, a goal
+      charged only to the combination actually on the pitch (real MW1
+      Kayode), the half-time-boundary case at this module's level, duplicate-
+      identity prevention, and malformed/incomplete data handled without
+      throwing — plus real-data invariants (minutes partition every match's
+      90, every opponent goal attributed, every combination flagged small
+      sample). `scripts/test-onpitch.js` and `scripts/test-match-events.js`
+      were extended (not weakened) for the half-time fix; both still pass in
+      full alongside the untouched `scripts/test-matchday.js`.
+- [x] `npm run test:onpitch`, `npm run test:matchevents`,
+      `npm run test:defensivecombinations`, `npm run test:matchday`,
+      `npm run check-secrets`, `node build.js` and `git diff --check` all
+      pass in an isolated clean clone of this commit (on-device esbuild
+      remains broken by the same pre-existing `@esbuild/darwin-arm64` vs.
+      `linux-arm64` platform mismatch noted in every prior V2 packet — not a
+      regression from this change). Season Stats V1 (`getLeagueSummary`,
+      `getPlayerUsage`, `withLeagueResults`), `src/data/squad.js` and the
+      entire Matchday updater (`automation/matchday-*.js`,
+      `.github/workflows/matchday-update.yml`) are byte-for-byte unchanged
+      from `origin/main`, verified with an explicit diff.
+- [ ] **Automation gap (already recorded, not duplicated):** goal-event
+      ingestion into `goals` is still a manual/backfilled field — see "Known
+      automation boundary" above and the V2.2 discovery section's evidence-
+      gap note. This packet does not change that; it only consumes the
+      `goals` data already in place.
 
 ## Next Season Stats packet — on-pitch combinations V1
 
