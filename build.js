@@ -58,6 +58,7 @@ const FILES = [
   'data/worldcup.js',
   'data/seasonStats.js',
   'data/onPitch.js',
+  'data/matchEvents.js',
   'data/fixtures.js',
   'lib/shared.js',
   'lib/charts.js',

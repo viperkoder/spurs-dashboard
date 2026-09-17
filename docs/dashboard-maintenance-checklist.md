@@ -123,8 +123,10 @@ without failing or hiding the deterministic update.
 Owner: Kody reviews each phase gate; Viper authorizes the next phase. Each
 phase is small, tested and reported before the next begins.
 
-- V2.1 — On-pitch data foundation (this packet)
-- V2.2 — Defensive combinations
+- V2.1 — On-pitch data foundation (merged, PR #5, `3929974`)
+- V2.2 — Defensive combinations (discovery + event-model foundation complete;
+  the defensive aggregation itself is not yet built — see "V2.2 — discovery
+  + event/tactical-role foundation" below)
 - V2.3 — Central midfield influence
 - V2.4 — Attacking combinations
 - V2.5 — Dashboard integration, presentation and final validation
@@ -275,6 +277,134 @@ existing "Next Season Stats packet" bullets below. Requires real goal-minute
 sourcing (ESPN/official) before any defensive combination number can be
 shown — until then, V2.2 must state goal data as unavailable rather than
 assume 0.
+
+### V2.2 — discovery + event/tactical-role foundation — 18 September 2026
+
+Discovery-first packet per Viper's brief: reviewed real evidence before
+writing any combination or ranking logic.
+
+**Matches reviewed (all four completed 2026/27 league matches):**
+
+- [x] MW1 Brentford 3-0 Spurs (22 Aug) — three opponent goals.
+- [x] MW2 Newcastle 0-2 (29 Aug) — two opponent goals.
+- [x] MW3 Nottingham Forest 0-0 (5 Sep) — genuinely zero goals.
+- [x] MW4 Everton 0-0 (12 Sep) — genuinely zero goals.
+
+**Sources evaluated, per the checklist's existing source hierarchy:**
+official club match reports (Brentford FC — reliable, gave scorer/assist/
+minute for all three of its goals), Premier League's official site (JS-
+rendered, not fetchable by this session's tools — a real access gap, not a
+data gap), ESPN's match/report pages (JS-rendered SPA — same access gap;
+ESPN's raw structured evidence API, the one `automation/matchday-core.js`
+already consumes server-side with second-level `time.value` precision, is
+not directly reachable from this session's network egress or by generic web
+fetch, and its commentary HTML page is disallowed by robots.txt), and NBC
+Sports match recaps (reliable, gave scorer/assist/minute for both Newcastle
+goals). No paid provider was added or considered; no fragile scraping was
+used — every goal recorded here came from a normal editorial match report,
+the same tier of source the daily/weekly checklist already treats as
+authoritative.
+
+**What was reliably obtainable, per match:**
+
+- MW1: scorer, assist and minute for all three goals. The third (Kayode)
+  is reported only as "45+" — the club report gives no exact stoppage
+  digit, and its buildup credits two contributors (a header and a blocked
+  shot) rather than one clean assist. Both are recorded as missing rather
+  than guessed.
+- MW2: scorer, assist and minute for both goals, cleanly.
+- MW3, MW4: no goals to source — reconciled as an empty `goals` array,
+  distinct from "not yet reviewed".
+- Substitution minutes for all four matches were already reconciled in V2.1
+  from ESPN evidence; MW1's independently-sourced substitution minutes
+  cross-check within normal ±1 minute editorial rounding (e.g. Brentford's
+  own report says Maddison/Solanke on 67', existing repo data says 68').
+
+**Evidence gap identified, not fabricated:** true second-level event
+ordering (needed to resolve a goal and a substitution reported in the exact
+same displayed minute) is not obtainable through this session's tools. The
+mechanism already exists — `automation/matchday-core.js` extracts
+`event.time.value` in seconds from ESPN's structured evidence at ingestion
+time — but that only runs with the automation's own live network path
+(GitHub Actions / a real local run), and no raw evidence payload is cached
+anywhere in the repo to inspect retroactively. This does not block the four
+matches reviewed here (see the Kayode finding below), but any future match
+where a goal and a substitution share a minute will need that live capture,
+or must honestly report ambiguous, exactly as V2.1 already does.
+
+**Goal-event model (implemented — the smallest extension found sufficient):**
+an optional `goals` array added to each `LEAGUE_MATCHES` match record (see
+the field-by-field doc comment atop `src/data/matchEvents.js`):
+`team` ('spurs'|'opponent'), `scorer` (or null), `assist` (or null — left
+null rather than guessing when a source credits multiple contributors),
+`minute`, `stoppage` (exact added minute as a number, or null when the
+source doesn't give one), `period` ('H1'|'H2'), `order` (a source-backed
+tie-breaker for same-minute conflicts — null on every real record so far,
+since none needed one), and `source` (the URL). No new database, no change
+to `automation/matchday-core.js` or the Matchday workflow — ingestion
+doesn't populate `goals` yet, so it stays a manual/backfilled field until a
+future packet decides that's worth automating.
+
+**Stoppage-time / event-order policy:** stoppage is only ever a real number
+from the source, or null — never inferred from "the goal was near the end
+of the half". Event order is only ever set from real source evidence (e.g.
+a seconds-precision commentary feed); it is never inferred from which team
+was winning, which player "should" have been on, or any other heuristic.
+
+**Tactical-role policy (reviewed, not implemented this packet):** the
+brief's tactical-role review was answered as a design decision only, since
+no reliable match-specific role evidence was gathered or verified this
+session for these four matches. Direction for whenever role data is
+sourced: an optional `role` field on each `appearances[]` entry (not a
+match-level or player-level permanent field), populated only when a source
+specifically documents a player's role in that match (the brief's own
+example: Gray at right-back, Gallagher advanced, both at Liverpool), with
+conservative fallback to the player's existing squad position
+(`src/data/squad.js`) when no match-specific evidence exists. No new
+ontology beyond the three groupings the brief names (defence/central
+midfield/attack, each with a handful of sub-roles) — a flat enum, not a
+hierarchy.
+
+**Statistical guardrails (documented for the eventual V2.2 ranking work,
+not yet built):** every future combination/rate must carry its own minutes-
+together and match-count denominator, not merely an appearance count;
+goals scored/conceded must be counted only over minutes the combination was
+actually on the pitch together (reusing `getPlayersOnPitchAtGoal`); every
+combination display must show its sample size alongside any rate; per the
+existing "Next Season Stats packet" bullets below, combinations under 270
+shared minutes or three matches are labelled a small sample and excluded
+from any "best/worst" ranking; and no output may describe a combination's
+on-pitch association as having caused a result — descriptive language only,
+matching V2.1's and this packet's own comments.
+
+**What was implemented this packet:** the `goals` field and its data for
+all four matches, `src/data/matchEvents.js` (`validateGoalEvents`,
+`getGoalEvents`, `splitGoalsByTeam`), and `scripts/test-match-events.js`.
+No combination aggregation, no rates, no ranking UI — deliberately, per the
+brief's "do not jump directly to rankings from incomplete evidence".
+
+**Genuine finding worth flagging to Kody/Viper:** Kayode's 45+ goal shares
+its recorded minute (45) with two Tottenham half-time substitutions
+(Gallagher/Bergvall off, Fernandes/Bentancur on). `getPlayersOnPitchAtGoal`
+correctly reports all four as ambiguous under the current minute-only
+model — proving V2.1's ambiguity design holds up against real evidence, not
+only synthetic tests, but also showing the model has no way to use the
+football-logic fact that a first-half stoppage-time goal necessarily
+precedes half-time substitutions. Resolving that specific case with the new
+`period` field is a candidate small enhancement, not implemented here.
+
+**Recommended next V2.2 implementation packet (smallest coherent step):**
+using the `goals` field now in place, build the defensive back-line
+aggregation named in the "Next Season Stats packet" bullets below — actual
+back-line combinations, minutes together, match count, and goals conceded
+while that combination was on the pitch (reusing `getPlayersOnPitchAtGoal`
+and `getOnPitchAt`) — across ALL completed league matches, including the
+0-0 Forest (MW3) and Everton (MW4) matches. Their qualifying on-pitch spells
+contribute minutes together and match/sample counts with zero goals conceded.
+Never filter the denominator to matches where goals were conceded. Apply the
+per-combination sample-size guardrail from the start; do not rank combinations
+from the current tiny sample. Still no ranking UI — a plain, labelled combination table is the
+target, matching the "do not build a full ranking UI yet" instruction.
 
 ## Next Season Stats packet — on-pitch combinations V1
 
