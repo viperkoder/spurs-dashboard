@@ -60,6 +60,7 @@ const FILES = [
   'data/onPitch.js',
   'data/matchEvents.js',
   'data/defensiveCombinations.js',
+  'data/midfieldInfluence.js',
   'data/fixtures.js',
   'lib/shared.js',
   'lib/charts.js',
