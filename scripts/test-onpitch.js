@@ -176,6 +176,69 @@ function makeSub(player, on, off = 90) {
   assert.deepEqual(beforeSub.ambiguous, []);
 }
 
+// --- Half-time boundary: a first-half goal at the boundary minute resolves
+//     deterministically against a half-time substitution, using `period`
+//     alone — no invented order (Season Stats V2.2 Defensive Combinations V1,
+//     18 September 2026; found against real MW1 data, see below) -----------
+{
+  const appearances = Array.from({ length: 9 }, (_, i) => makeStarter(`Starter ${i + 1}`));
+  appearances.push(makeStarter('Starter 10', 45)); // played the whole first half, off exactly at 45
+  appearances.push(makeSub('Sub A', 45)); // on exactly at 45 — a half-time introduction
+  const match = { mw: 920, appearances, unused: [] };
+
+  // A first-half goal reported at the exact half-time boundary minute.
+  const h1Goal = { minute: 45, team: 'opponent', period: 'H1' };
+  const { onPitch: h1Roster, ambiguous: h1Ambiguous, issues: h1Issues } = onPitch.getPlayersOnPitchAtGoal(match, h1Goal);
+  assert.ok(h1Roster.includes('Starter 10'), 'a player who played the entire first half must be credited with an H1 goal at the boundary minute');
+  assert.ok(!h1Roster.includes('Sub A'), 'a half-time substitute must not be credited with a goal that happened before they entered');
+  assert.deepEqual(h1Ambiguous, [], 'the half-time boundary case must resolve, not stay ambiguous, when the goal is explicitly period H1');
+  assert.equal(h1Issues.length, 0);
+
+  // Guard: without an explicit period, the same coincidence must remain
+  // ambiguous exactly as before — nothing is inferred from the minute alone.
+  const noPeriodGoal = { minute: 45, team: 'opponent' };
+  const { ambiguous: noPeriodAmbiguous } = onPitch.getPlayersOnPitchAtGoal(match, noPeriodGoal);
+  assert.ok(noPeriodAmbiguous.includes('Starter 10'));
+  assert.ok(noPeriodAmbiguous.includes('Sub A'));
+
+  // Guard: a goal explicitly marked period H2 at the same minute number
+  // (a malformed/inconsistent record, but this module must not compound the
+  // error by resolving it anyway) must also remain ambiguous.
+  const wrongPeriodGoal = { minute: 45, team: 'opponent', period: 'H2' };
+  const { ambiguous: wrongPeriodAmbiguous } = onPitch.getPlayersOnPitchAtGoal(match, wrongPeriodGoal);
+  assert.ok(wrongPeriodAmbiguous.includes('Starter 10'));
+  assert.ok(wrongPeriodAmbiguous.includes('Sub A'));
+
+  // Guard: the half-time resolution must not fire away from the boundary
+  // minute even with period H1 (e.g. an early first-half substitution that
+  // happens to coincide with a goal at minute 20 is still genuinely
+  // ambiguous — the football-logic guarantee only holds at half time itself).
+  const awayFromBoundary = {
+    mw: 921,
+    appearances: [
+      ...Array.from({ length: 9 }, (_, i) => makeStarter(`Starter ${i + 1}`)),
+      makeStarter('Starter 10', 20),
+      makeSub('Sub B', 20),
+    ],
+    unused: [],
+  };
+  const { ambiguous: earlyAmbiguous } = onPitch.getPlayersOnPitchAtGoal(awayFromBoundary, { minute: 20, team: 'opponent', period: 'H1' });
+  assert.ok(earlyAmbiguous.includes('Starter 10'));
+  assert.ok(earlyAmbiguous.includes('Sub B'));
+
+  // Real data cross-check: MW1's Kayode goal (45+, period H1) coincides with
+  // two half-time substitutions (Gallagher/Bergvall off, Fernandes/Bentancur
+  // on, all at minute 45) — this must now resolve cleanly.
+  const mw1 = realMatches.find(m => m.mw === 1);
+  const kayode = mw1.goals.find(g => g.scorer === 'Michael Kayode');
+  const kayodeResult = onPitch.getPlayersOnPitchAtGoal(mw1, kayode);
+  assert.deepEqual(kayodeResult.ambiguous, [], 'the real Kayode half-time coincidence must now resolve deterministically');
+  assert.ok(kayodeResult.onPitch.includes('Conor Gallagher'));
+  assert.ok(kayodeResult.onPitch.includes('Lucas Bergvall'));
+  assert.ok(!kayodeResult.onPitch.includes('Mateus Fernandes'));
+  assert.ok(!kayodeResult.onPitch.includes('Rodrigo Bentancur'));
+}
+
 // --- Duplicate player handling ---------------------------------------------
 {
   const appearances = [
