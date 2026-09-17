@@ -61,6 +61,7 @@ const FILES = [
   'data/matchEvents.js',
   'data/defensiveCombinations.js',
   'data/midfieldInfluence.js',
+  'data/attackingCombinations.js',
   'data/fixtures.js',
   'lib/shared.js',
   'lib/charts.js',

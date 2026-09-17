@@ -3,6 +3,7 @@ import { P } from '../data/theme.js';
 import { LEAGUE_MATCHES, getLeagueSummary, getPlayerUsage } from '../data/seasonStats.js';
 import { getDefensiveCombinationStats, SAMPLE_MINUTES_FLOOR, SAMPLE_MATCHES_FLOOR } from '../data/defensiveCombinations.js';
 import { getMidfieldUnitStats, getMidfieldDefensiveCombinationStats } from '../data/midfieldInfluence.js';
+import { getAttackingCombinationStats } from '../data/attackingCombinations.js';
 import { WH } from '../lib/shared.js';
 
 const COLUMNS = [
@@ -27,6 +28,8 @@ export function SeasonStatsPanel(){
   const { combinations: defensiveCombinations } = getDefensiveCombinationStats(LEAGUE_MATCHES);
   const { units: midfieldUnits } = getMidfieldUnitStats(LEAGUE_MATCHES);
   const { combinations: midfieldDefensiveCombinations } = getMidfieldDefensiveCombinationStats(LEAGUE_MATCHES);
+  const { combinations: attackingCombinations } = getAttackingCombinationStats(LEAGUE_MATCHES);
+  const totalSpursGoals = LEAGUE_MATCHES.reduce((sum,match)=>sum+match.score.spurs,0);
   const coverage=LEAGUE_MATCHES.length
     ? `MD1–MD${Math.max(...LEAGUE_MATCHES.map(match=>match.mw))} · through ${new Date(LEAGUE_MATCHES[LEAGUE_MATCHES.length-1].date).toLocaleDateString("en-GB",{timeZone:"Europe/London",day:"numeric",month:"short",year:"numeric"})}`
     : "No completed league matches";
@@ -189,6 +192,43 @@ export function SeasonStatsPanel(){
 
         <div style={{padding:"10px 14px",fontSize:10,color:P.muted,lineHeight:1.6,borderTop:`1px solid ${P.border}`}}>
           Small sample: a unit or shared spell under {SAMPLE_MINUTES_FLOOR} shared minutes or {SAMPLE_MATCHES_FLOOR} matches is labelled "SMALL SAMPLE" and excluded from any best/worst ranking language — none is hidden. With only {LEAGUE_MATCHES.length} completed league matches so far, every row currently qualifies. These numbers describe what happened while units shared the pitch — they do not isolate central midfield's contribution from defensive personnel, opponent strength, game state, score effects, tactical instructions, red cards or other contextual factors. No influence score or composite rating is shown.
+        </div>
+      </div>
+
+      <div style={{background:P.bgCard,border:`1px solid ${P.border}`,borderRadius:7,overflow:"hidden"}}>
+        <div style={{padding:"11px 14px",borderBottom:`1px solid ${P.border}`}}>
+          <div style={{fontSize:12,fontWeight:900,color:P.gold,letterSpacing:"0.1em"}}>ATTACKING COMBINATIONS</div>
+          <div style={{fontSize:9,color:P.muted,marginTop:3,letterSpacing:"0.04em"}}>STRIKERS, WINGERS &amp; ATTACKING MIDFIELD ONLY · CENTRAL MIDFIELD AND DEFENCE EXCLUDED</div>
+        </div>
+        <div className="scroll" style={{overflowX:"auto"}}>
+          <table style={{width:"100%",minWidth:620,borderCollapse:"collapse",fontVariantNumeric:"tabular-nums"}}>
+            <thead>
+              <tr>
+                {["Combination","Minutes","Matches","Goals","GF/90"].map(label=>(
+                  <th key={label} style={{padding:"9px 10px",fontSize:9,color:P.muted,textAlign:label==="Combination"?"left":"center",letterSpacing:"0.08em",borderBottom:`1px solid ${P.border}`,whiteSpace:"nowrap"}}>{label.toUpperCase()}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {attackingCombinations.map((combo,index)=>(
+                <tr key={combo.combination} style={{background:index%2?P.bgPanel:"transparent"}}>
+                  <td style={{padding:"10px",fontSize:12,fontWeight:700,color:P.white,borderBottom:`1px solid ${P.border}`}}>{combo.combination}{combo.smallSample?<span style={{marginLeft:6,fontSize:9,fontWeight:800,color:P.muted,letterSpacing:"0.04em"}}>SMALL SAMPLE</span>:null}</td>
+                  <td style={{padding:"10px",fontSize:12,fontWeight:600,color:P.text,textAlign:"center",borderBottom:`1px solid ${P.border}`,whiteSpace:"nowrap"}}>{combo.minutes}</td>
+                  <td style={{padding:"10px",fontSize:12,fontWeight:600,color:P.text,textAlign:"center",borderBottom:`1px solid ${P.border}`,whiteSpace:"nowrap"}}>{combo.matches}</td>
+                  <td style={{padding:"10px",fontSize:12,fontWeight:600,color:P.text,textAlign:"center",borderBottom:`1px solid ${P.border}`,whiteSpace:"nowrap"}}>{combo.goalsScored}</td>
+                  <td style={{padding:"10px",fontSize:12,fontWeight:700,color:P.gold,textAlign:"center",borderBottom:`1px solid ${P.border}`,whiteSpace:"nowrap"}}>{combo.gfPer90===null?"—":combo.gfPer90.toFixed(2)}</td>
+                </tr>
+              ))}
+              {attackingCombinations.length===0&&(
+                <tr><td colSpan={5} style={{padding:14,fontSize:11,color:P.muted,textAlign:"center"}}>No completed matches with attacking on-pitch data yet.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div style={{padding:"10px 14px",fontSize:10,color:P.muted,lineHeight:1.6,borderTop:`1px solid ${P.border}`}}>
+          {totalSpursGoals===0
+            ? `Spurs have not yet scored in the currently audited league sample (${LEAGUE_MATCHES.length} completed matches), so this table currently measures attacking-unit usage — minutes shared on the pitch — rather than scoring effectiveness. Every real Spurs goal, once it occurs, will attribute automatically to the exact attacking combination on the pitch for it.`
+            : `Small sample: a combination under ${SAMPLE_MINUTES_FLOOR} shared minutes or ${SAMPLE_MATCHES_FLOOR} matches is labelled "SMALL SAMPLE" and excluded from any best/worst ranking language — none is hidden.`} Descriptive only: on-pitch presence and goals scored while sharing the pitch are not a claim that a combination caused those goals, and no combination here is ranked as most or least dangerous/effective.
         </div>
       </div>
 

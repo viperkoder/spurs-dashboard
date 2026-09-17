@@ -126,8 +126,8 @@ phase is small, tested and reported before the next begins.
 - V2.1 — On-pitch data foundation (merged, PR #5, `3929974`)
 - V2.2 — Defensive combinations (discovery + event-model foundation merged,
   PR #6, `9e815cb`; Defensive Combinations V1 merged, PR #7, `d2053d5`)
-- V2.3 — Central midfield influence (V1 implemented below; awaiting publish)
-- V2.4 — Attacking combinations
+- V2.3 — Central midfield influence (V1 merged, PR #8, `8cc5eef`)
+- V2.4 — Attacking combinations (V1 implemented below; awaiting publish)
 - V2.5 — Dashboard integration, presentation and final validation
 
 ### V2.1 — On-pitch data foundation — implemented 17 September 2026
@@ -603,13 +603,120 @@ combination framework.
       unresolved. Season Stats V1, V2.1 and the entire Matchday updater
       (`automation/matchday-*.js`, `.github/workflows/matchday-update.yml`)
       are untouched.
-- [ ] **Publication blocked (recorded, not resolved):** this session's
-      GitHub proxy is not authorized for `viperkoder/spurs-dashboard`, so
-      the branch (`codex/season-stats-v2.3-central-midfield-influence-v1`,
-      verified commit `d0b66350e8ed9da79ce9c4d39d087407838ae668`, based on
-      verified main `d2053d56a176beaeb4922127593bd56877335787`) could not be
-      pushed or opened as a PR from this session. Preserved as a git bundle
-      delivered to Viper for Kody to apply and push.
+- [x] **Publication:** merged via PR #8 at `8cc5eef8da236c079e582a4e4991f6fda6fe6a81`.
+      The prior session's push was blocked by GitHub-proxy authorization; the
+      preserved git bundle handoff to Kody resolved it, confirming that
+      recovery path works end to end.
+
+### V2.4 — Attacking Combinations V1 — 18 September 2026
+
+Implements the first V2.4 packet: which attacking players actually shared
+the pitch, for how long, and what Spurs goals occurred while those units
+were together. The current authoritative dataset has zero Spurs league
+goals, so this V1 measures attacking-unit usage, not scoring effectiveness
+— built so a real Spurs goal, once it exists, attributes automatically with
+no redesign. Reused `src/data/onPitch.js` and `src/data/matchEvents.js`
+unchanged; reused `src/data/defensiveCombinations.js`'s `SAMPLE_MINUTES_FLOOR`/
+`SAMPLE_MATCHES_FLOOR` constants rather than redeclaring them. Added no new
+database, provider or generic combination framework — the same
+spell-splitting pattern as Defensive Combinations V1 and Central Midfield
+Influence V1, once more, filtered to `team: 'spurs'` goals.
+
+- [x] **Attacking membership**, derived from `src/data/squad.js`'s own
+      listed position (ST/LW/RW/AM) and real match appearances in
+      `src/data/seasonStats.js` — not from any prior chat/completion-report
+      player list. Included by squad.js position: Mathys Tel, Mykhailo
+      Mudryk (LW); Mohammed Kudus, Sávio (RW); Omar Marmoush, Dominic
+      Solanke (ST); James Maddison, Mateus Fernandes (AM — genuinely part of
+      the attacking unit in every appearance reviewed, no evidence of a
+      deeper central role). No central midfielder (Bergvall, Gallagher,
+      Bentancur, Tonali) or defender is included merely for attacking
+      overlap — cross-checked against `defensiveCombinations.js`'s and
+      `midfieldInfluence.js`'s existing whitelists (test coverage below).
+- [x] **Match-scoped additions (documented, not silent):** Richarlison
+      (MW1 only) and Mikey Moore (MW1, MW2 only) both appear in real match
+      records but are absent from `squad.js`'s SQUAD list — a pre-existing
+      roster gap for Richarlison (still an unresolved Turkish-window exit
+      rumour per transfers.js/finances.js, not a confirmed departure — a
+      genuine finding flagged below for the weekly reconciliation
+      checklist, not fixed in this packet) and a correct absence for Mikey
+      Moore (transfers.js: completed loan to FC Köln, after these
+      appearances). Both classified as attacking on reliable external
+      evidence (recognized forward / recognized winger respectively) since
+      squad.js has no position to read for either. No other player needed a
+      match-specific decision.
+- [x] **Aggregation method:** new `src/data/attackingCombinations.js`
+      mirrors the established spell-splitting/goal-resolution pattern
+      (`getMatchAttackingSpells`, `resolveGoalAttackingCombination`,
+      `getAttackingCombinationStats`). Combination identity is
+      order-independent; every qualifying spell contributes minutes and a
+      match credit regardless of whether a goal was scored, so a scoreless
+      match's minutes are not discarded. Attacking-unit size is whatever the
+      evidence produces (3, 4 or 5 players observed in the real dataset) —
+      never forced to a fixed front three/four.
+- [x] **Current results (all four completed league matches):** 360 total
+      minutes across fourteen distinct attacking combinations (no two spells
+      shared an identical player set this season), sizes ranging 3–5
+      players, every one a small sample. 0 Spurs goals scored, 0
+      unresolved — the real dataset has no Spurs goal to attribute. GF/90 is
+      a real, counted `0.00` for every row, not "unavailable".
+- [x] **Optional metric investigation:** searched the existing data flow
+      (`src/data/*.js`, `automation/*.js`) for shots, shots on target or xG
+      already available cleanly. None exists — the one match is a passing
+      mention inside a goal's `sourceNote` text, not structured data.
+      Decision: leave it out, per the packet brief. Goals + minutes are the
+      V1 metric set; no new provider, scraping system or manual-maintenance
+      burden was added to chase one.
+- [x] **Small-sample treatment:** identical guardrail to Defensive
+      Combinations V1 and Central Midfield Influence V1; every row labelled
+      "SMALL SAMPLE", none hidden, no combination described as best, worst,
+      most or least dangerous/effective — including the zero-goal rows,
+      which are shown as real counted zeros, not ranked as weak.
+- [x] **UI:** an "ATTACKING COMBINATIONS" section added to the existing
+      Season Stats page (`src/components/SeasonStatsPanel.js`) — a single
+      compact table (Combination / Minutes / Matches / Goals / GF/90)
+      matching the existing panel's visual language, with a note explaining
+      the table currently measures attacking-unit usage rather than scoring
+      effectiveness while Spurs remain scoreless in this sample. No
+      redesign, no chart.
+- [x] **Tests:** `scripts/test-attacking-combinations.js` (new) covers an
+      unchanged attacking unit for a full match, a substitution splitting a
+      spell (real MW1), multiple attacking substitutions across one match
+      (real MW3, five spells including a genuine one-minute four-player
+      spell), order-independent cross-match aggregation, a scoreless match
+      contributing minutes, a synthetic Spurs goal attributed only to the
+      unit actually on the pitch (proving the module supports a real goal
+      today even though none exists yet), same-minute goal/substitution
+      ambiguity preserved rather than guessed, the match-scoped
+      Richarlison/Mikey Moore additions (and non-membership for every
+      matchweek/player not evidenced), and malformed/incomplete data
+      handled without throwing — plus real-data invariants (360 minutes
+      partitioned, 0 goals attributed, 0 unresolved, every row
+      small-sample, attacking-unit sizes genuinely vary).
+- [x] `npm run test:onpitch`, `npm run test:matchevents`,
+      `npm run test:defensivecombinations`, `npm run test:midfieldinfluence`,
+      `npm run test:attackingcombinations`, `npm run test:matchday`,
+      `npm run check-secrets`, `node build.js` and `git diff --check` all
+      pass. Defensive Combinations V1 confirmed unchanged (360 minutes, 5
+      conceded, 7 combinations, 0 unresolved) and Central Midfield Influence
+      V1 confirmed unchanged (5 midfield units, 12 midfield+defence
+      combinations, 360 minutes, 5 conceded, 0 unresolved). Season Stats V1,
+      V2.1/V2.2 and the entire Matchday updater
+      (`automation/matchday-*.js`, `.github/workflows/matchday-update.yml`)
+      are untouched.
+- [ ] **Saturday readiness / remaining automation gap (V2.5 scope, recorded
+      here, not built):** the Matchday updater still does not automatically
+      populate the `goals` field or match-specific role overrides that
+      V2.2–V2.4 read (see "Known automation boundary" above) — Saturday's
+      completed match will need its `appearances` ingested automatically (as
+      today) but its `goals` array and any new match-scoped role decision
+      backfilled by hand before Defensive Combinations, Central Midfield
+      Influence or Attacking Combinations reflect it. No redesign is needed
+      for that match to be accepted once backfilled — all three modules
+      already iterate `LEAGUE_MATCHES` generically. Wiring automatic
+      goal-event/role ingestion into the Matchday workflow is V2.5
+      integration work, intentionally out of scope here.
+- [ ] **Squad reconciliation — Richarlison:** review his real match appearances against current squad, transfers and finances evidence; he appears in MW1 but is absent from the squad source. Resolve the roster discrepancy in a separate reconciliation packet, preserving historical appearance evidence. Not implemented in this publication.
 
 ## Next Season Stats packet — on-pitch combinations V1
 

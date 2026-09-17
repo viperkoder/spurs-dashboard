@@ -11,7 +11,8 @@
     "test:onpitch": "node scripts/test-onpitch.js",
     "test:matchevents": "node scripts/test-match-events.js",
     "test:defensivecombinations": "node scripts/test-defensive-combinations.js",
-    "test:midfieldinfluence": "node scripts/test-midfield-influence.js"
+    "test:midfieldinfluence": "node scripts/test-midfield-influence.js",
+    "test:attackingcombinations": "node scripts/test-attacking-combinations.js"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"
