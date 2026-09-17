@@ -118,6 +118,164 @@ without failing or hiding the deterministic update.
 - [x] GitHub Build check and Pages deployment passed for `dac5402`; live Overview confirmed Liverpool 3-1 Spurs, latest-first LAST5, Spurs 17th/2 points, and corrected scorer totals. Live Season Stats verified all 23 usage rows and expandable Everton participation. Browser logs showed extension metadata errors only, no dashboard application error.
 - [x] Live QA follow-up corrected stale pre-season table labels, anchored coverage dates to UK match dates, added official post-match fallback headlines and confirmed the Villa kickoff at 12:30 BST / 19:30 SGT on 19 September against the official stadium local-information page. Follow-up matchday tests, secret scan, build and whitespace check passed.
 
+## Season Stats V2 — on-pitch combinations (five-phase map)
+
+Owner: Kody reviews each phase gate; Viper authorizes the next phase. Each
+phase is small, tested and reported before the next begins.
+
+- V2.1 — On-pitch data foundation (this packet)
+- V2.2 — Defensive combinations
+- V2.3 — Central midfield influence
+- V2.4 — Attacking combinations
+- V2.5 — Dashboard integration, presentation and final validation
+
+### V2.1 — On-pitch data foundation — implemented 17 September 2026
+
+- [x] Added `src/data/onPitch.js`: pure, deterministic query functions over
+      the existing `LEAGUE_MATCHES` `appearances` interval data (`on`/`off`
+      per player) already recorded by Season Stats V1. No new data model,
+      database or event-replay engine was introduced — the existing
+      appearance intervals already are the on-pitch evidence.
+- [x] `getStartingXI(match)` — the eleven who kicked off.
+- [x] `getOnPitchAt(match, minute)` — every player on the pitch at a given
+      regulation minute, with a documented boundary rule: intervals are
+      half-open `[on, off)` for a player substituted before full time (a
+      goal in their exact departure minute is not attributed to them, since
+      source data cannot show whether it preceded or followed the
+      substitution within that minute), and inclusive of the final minute
+      for a player who played to full time (`off >= matchDuration`), so a
+      stoppage-time goal still credits a full-match player correctly.
+- [x] `getSubstitutionEvents(match)` — chronological on/off events derived
+      from the same interval data, exits ordered before entries in the same
+      minute.
+- [x] `getPlayersOnPitchAtGoal(match, goal)` — takes a caller-supplied goal
+      event (`{minute, stoppage?, team, scorer?}`) and returns who was on
+      the pitch. Reports presence only — no causation claim is made or
+      implied anywhere in this module.
+- [x] `validateOnPitchData(match)` — non-throwing structural check (missing
+      player, non-numeric or out-of-range minutes, off-before-on, duplicate
+      player, started/on-minute mismatch, wrong starter count) so downstream
+      combination stats can degrade safely instead of crashing or guessing.
+      Independent of `automation/matchday-core.js`'s existing throwing
+      validator, which only runs at ingestion time for `LEAGUE_MATCHES`.
+- [x] Registered in `build.js`'s `FILES` list (after `seasonStats.js`) so the
+      build-completeness guardrail stays accurate; no UI or dashboard change
+      — V2.1 exports nothing consumed by any component yet, per the V2.5 gate.
+- [x] Tests added in `scripts/test-onpitch.js` (`npm run test:onpitch`):
+      no substitutions, one substitution, multiple substitutions (cross-
+      checked against real audited MW1 Brentford data), goal before a
+      substitution, goal after a substitution (verifies the "Defender A off
+      70', goal at 75' is not attributed to Defender A" example from the
+      packet brief), a stoppage-time goal, and malformed/incomplete data
+      (missing appearances, non-numeric minutes, off-before-on minutes, a
+      duplicate player, a started/on-mismatch) handled without throwing.
+      Every real `LEAGUE_MATCHES` match is also cross-checked for exactly 11
+      players on the pitch at several sampled minutes.
+- [x] `npm run test:onpitch`, `npm run test:matchday`, `npm run check-secrets`
+      and `node build.js` all pass; verified in an isolated clean clone of
+      this commit (esbuild could not run on the on-device shell used for this
+      session — a pre-existing `@esbuild/darwin-arm64` vs `linux-arm64`
+      platform mismatch reproduced identically on unmodified `origin/main`,
+      unrelated to this change) plus locally on the resulting worktree.
+      `docs/` was rebuilt from that verified build and is included in this
+      commit per `AGENTS.md`.
+- [x] Season Stats V1 (`getLeagueSummary`, `getPlayerUsage`,
+      `withLeagueResults`, the Season Stats panel) is untouched. The Matchday
+      updater (`automation/matchday-*.js`, `.github/workflows/matchday-update.yml`)
+      is untouched.
+
+#### Boundary review correction — 18 September 2026
+
+A pre-publication review found the first V2.1 implementation resolved
+same-minute goal/substitution conflicts by silently falling back to the
+`[on, off)` roster convention, which is honest for "who was on the pitch in
+general" but not for "who was on the pitch for this specific goal" — it
+could not actually distinguish event order within a minute. It also had
+three malformed-data gaps: a duplicated player name could still appear in
+query results (from whichever appearance record was scanned last), an
+interval with `off` before `on` or beyond match duration was flagged by
+`validateOnPitchData` but not actually excluded from `getOnPitchAt`, and a
+non-array `appearances` field (e.g. a string or plain object rather than a
+list) could throw instead of degrading safely. Corrected before any of this
+shipped to `main`:
+
+- [x] `getPlayersOnPitchAtGoal(match, goal)` no longer uses `[on, off)` when
+      the goal's minute exactly matches a player's entry or exit minute. It
+      now returns that player in a new `ambiguous` array instead of
+      `onPitch`, and adds an issue explaining why, unless the caller supplies
+      real source-backed ordering via an optional `order` field on the goal
+      and matching `onOrder`/`offOrder` fields on the relevant appearance
+      (e.g. a commentary sequence number) — in which case the earlier event
+      wins deterministically. No event order is ever invented; half-time
+      (45') and stoppage-time (90'+) substitutions get no special-cased
+      logic because the same minute-granularity ambiguity applies uniformly
+      at any minute, not just those two.
+- [x] Ordinary roster/minute queries (`getOnPitchAt`, `getStartingXI`,
+      `getSubstitutionEvents`) keep the existing `[on, off)` convention
+      exactly as before — that convention was correct for "who was on the
+      pitch generally" and the review did not ask for it to change.
+- [x] Added a single shared appearance-validity filter used by every query
+      function (`getStartingXI`, `getOnPitchAt`, `getSubstitutionEvents`,
+      `getPlayersOnPitchAtGoal`), so an invalid or duplicate record is
+      excluded consistently everywhere rather than flagged in one place and
+      still usable in another. A player whose name appears more than once in
+      `appearances` is excluded entirely from every query — neither
+      duplicate is treated as authoritative, since guessing which one is
+      correct would fabricate certainty the source data doesn't have.
+- [x] `on < 0`, `off < on`, and `off > matchDuration` intervals are now
+      actually rejected by every query (previously only reported by
+      `validateOnPitchData`, not enforced by `getOnPitchAt`).
+- [x] A non-array (or absent/null) `appearances` field is now handled safely
+      by every exported function — verified with a string, a plain object, a
+      number, `null`, `undefined` and a missing key, none of which throw.
+- [x] Tests added: same-minute goal/substitution with no ordering evidence
+      (both players ambiguous, neither guessed), the same case with
+      `order`/`onOrder`/`offOrder` supplied (resolves deterministically both
+      ways), a duplicated player excluded from `getStartingXI`,
+      `getOnPitchAt`, `getSubstitutionEvents` and goal attribution, invalid
+      intervals (backwards, beyond duration, negative) rejected at every
+      sampled minute, and non-array/malformed `appearances` handled without
+      throwing across all four exported query functions.
+- [x] Reconciled against `origin/main` at `12797ce906fa28adcfa5abd621a2ff6d8be50c9f`
+      (rebased cleanly; the only overlap was generated `docs/` output,
+      resolved by rebuilding fresh). `npm run test:onpitch`,
+      `npm run test:matchday`, `npm run check-secrets`, `node build.js` and
+      `git diff --check` all pass. Season Stats V1 and the Matchday updater
+      remain byte-for-byte untouched (verified with an explicit diff against
+      `origin/main` on every V1/matchday source file).
+
+**Data assumption:** on-pitch intervals are taken directly from the existing,
+already-audited `appearances.on`/`off` fields; V2.1 does not re-derive them
+from a separate substitution-event log because none exists or is needed —
+the interval already is the evidence.
+
+**Source limitation (identified, not fabricated):** `LEAGUE_MATCHES` has no
+goal-minute event data yet. Spurs have scored zero league goals this season
+(GF 0) and no opponent goal minute has been captured in any league match
+record (`src/data/standings.js`'s `LAST5.scorer` is empty for the Newcastle
+and Forest results, and Brentford's isn't tracked at match-record level
+either). `getPlayersOnPitchAtGoal` therefore has no real production goal data
+to run against yet — it is proven against synthetic goal events in tests only.
+Real goal-event capture (source, minute, stoppage, for/against) is unstarted
+and is a dependency of V2.2 (defensive: goals conceded) and V2.4 (attacking:
+goals for), not part of this foundation packet.
+
+**Stoppage-time notation:** no `LEAGUE_MATCHES` record currently uses a
+stoppage-time boundary (all `on`/`off` values are plain regulation-minute
+integers). `isOnPitchAt`'s full-time-inclusive rule already handles a
+stoppage-time goal correctly for any player still on the pitch at 90'; this
+is proven in `scripts/test-onpitch.js` with a synthetic case. No real example
+exists yet to validate against.
+
+**Proposed smallest V2.2 packet:** capture source-backed goal events (minute,
+stoppage, for/against, scorer where known) for the four completed league
+matches, reusing `getPlayersOnPitchAtGoal`; then aggregate actual back-line
+combinations (minutes together, match count, goals conceded, GA/90) per the
+existing "Next Season Stats packet" bullets below. Requires real goal-minute
+sourcing (ESPN/official) before any defensive combination number can be
+shown — until then, V2.2 must state goal data as unavailable rather than
+assume 0.
+
 ## Next Season Stats packet — on-pitch combinations V1
 
 Owner: Kody. Scope: extend the existing completed-match records and deterministic calculations; no separate statistics database, paid API or AI calculation loop.
