@@ -107,12 +107,125 @@ function updateSquad(source, players) {
   return next;
 }
 
+// Season Stats V2.5 — minimal role/squad reconciliation (Part 5).
+//
+// Not a transfer-management system and not an inference engine: it only
+// answers "does this appearance's player have a squad.js entry to match
+// against?" using the same last-name matching `updateSquad` already uses
+// to credit apps/goals. A player with no match is NOT dropped from the
+// match's `appearances` (historical truth is untouched) — this only
+// produces a warning so a human can add a match-specific combination-module
+// override (the same reviewed pattern already used for Richarlison and
+// Mikey Moore), never an automatic classification.
+function detectUnknownPlayers(appearances, squadSource) {
+  return (appearances || [])
+    .map(p => p.player)
+    .filter(Boolean)
+    .filter(name => {
+      const last = name.trim().split(/\s+/).pop().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return !new RegExp(`\\{name:\"[^\"]*${last}[^\"]*\"`, 'i').test(squadSource || '');
+    });
+}
+
 function resultFromEvidence(evidence) {
   const competitors = evidence.event?.competitors || [];
   const spurs = competitors.find(c => /Tottenham Hotspur/i.test(c.team?.displayName || ''));
   const opponent = competitors.find(c => !/Tottenham Hotspur/i.test(c.team?.displayName || ''));
   if (!spurs || !opponent) throw new Error('Tottenham result missing from structured evidence');
   return { spurs: Number(spurs.score), opponent: Number(opponent.score) };
+}
+
+// Season Stats V2.5 — automated goal-event extraction (18 September 2026).
+//
+// Reuses the exact same evidence stream the already-proven substitution
+// extraction reads (`evidence.summary.commentary`), never a new source.
+// Never invents a scorer, assist, minute, stoppage digit, period or team —
+// every field comes only from matched text/structured sub-fields, exactly
+// like the existing substitution parser.
+//
+// Safety design (the "unknown must never become zero" invariant): the
+// extracted goal count, split by team, is cross-checked against the
+// independently-reliable authoritative final score (already used and
+// trusted by `resultFromEvidence`). Only an EXACT match for both teams
+// counts as `status: 'reconciled'` — anything else is `'unresolved'`
+// (evidence present but doesn't safely add up) or `'unavailable'`
+// (the evidence stream itself is missing, e.g. ESPN has pruned the
+// match's commentary/play-by-play after enough time has passed — observed
+// directly against a real ~4-week-old fixture during this packet's audit).
+// Neither case ever produces an empty `goals: []` — that shape is reserved
+// for a genuinely reconciled scoreless match, where the evidence stream
+// was present and simply contained no goal events, consistent with a 0-0
+// final score.
+function extractGoalEvents(evidence, finalScore) {
+  const commentary = evidence.summary?.commentary;
+  if (!Array.isArray(commentary)) {
+    return {
+      status: 'unavailable',
+      goals: null,
+      reason: 'evidence.summary.commentary is missing or not an array — no play-by-play evidence available to extract goal events from (ESPN appears to prune this field for older fixtures).',
+    };
+  }
+
+  const teamName = name => (/Tottenham Hotspur/i.test(name || '') ? 'spurs' : 'opponent');
+  const sourceUrl = `https://www.espn.com/soccer/match/_/gameId/${evidence.event?.id}`;
+  const goals = [];
+  const problems = [];
+
+  const goalEvents = commentary.filter(event => /^\s*Goal!/i.test(event?.text || ''));
+  for (const event of goalEvents) {
+    const text = event.text || '';
+    // ESPN's "Goal!" commentary convention names the SCORING team first
+    // ("Goal!  <scoring team> <score>, <other team> <score>. ..."), and the
+    // final-score recap that follows means both team names are often
+    // present in the same line -- so whichever name occurs EARLIEST in the
+    // text is the scorer, never just "whichever team name appears".
+    const withPosition = (evidence.event?.competitors || [])
+      .map(c => ({ competitor: c, index: text.indexOf(c.team?.displayName || '\uffff') }))
+      .filter(entry => entry.index >= 0)
+      .sort((a, b) => a.index - b.index);
+    const scoringTeam = withPosition[0]?.competitor;
+    if (!scoringTeam) {
+      problems.push(`Could not identify which team scored from: "${text}"`);
+      continue;
+    }
+    const rawSeconds = event.time?.value ?? event.play?.clock?.value;
+    const minuteRaw = Number(rawSeconds) / 60;
+    if (!Number.isFinite(minuteRaw)) {
+      problems.push(`No usable minute/clock value for: "${text}"`);
+      continue;
+    }
+    const minute = Math.min(90, Math.ceil(minuteRaw));
+    const stoppageMatch = text.match(/(?:^|\D)(\d{2,3})\s*\+\s*(\d+)/);
+    const scorer = event.play?.participants?.[0]?.athlete?.displayName || null;
+    const assistParticipant = event.play?.participants?.[1]?.athlete?.displayName || null;
+    const assist = /assist/i.test(text) ? assistParticipant : null;
+    goals.push({
+      team: teamName(scoringTeam.team?.displayName),
+      scorer,
+      assist,
+      minute,
+      stoppage: stoppageMatch ? Number(stoppageMatch[2]) : null,
+      period: minute <= 45 ? 'H1' : 'H2',
+      order: null,
+      source: sourceUrl,
+    });
+  }
+
+  if (problems.length > 0) {
+    return { status: 'unresolved', goals: null, reason: `Goal evidence present but not safely parseable: ${problems.join('; ')}` };
+  }
+
+  const extractedSpurs = goals.filter(g => g.team === 'spurs').length;
+  const extractedOpponent = goals.filter(g => g.team === 'opponent').length;
+  if (extractedSpurs !== finalScore.spurs || extractedOpponent !== finalScore.opponent) {
+    return {
+      status: 'unresolved',
+      goals: null,
+      reason: `Extracted goal events (spurs ${extractedSpurs}, opponent ${extractedOpponent}) do not match the authoritative final score (spurs ${finalScore.spurs}, opponent ${finalScore.opponent}) — evidence is incomplete or ambiguous, not counted as verified.`,
+    };
+  }
+
+  return { status: 'reconciled', goals, reason: null };
 }
 
 function leagueMatchFromEvidence(fixture, evidence) {
@@ -141,19 +254,56 @@ function leagueMatchFromEvidence(fixture, evidence) {
     byName.get(outgoing).off = minute;
   });
 
+  const score = resultFromEvidence(evidence);
+  const goalReconciliation = extractGoalEvents(evidence, score);
+
   const match = {
     mw: fixture.mw,
     opponent: fixture.opponent,
     venue: fixture.venue,
     date: fixture.date,
-    score: resultFromEvidence(evidence),
+    score,
     sourceEventId: String(evidence.event.id),
     sources: [`https://www.espn.com/soccer/match/_/gameId/${evidence.event.id}`],
     appearances,
     unused: roster.filter(p => !p.starter && !p.subbedIn).map(p => p.athlete?.displayName).filter(Boolean),
   };
+  // Only an exact, cross-checked reconciliation ever attaches `goals` here.
+  // 'unavailable'/'unresolved' leave it undefined — the existing manual
+  // review workflow (see seasonStats.js) remains the source of truth for
+  // that match until reviewed, exactly as it does today.
+  if (goalReconciliation.status === 'reconciled') {
+    validateGoalEvidence(goalReconciliation.goals);
+    match.goals = goalReconciliation.goals;
+  }
+  // Transient, never persisted: upsertLeagueMatch strips this before
+  // writing seasonStats.js. Carried here only so the caller (the Matchday
+  // orchestration script) can log/surface the reconciliation outcome per
+  // Part 3's "surface the reconciliation problem" requirement.
+  match.goalReconciliation = { status: goalReconciliation.status, reason: goalReconciliation.reason };
   validateLeagueMatch(match);
   return match;
+}
+
+// Mirrors src/data/matchEvents.js's validateGoalEvents structural rules.
+// Duplicated deliberately (small, self-contained) rather than requiring an
+// ES module from this CommonJS automation script — the same reason
+// automation/ has never imported src/data directly (see test-matchday.js's
+// source-text + vm loading pattern for why). Keep both in sync by hand if
+// the schema ever changes.
+function validateGoalEvidence(goals) {
+  if (!Array.isArray(goals)) throw new Error('goals is present but not an array');
+  goals.forEach((goal, index) => {
+    const label = `goals[${index}]`;
+    if (!goal || typeof goal !== 'object') throw new Error(`${label}: missing or not an object`);
+    if (goal.team !== 'spurs' && goal.team !== 'opponent') throw new Error(`${label}: team must be 'spurs' or 'opponent'`);
+    if (!Number.isFinite(goal.minute) || goal.minute < 0) throw new Error(`${label}: minute is not a valid number`);
+    if (goal.stoppage !== null && !Number.isFinite(goal.stoppage)) throw new Error(`${label}: stoppage must be a finite number or null`);
+    if (goal.period !== 'H1' && goal.period !== 'H2') throw new Error(`${label}: period must be 'H1' or 'H2'`);
+    if (goal.order !== null && !Number.isFinite(goal.order)) throw new Error(`${label}: order must be a finite number or null`);
+    if (!goal.source) throw new Error(`${label}: missing source`);
+  });
+  return true;
 }
 
 function validateLeagueMatch(match) {
@@ -185,12 +335,39 @@ function renderLeagueMatches(matches) {
   return JSON.stringify(matches, null, 2).replace(/</g, '\\u003c');
 }
 
+// Diffs automated goal evidence against already-reviewed evidence for the
+// same match, for Part 8's reconciliation report — never used to decide
+// what gets written; purely descriptive so a discrepancy can be surfaced
+// without ever silently overwriting reviewed data.
+function compareGoalEvidence(reviewedGoals, automatedGoals) {
+  if (!Array.isArray(reviewedGoals) || !Array.isArray(automatedGoals)) return null;
+  const key = g => `${g.team}|${g.scorer || '?'}|${g.assist || '?'}|${g.minute}|${g.stoppage ?? '?'}`;
+  const reviewedKeys = reviewedGoals.map(key).sort();
+  const automatedKeys = automatedGoals.map(key).sort();
+  const identical = JSON.stringify(reviewedKeys) === JSON.stringify(automatedKeys);
+  return { identical, reviewed: reviewedKeys, automated: automatedKeys };
+}
+
 function upsertLeagueMatch(source, incoming) {
-  validateLeagueMatch(incoming);
+  // Strip the transient reconciliation status before any validation or
+  // persistence — it is caller-facing metadata (see leagueMatchFromEvidence),
+  // never part of the LEAGUE_MATCHES schema.
+  const { goalReconciliation, ...record } = incoming;
+  validateLeagueMatch(record);
   const matches = getLeagueMatches(source);
-  const index = matches.findIndex(match => match.mw === incoming.mw);
-  if (index >= 0) matches[index] = incoming;
-  else matches.push(incoming);
+  const index = matches.findIndex(match => match.mw === record.mw);
+  if (index >= 0) {
+    // Never let automated goal evidence silently replace evidence that has
+    // already been reviewed for this match (Part 8) — whether the existing
+    // `goals` is a populated array (reviewed, goals found) or an empty
+    // array (reviewed, genuinely scoreless). Only a match with NO `goals`
+    // field yet (never reviewed) can receive automated evidence.
+    const next = { ...record };
+    if (matches[index].goals !== undefined) next.goals = matches[index].goals;
+    matches[index] = next;
+  } else {
+    matches.push(record);
+  }
   matches.sort((a, b) => a.mw - b.mw);
   const rendered = renderLeagueMatches(matches);
   return source.replace(/export const LEAGUE_MATCHES = \[[\s\S]*?\n\];/, `export const LEAGUE_MATCHES = ${rendered};`);
@@ -221,9 +398,12 @@ function readState(path) {
 module.exports = {
   AFTER_KICKOFF_MS,
   applyFixtureScore,
+  compareGoalEvidence,
   dueFixtures,
+  extractGoalEvents,
   fixtureKey,
   calculatePlayerUsage,
+  detectUnknownPlayers,
   getLeagueMatches,
   leagueMatchFromEvidence,
   readState,
@@ -234,5 +414,6 @@ module.exports = {
   ukLocalTimeMs,
   updateSquad,
   upsertLeagueMatch,
+  validateGoalEvidence,
   validateLeagueMatch,
 };

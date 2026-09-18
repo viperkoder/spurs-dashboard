@@ -113,14 +113,32 @@ function validate(reconciliation, fixture, evidence) {
     // if a league lineup, substitution or minute boundary is incomplete.
     const leagueMatch = core.leagueMatchFromEvidence(fixture, evidence);
     let leagueUsageChanged = false;
+    const squadSource = fs.readFileSync(SQUAD_PATH, 'utf8');
     if (leagueMatch) {
+      // Part 3: surface the goal-reconciliation outcome — never silent.
+      const gr = leagueMatch.goalReconciliation;
+      if (gr && gr.status !== 'reconciled') {
+        workflowWarning(
+          `Goal evidence for ${fixture.opponent} (MW${fixture.mw}) is ${gr.status}: ${gr.reason} Season Stats goals[] left for manual review — appearances/usage are unaffected.`,
+          'Goal evidence not automatically reconciled'
+        );
+      } else if (gr && gr.status === 'reconciled') {
+        console.log(`Goal evidence automatically reconciled for ${fixture.opponent} (MW${fixture.mw}): ${leagueMatch.goals.length} goal(s) verified against the final score.`);
+      }
+      // Part 5: unknown-player detection — warn only, never drop or guess.
+      const unknown = core.detectUnknownPlayers(leagueMatch.appearances, squadSource);
+      if (unknown.length > 0) {
+        workflowWarning(
+          `Player(s) with no squad.js entry appeared for Tottenham in ${fixture.opponent} (MW${fixture.mw}): ${unknown.join(', ')}. Historical appearance recorded as-is; add a match-specific combination-module override if/when reviewed (see dashboard-maintenance-checklist.md).`,
+          'Unknown player — squad reconciliation needed'
+        );
+      }
       const seasonStatsSource = fs.readFileSync(SEASON_STATS_PATH, 'utf8');
       const nextSeasonStats = core.upsertLeagueMatch(seasonStatsSource, leagueMatch);
       leagueUsageChanged = nextSeasonStats !== seasonStatsSource;
       if (leagueUsageChanged) fs.writeFileSync(SEASON_STATS_PATH, nextSeasonStats);
     }
     const standingsSource = fs.readFileSync(STANDINGS_PATH, 'utf8');
-    const squadSource = fs.readFileSync(SQUAD_PATH, 'utf8');
     let result;
     try {
       result = await askClaude(fixture, evidence, standingsSource, squadSource);

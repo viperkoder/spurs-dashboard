@@ -115,4 +115,207 @@ const clubs = Array.from({ length: 20 }, (_, i) => ({
 const tableSource = `export const STANDINGS = [\n${clubs.map(c => `  {team:"${c.team}"},`).join('\n')}\n];`;
 assert.doesNotThrow(() => validateStandings(clubs, tableSource));
 assert.throws(() => validateStandings(clubs.slice(0, 19), tableSource), /20 clubs/);
+// ---------------------------------------------------------------------------
+// Season Stats V2.5 — automated goal-event ingestion (Parts 2/3/4/5/6/7).
+// ---------------------------------------------------------------------------
+
+// A simple, self-contained 11-starters-only roster for the goal-ingestion
+// tests below — no subs, so tests that don't care about substitutions don't
+// also need to supply a matching substitution commentary event.
+const goalTestRoster = Array.from({ length: 11 }, (_, index) => ({
+  athlete: { displayName: `Starter ${index + 1}` }, starter: true, subbedIn: false,
+}));
+
+function syntheticEvidence({ commentary, spursScore = 1, opponentScore = 0, roster = goalTestRoster } = {}) {
+  return {
+    event: {
+      id: 'v25-synthetic',
+      competitors: [
+        { team: { displayName: 'Tottenham Hotspur' }, score: String(spursScore) },
+        { team: { displayName: 'Everton' }, score: String(opponentScore) },
+      ],
+    },
+    summary: {
+      rosters: [{ team: { displayName: 'Tottenham Hotspur' }, roster }],
+      commentary,
+    },
+  };
+}
+
+// PART 7 — genuine 0-0: commentary present, no goal-prefixed entries, score
+// 0-0 -> a verified zero, not an absent/unknown result.
+{
+  const evidence = syntheticEvidence({ commentary: [], spursScore: 0, opponentScore: 0 });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goalReconciliation.status, 'reconciled');
+  assert.deepEqual(match.goals, []);
+}
+
+// PART 7 — valid goal with assist + a stoppage-time goal (45+2), unresolved
+// left implicit via exact-count cross-check.
+{
+  const commentary = [
+    {
+      text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 right footed shot. Assisted by Starter 8.',
+      time: { value: 2820 }, // 47th minute
+      play: { participants: [{ athlete: { displayName: 'Starter 9' } }, { athlete: { displayName: 'Starter 8' } }] },
+    },
+    {
+      text: 'Goal!  Tottenham Hotspur 2, Everton 0. Sub One header (45+2\').',
+      time: { value: 2820 },
+      play: { participants: [{ athlete: { displayName: 'Sub One' } }] },
+    },
+  ];
+  const evidence = syntheticEvidence({ commentary, spursScore: 2, opponentScore: 0 });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goalReconciliation.status, 'reconciled');
+  assert.equal(match.goals.length, 2);
+  assert.equal(match.goals[0].scorer, 'Starter 9');
+  assert.equal(match.goals[0].assist, 'Starter 8');
+  assert.equal(match.goals[1].stoppage, 2);
+}
+
+// PART 7 — goal with no assist: text has no "Assist" keyword -> assist null,
+// never guessed from the second participant.
+{
+  const commentary = [{
+    text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 tap-in.',
+    time: { value: 1800 },
+    play: { participants: [{ athlete: { displayName: 'Starter 9' } }] },
+  }];
+  const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 0 });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goals[0].assist, null);
+}
+
+// PART 3/7 — invariant under test: UNKNOWN MUST NOT BECOME ZERO.
+// (a) goal source unavailable: no commentary field at all.
+{
+  const evidence = syntheticEvidence({ commentary: undefined, spursScore: 0, opponentScore: 0 });
+  delete evidence.summary.commentary;
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goalReconciliation.status, 'unavailable');
+  assert.equal(match.goals, undefined, 'unavailable evidence must never become goals: []');
+}
+// (b) incomplete/malformed evidence: extracted count does not match the
+// authoritative final score.
+{
+  const commentary = [{
+    text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 tap-in.',
+    time: { value: 1800 },
+    play: { participants: [{ athlete: { displayName: 'Starter 9' } }] },
+  }];
+  const evidence = syntheticEvidence({ commentary, spursScore: 2, opponentScore: 0 });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goalReconciliation.status, 'unresolved');
+  assert.equal(match.goals, undefined, 'unresolved evidence must never become goals: []');
+}
+// (c) malformed upstream event: a goal-prefixed entry naming no recognized team.
+{
+  const commentary = [{
+    text: 'Goal!  Somewhere else entirely.',
+    time: { value: 1800 },
+    play: { participants: [] },
+  }];
+  const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 0 });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goalReconciliation.status, 'unresolved');
+}
+
+// PART 4 — idempotency: running the automated goal ingestion twice against
+// the same completed match must not duplicate or drift, AND must never let
+// automated re-extraction overwrite already-reviewed evidence for a match
+// that has since been manually reviewed (Part 8 protection).
+{
+  const commentary = [{
+    text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 tap-in. Assisted by Starter 8.',
+    time: { value: 1800 },
+    play: { participants: [{ athlete: { displayName: 'Starter 9' } }, { athlete: { displayName: 'Starter 8' } }] },
+  }];
+  const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 0 });
+  const fixture = { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' };
+  const firstMatch = core.leagueMatchFromEvidence(fixture, evidence);
+  const base = core.replaceExportedArray(seasonStatsSource, 'LEAGUE_MATCHES', [JSON.stringify(matches).slice(1, -1)]);
+  const afterFirst = core.upsertLeagueMatch(base, firstMatch);
+  const secondMatch = core.leagueMatchFromEvidence(fixture, evidence);
+  const afterSecond = core.upsertLeagueMatch(afterFirst, secondMatch);
+  assert.equal(afterSecond, afterFirst, 're-running the same completed match must be byte-identical (idempotent)');
+  assert.deepEqual(core.getLeagueMatches(afterFirst).find(m => m.mw === 4).goals, firstMatch.goals);
+
+  // Now simulate a human review that overrides the automated goals (e.g. a
+  // more precise manually-sourced record) — a third automated re-run must
+  // NOT clobber it.
+  const reviewed = core.getLeagueMatches(afterFirst);
+  reviewed.find(m => m.mw === 4).goals = [{ team: 'spurs', scorer: 'Manually Reviewed Player', assist: null, minute: 30, stoppage: null, period: 'H1', order: null, source: 'https://example.com/reviewed' }];
+  const reviewedSource = core.replaceExportedArray(seasonStatsSource, 'LEAGUE_MATCHES', [JSON.stringify(reviewed).slice(1, -1)]);
+  const thirdMatch = core.leagueMatchFromEvidence(fixture, evidence);
+  const afterThird = core.upsertLeagueMatch(reviewedSource, thirdMatch);
+  assert.deepEqual(core.getLeagueMatches(afterThird).find(m => m.mw === 4).goals, reviewed.find(m => m.mw === 4).goals, 'reviewed goal evidence must never be silently overwritten by automated extraction');
+}
+
+// PART 5 — unknown-player detection: warns without dropping the appearance.
+{
+  const squadSnippet = 'export const SQUAD = [\n  {name:"Starter 1", pos:"CB", apps:0, g:0},\n];';
+  const unknown = core.detectUnknownPlayers([{ player: 'Starter 1' }, { player: 'Completely Unknown Player' }], squadSnippet);
+  assert.deepEqual(unknown, ['Completely Unknown Player']);
+  assert.deepEqual(core.detectUnknownPlayers([], squadSnippet), []);
+}
+
+// PART 6 — next-match readiness: one normal Matchday reconciliation (with a
+// Spurs goal, an opponent goal, starters, subs) flows through automatically
+// to Player Usage AND to the generic Season Stats data the combination
+// modules consume, with no module-specific code changes. Does not hard-code
+// any particular real result — this is entirely synthetic.
+{
+  const commentary = [
+    {
+      text: 'Substitution, Tottenham Hotspur. Sub One replaces Starter 11.',
+      time: { value: 3600 },
+      play: { participants: [{ athlete: { displayName: 'Sub One' } }, { athlete: { displayName: 'Starter 11' } }] },
+    },
+    {
+      text: 'Goal!  Tottenham Hotspur 1, Everton 1. Starter 9 tap-in. Assisted by Starter 8.',
+      time: { value: 1800 },
+      play: { participants: [{ athlete: { displayName: 'Starter 9' } }, { athlete: { displayName: 'Starter 8' } }] },
+    },
+    {
+      text: 'Goal!  Everton 1, Tottenham Hotspur 1. Opposition Player finish.',
+      time: { value: 900 },
+      play: { participants: [{ athlete: { displayName: 'Opposition Player' } }] },
+    },
+  ];
+  const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 1, roster: evidenceRoster });
+  const fixture = { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' };
+  const nextMatch = core.leagueMatchFromEvidence(fixture, evidence);
+  assert.equal(nextMatch.goalReconciliation.status, 'reconciled');
+  const base = core.replaceExportedArray(seasonStatsSource, 'LEAGUE_MATCHES', [JSON.stringify(matches).slice(1, -1)]);
+  const nextSource = core.upsertLeagueMatch(base, nextMatch);
+  const nextMatches = core.getLeagueMatches(nextSource);
+  assert.equal(nextMatches.length, 4);
+  const inserted = nextMatches.find(m => m.mw === 4);
+  assert.equal(inserted.goals.length, 2);
+  // Generic Player Usage must include the new match without any edit.
+  const nextUsage = seasonContext.__season.getPlayerUsage(nextMatches);
+  const starter9Usage = nextUsage.find(p => p.player === 'Starter 9');
+  assert.equal(starter9Usage.apps, matches.filter(m => m.appearances.some(p => p.player === 'Starter 9')).length + 1);
+}
+
 console.log('matchday tests passed');

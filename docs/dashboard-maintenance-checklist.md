@@ -127,8 +127,9 @@ phase is small, tested and reported before the next begins.
 - V2.2 — Defensive combinations (discovery + event-model foundation merged,
   PR #6, `9e815cb`; Defensive Combinations V1 merged, PR #7, `d2053d5`)
 - V2.3 — Central midfield influence (V1 merged, PR #8, `8cc5eef`)
-- V2.4 — Attacking combinations (V1 implemented below; awaiting publish)
-- V2.5 — Dashboard integration, presentation and final validation
+- V2.4 — Attacking combinations (V1 merged, PR #9, `cd743a2`)
+- V2.5 — Final integration + Matchday automation (implemented below;
+  awaiting publish) — SEASON STATS V2 COMPLETE once merged
 
 ### V2.1 — On-pitch data foundation — implemented 17 September 2026
 
@@ -704,19 +705,179 @@ Influence V1, once more, filtered to `team: 'spurs'` goals.
       V2.1/V2.2 and the entire Matchday updater
       (`automation/matchday-*.js`, `.github/workflows/matchday-update.yml`)
       are untouched.
-- [ ] **Saturday readiness / remaining automation gap (V2.5 scope, recorded
-      here, not built):** the Matchday updater still does not automatically
-      populate the `goals` field or match-specific role overrides that
-      V2.2–V2.4 read (see "Known automation boundary" above) — Saturday's
-      completed match will need its `appearances` ingested automatically (as
-      today) but its `goals` array and any new match-scoped role decision
-      backfilled by hand before Defensive Combinations, Central Midfield
-      Influence or Attacking Combinations reflect it. No redesign is needed
-      for that match to be accepted once backfilled — all three modules
-      already iterate `LEAGUE_MATCHES` generically. Wiring automatic
-      goal-event/role ingestion into the Matchday workflow is V2.5
-      integration work, intentionally out of scope here.
-- [ ] **Squad reconciliation — Richarlison:** review his real match appearances against current squad, transfers and finances evidence; he appears in MW1 but is absent from the squad source. Resolve the roster discrepancy in a separate reconciliation packet, preserving historical appearance evidence. Not implemented in this publication.
+- [x] **Saturday readiness / automation gap — closed by V2.5 below.** The
+      Matchday updater now automatically attempts goal-event ingestion for
+      every future completed Premier League match; role reconciliation is
+      now a visible warning instead of a silent gap. See "V2.5 — Final
+      Integration + Matchday Automation" below for the implementation,
+      safety design and real-data findings.
+- [x] **Squad reconciliation — Richarlison:** not fixed at the squad.js
+      source level (still out of scope — squad.js itself is untouched), but
+      the pipeline no longer depends on a human noticing this kind of gap:
+      V2.5's `detectUnknownPlayers` now automatically flags any Tottenham
+      appearance with no `squad.js` entry as a GitHub Actions warning at
+      ingestion time. Richarlison's specific MW1 gap remains documented in
+      `src/data/attackingCombinations.js`'s match-specific override (already
+      reviewed and authoritative); this item stays open only for the actual
+      squad.js edit, which remains a deliberate separate reconciliation
+      packet, not a Season Stats V2 concern.
+
+### V2.5 — Final Integration + Matchday Automation — 18 September 2026
+
+Final planned Season Stats V2 packet: makes the pipeline operational for the
+rest of the season (new completed match → Matchday → automatic goal
+evidence where safely possible → Season Stats recalculates → Defensive,
+Central Midfield and Attacking Combinations update) without manual
+reconstruction of every match, while never letting an unknown or missing
+piece of evidence become a false zero.
+
+- [x] **Part 1 — Matchday data-flow audit.** Read `automation/matchday-core.js`
+      and `automation/matchday-update.js` in full. Confirmed: `leagueMatchFromEvidence`
+      ingested only appearances/substitutions from `evidence.summary.rosters`
+      + `evidence.summary.commentary`; it never populated `goals`. Scorer/assist
+      data flowed only through the separate AI-reconciliation path into
+      `standings.js`'s `SCORERS`/`LAST5`, disconnected from the `seasonStats.js`
+      `goals[]` schema V2.2–V2.4 actually read — confirming the exact gap this
+      packet closes. Live-probed ESPN's real summary endpoint (via `WebFetch`,
+      since this session's own network egress cannot reach `site.api.espn.com`
+      directly) against all four real completed-match event IDs
+      (401879321, 401879312, 401878780, 401879277): **`summary.commentary` is
+      absent from all four today** — ESPN prunes this play-by-play field once
+      a match ages past some window. This is consistent with, not
+      contradictory to, the existing substitution-extraction code's proven
+      success: it succeeded when Matchday actually ran near each match's real
+      kickoff (within the existing 2h–14-day eligibility window), before the
+      field aged out. The automation below is therefore expected to reconcile
+      cleanly for future matches processed promptly, and to correctly report
+      "unavailable" (never a false zero) for anything older — exactly what
+      Part 8's real-data run against these four matches confirmed.
+- [x] **Part 2 — Automated goal-event ingestion.** Added
+      `extractGoalEvents(evidence, finalScore)` to `automation/matchday-core.js`,
+      reusing the exact same `evidence.summary.commentary` stream the proven
+      substitution parser reads — no new data source. Matches ESPN's
+      `"Goal!  <team> <score>, <team> <score>. ..."` commentary convention;
+      team is resolved by whichever team name occurs earliest in the text
+      (the recap line can name both teams), never by first-match `includes`.
+      Populates only fields the evidence actually supports: `scorer` from the
+      first play participant, `assist` only when the text contains the word
+      "Assist" (else `null`, never guessed from the second participant),
+      `stoppage` only when the text contains an explicit `NN+N` digit,
+      `period` from the regulation minute, `order` always `null` (no
+      ordering evidence source exists yet, matching V2.2's documented
+      precedent). Wired into `leagueMatchFromEvidence`: `match.goals` is set
+      **only** when reconciliation status is `'reconciled'`.
+- [x] **Part 3 — Safe reconciliation (unknown ≠ zero).** Three explicit
+      states, never conflated: `'reconciled'` (evidence present, parsed, and
+      the extracted per-team goal count exactly matches the independently
+      trusted final score from `resultFromEvidence`) → `goals` attached;
+      `'unavailable'` (no `commentary` field at all) → `goals` left
+      undefined, exactly like an unreviewed match today; `'unresolved'`
+      (evidence present but a goal event's team/minute couldn't be parsed,
+      or the extracted count doesn't match the final score) → `goals` left
+      undefined and a distinct GitHub Actions warning is raised
+      (`workflowWarning(..., 'Goal evidence not automatically reconciled')`).
+      A verified 0-0 (commentary present, genuinely no goal entries) is the
+      only path that produces `goals: []` — proven by a dedicated test.
+      Appearance-data safety is unchanged: `validateLeagueMatch` still
+      throws (fails the whole run) on any incomplete/malformed roster or
+      substitution evidence, exactly as before this packet.
+- [x] **Part 4 — Idempotency.** `upsertLeagueMatch` now strips the transient
+      `goalReconciliation` field before persisting (never written to
+      `seasonStats.js`) and, critically, **never lets automated goal
+      evidence overwrite a match that already has any `goals` field** —
+      populated or a reviewed empty array — so a second automated run
+      against an already-reviewed match is a true no-op. Proven by a test
+      that runs the same synthetic evidence twice (byte-identical output)
+      and a third time after simulating a manual review, confirming the
+      manually reviewed evidence survives.
+- [x] **Part 5 — Role/squad reconciliation.** Added
+      `detectUnknownPlayers(appearances, squadSource)`: flags any Tottenham
+      appearance whose player has no `squad.js` entry (same last-name match
+      `updateSquad` already uses), without dropping the appearance or
+      guessing a classification. Wired into `matchday-update.js` as a
+      distinct GitHub Actions warning (`'Unknown player — squad
+      reconciliation needed'`). This does not build a transfer-management
+      system: existing match-specific combination-module overrides (the
+      reviewed Richarlison/Mikey Moore pattern) remain the sole authority
+      for classifying such a player, and historical appearances are never
+      altered by a later squad.js change.
+- [x] **Part 6 — Next-match readiness.** A synthetic fixture test (starters,
+      a substitution, a Spurs goal with assist, an opponent goal, no
+      hard-coded real result) proves one `leagueMatchFromEvidence` +
+      `upsertLeagueMatch` call is picked up by `getPlayerUsage` automatically
+      — no module-specific code touched. Defensive/Midfield/Attacking
+      Combinations already iterate `LEAGUE_MATCHES` generically (proven in
+      V2.2–V2.4), so the same holds for them without new tests duplicating
+      that proof.
+- [x] **Part 7 — Failure-test matrix.** `scripts/test-matchday.js` now also
+      covers: genuine 0-0 (verified zero), goal with assist, goal with no
+      assist, stoppage-time goal (45+2), goal source unavailable (no
+      `commentary` field — must never become `[]`), incomplete/mismatched
+      evidence (extracted count ≠ final score — must never become `[]`),
+      malformed upstream event (unidentifiable scoring team), an unknown
+      player detected without being dropped, and duplicate Matchday runs
+      (idempotency, including the reviewed-evidence-protection case). Every
+      "unknown" case asserts `match.goals === undefined`, never `[]`.
+- [x] **Part 8 — Current data reconciliation.** Ran the automation against
+      all four real completed league matches' live ESPN evidence (via
+      `WebFetch`, since direct HTTPS to `site.api.espn.com` is blocked by
+      this session's own egress policy). Finding: `summary.commentary` is
+      absent for all four today (see Part 1), so `extractGoalEvents` reports
+      `'unavailable'` for each — the automation correctly declines to touch
+      any of the existing manually-reviewed `goals[]` records (MW1: 3
+      opponent goals; MW2: 2 opponent goals; MW3/MW4: reviewed 0-0). No
+      discrepancy exists to report because automation did not attempt a
+      reconciliation against stale evidence — this is the intended safe
+      behavior, not a shortfall. It will be exercised for real the next time
+      Matchday runs on a freshly completed match, while evidence is still
+      live.
+- [x] **Part 9 — UI/operational status.** Not added. The GitHub Actions
+      warning annotations from Parts 3/5 already surface both failure modes
+      distinctly and visibly at the point they occur; a dashboard-level
+      indicator would need new state plumbing (a field for "last
+      reconciliation status" persisted somewhere the frontend reads) that
+      does not exist today, for a signal aimed at maintainers, not
+      supporters. Judged not genuinely useful enough to add complexity —
+      revisit only if Viper wants supporter-facing data-freshness signalling
+      specifically.
+- [x] **Part 10 — Existing analytics preserved.** Re-ran all three
+      combination-module test suites after every change: Defensive
+      Combinations V1 unchanged (360 minutes, 5 conceded, 7 combinations, 0
+      unresolved); Central Midfield Influence V1 unchanged (5 units, 12
+      combinations, 360 minutes, 5 conceded, 0 unresolved); Attacking
+      Combinations V1 unchanged (360 minutes, 14 combinations, 0 Spurs
+      goals, 0 unresolved). No drift — expected, since none of the four real
+      match records were modified by this packet (Part 8).
+- [x] **Part 11 — Workflow reliability.** `workflowWarning` now takes an
+      explicit `title` (default preserves the exact existing AI-deferral
+      behavior) so a deferred-AI-reconciliation warning, a goal-evidence
+      warning and an unknown-player warning are never conflated in the
+      GitHub Actions UI. Appearance-data validation still fails the whole
+      run (`process.exit(1)`) on incomplete/malformed evidence, unchanged.
+      Goal-evidence and role-reconciliation issues are non-fatal by design
+      (Part 3): they never block a match whose appearance data is otherwise
+      sound, and they never produce a false-success (the warning is always
+      emitted, never swallowed).
+- [x] **Verification.** `npm run test:matchday`, `test:onpitch`,
+      `test:matchevents`, `test:defensivecombinations`,
+      `test:midfieldinfluence`, `test:attackingcombinations`,
+      `check-secrets`, `node build.js` and `git diff --check` all pass.
+      Real-data invariant re-confirmed against all four completed league
+      matches (see Part 10).
+- [x] **SEASON STATS V2 — COMPLETE.** All five phases (V2.1 on-pitch
+      foundation, V2.2 defensive combinations, V2.3 central midfield
+      influence, V2.4 attacking combinations, V2.5 integration/automation)
+      are implemented, tested and — pending publication — verified. Genuine
+      remaining limitations, not gaps in this packet: (1) automated goal
+      ingestion cannot be retroactively verified against matches older than
+      ESPN's commentary-retention window — it will prove itself the next
+      time it runs against a fresh match; (2) `squad.js` itself still lacks
+      a Richarlison entry (a data-file edit, not an automation gap); (3) no
+      supporter-facing reconciliation-status UI (Part 9, deliberately
+      deferred). No V2.6 is proposed — per this packet's explicit stop
+      condition, no xG, shots, rankings or further statistics feature
+      should follow from Season Stats work without a new, separately
+      authorized packet.
 
 ## Next Season Stats packet — on-pitch combinations V1
 
