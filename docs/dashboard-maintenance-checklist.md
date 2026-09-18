@@ -128,8 +128,8 @@ phase is small, tested and reported before the next begins.
   PR #6, `9e815cb`; Defensive Combinations V1 merged, PR #7, `d2053d5`)
 - V2.3 — Central midfield influence (V1 merged, PR #8, `8cc5eef`)
 - V2.4 — Attacking combinations (V1 merged, PR #9, `cd743a2`)
-- V2.5 — Final integration + Matchday automation (implemented below;
-  awaiting publish) — SEASON STATS V2 COMPLETE once merged
+- V2.5 — Final integration + Matchday automation (merged, PR #10,
+  `bef99a8`) — **SEASON STATS V2 — COMPLETE**
 
 ### V2.1 — On-pitch data foundation — implemented 17 September 2026
 
@@ -867,7 +867,11 @@ piece of evidence become a false zero.
 - [x] **SEASON STATS V2 — COMPLETE.** All five phases (V2.1 on-pitch
       foundation, V2.2 defensive combinations, V2.3 central midfield
       influence, V2.4 attacking combinations, V2.5 integration/automation)
-      are implemented, tested and — pending publication — verified. Genuine
+      are implemented, tested, merged through PR #10 and independently verified
+      on authoritative main (`bef99a8197418a3643893c5a50e439f8e19e9d04`).
+      Hosted Build and Matchday checks passed. The corrected added-time
+      regression verifies 45+2 as 45 / 2 / H1, 90+6 as 90 / 6 / H2,
+      and protects H1 attribution across half-time substitutions. Genuine
       remaining limitations, not gaps in this packet: (1) automated goal
       ingestion cannot be retroactively verified against matches older than
       ESPN's commentary-retention window — it will prove itself the next
@@ -879,7 +883,10 @@ piece of evidence become a false zero.
       should follow from Season Stats work without a new, separately
       authorized packet.
 
-## Next Season Stats packet — on-pitch combinations V1
+## Historical Season Stats V2 scope — completed
+
+The following scope is retained as history: delivered through V2.1–V2.5.
+There is no active next Season Stats packet; no V2.6 is authorized.
 
 Owner: Kody. Scope: extend the existing completed-match records and deterministic calculations; no separate statistics database, paid API or AI calculation loop.
 
