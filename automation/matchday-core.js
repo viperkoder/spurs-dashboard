@@ -188,14 +188,31 @@ function extractGoalEvents(evidence, finalScore) {
       problems.push(`Could not identify which team scored from: "${text}"`);
       continue;
     }
-    const rawSeconds = event.time?.value ?? event.play?.clock?.value;
-    const minuteRaw = Number(rawSeconds) / 60;
-    if (!Number.isFinite(minuteRaw)) {
-      problems.push(`No usable minute/clock value for: "${text}"`);
-      continue;
+    // V2.5 correction (independent review, 18 September 2026): a source
+    // notation of "45+2'" means regulation minute 45, stoppage 2, period
+    // H1 — it must NEVER be normalized into "minute 47" for period
+    // determination, or a half-time substitution would misattribute the
+    // goal to the post-half-time (H2) unit instead of the players actually
+    // on the pitch during first-half stoppage time. The added-time
+    // notation, when present, is the authoritative source-backed
+    // representation and takes priority over the raw clock/time value —
+    // the base minute it states (45 or 90) is used directly, never
+    // re-derived from elapsed seconds.
+    const stoppageMatch = text.match(/(?:^|\D)(45|90)\s*\+\s*(\d+)/);
+    let minute;
+    let stoppage = null;
+    if (stoppageMatch) {
+      minute = Number(stoppageMatch[1]);
+      stoppage = Number(stoppageMatch[2]);
+    } else {
+      const rawSeconds = event.time?.value ?? event.play?.clock?.value;
+      const minuteRaw = Number(rawSeconds) / 60;
+      if (!Number.isFinite(minuteRaw)) {
+        problems.push(`No usable minute/clock value for: "${text}"`);
+        continue;
+      }
+      minute = Math.min(90, Math.ceil(minuteRaw));
     }
-    const minute = Math.min(90, Math.ceil(minuteRaw));
-    const stoppageMatch = text.match(/(?:^|\D)(\d{2,3})\s*\+\s*(\d+)/);
     const scorer = event.play?.participants?.[0]?.athlete?.displayName || null;
     const assistParticipant = event.play?.participants?.[1]?.athlete?.displayName || null;
     const assist = /assist/i.test(text) ? assistParticipant : null;
@@ -204,7 +221,7 @@ function extractGoalEvents(evidence, finalScore) {
       scorer,
       assist,
       minute,
-      stoppage: stoppageMatch ? Number(stoppageMatch[2]) : null,
+      stoppage,
       period: minute <= 45 ? 'H1' : 'H2',
       order: null,
       source: sourceUrl,

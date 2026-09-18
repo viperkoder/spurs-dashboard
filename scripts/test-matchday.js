@@ -156,6 +156,19 @@ function syntheticEvidence({ commentary, spursScore = 1, opponentScore = 0, rost
 
 // PART 7 — valid goal with assist + a stoppage-time goal (45+2), unresolved
 // left implicit via exact-count cross-check.
+//
+// V2.5 CORRECTION (independent review, 18 September 2026) — ROOT CAUSE:
+// "45+2'" means regulation minute 45, stoppage 2, period H1. The original
+// implementation derived `minute` from the raw elapsed-clock seconds
+// (2820s = 47 minutes) for EVERY goal including stoppage-time ones, so a
+// 45+2 goal was normalized to `{ minute: 47, period: 'H2' }` — silently
+// crossing the half-time boundary. That is what this assertion block would
+// have observed before the fix (documented here, not re-derived, since the
+// buggy code path no longer exists to run): `match.goals[1]` would equal
+// `{ minute: 47, stoppage: 2, period: 'H2', ... }`. The fix makes the
+// source's own "45+2" notation authoritative for the base regulation
+// minute — never re-derived from clock seconds — so it now resolves
+// correctly below.
 {
   const commentary = [
     {
@@ -165,7 +178,7 @@ function syntheticEvidence({ commentary, spursScore = 1, opponentScore = 0, rost
     },
     {
       text: 'Goal!  Tottenham Hotspur 2, Everton 0. Sub One header (45+2\').',
-      time: { value: 2820 },
+      time: { value: 2820 }, // clock reads 47 minutes elapsed — must NOT drive minute/period
       play: { participants: [{ athlete: { displayName: 'Sub One' } }] },
     },
   ];
@@ -178,7 +191,87 @@ function syntheticEvidence({ commentary, spursScore = 1, opponentScore = 0, rost
   assert.equal(match.goals.length, 2);
   assert.equal(match.goals[0].scorer, 'Starter 9');
   assert.equal(match.goals[0].assist, 'Starter 8');
+  // AFTER the fix: 45+2 -> minute 45, stoppage 2, period H1 (never 47/H2).
+  assert.equal(match.goals[1].minute, 45, '45+2 must resolve to regulation minute 45, not 47');
   assert.equal(match.goals[1].stoppage, 2);
+  assert.equal(match.goals[1].period, 'H1', '45+2 must stay period H1 — this is the exact blocker independent review found');
+}
+
+// PART 7 — second-half added time (90+N) must remain minute 90 / H2, and
+// the 45+N fix above must not have disturbed it.
+{
+  const commentary = [{
+    text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 tap-in (90+6\').',
+    time: { value: 5760 }, // 96 minutes elapsed clock
+    play: { participants: [{ athlete: { displayName: 'Starter 9' } }] },
+  }];
+  const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 0 });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goals[0].minute, 90);
+  assert.equal(match.goals[0].stoppage, 6);
+  assert.equal(match.goals[0].period, 'H2');
+}
+
+// PART 7/HALF-TIME ATTRIBUTION — the actual downstream consequence of the
+// blocker: a genuine half-time substitution (Player A off at 45, Player B
+// on at 45) must attribute a 45+2 goal to Player A's (pre-half-time) unit,
+// never Player B's (post-half-time) unit. Run through the real pipeline —
+// automated extraction (leagueMatchFromEvidence) feeding the shared
+// on-pitch/goal-attribution machinery every combination module consumes
+// (proven once here; Defensive/Midfield/Attacking all call the same
+// getPlayersOnPitchAtGoal/resolveHalfTimeBoundary functions in onPitch.js,
+// which this packet did not touch — only the automation's minute/period
+// computation was wrong).
+{
+  const loadModules = (relativePaths, exportNames) => {
+    const source = relativePaths
+      .map(p => fs.readFileSync(require('path').join(__dirname, p), 'utf8'))
+      .join('\n');
+    const stripped = source
+      .replace(/^import\s+.*?from\s+['"][^'"]+['"]\s*;?\s*$/gm, '')
+      .replace(/^export\s+/gm, '');
+    const context = { Map, Set, Number, Array };
+    vm.runInNewContext(`${stripped}\nthis.__mod={${exportNames.join(',')}};`, context);
+    return context.__mod;
+  };
+  const { getPlayersOnPitchAtGoal } = loadModules(
+    ['../src/data/onPitch.js'],
+    ['getPlayersOnPitchAtGoal']
+  );
+
+  const halfTimeRoster = [
+    ...Array.from({ length: 10 }, (_, i) => ({ athlete: { displayName: `Ever Present ${i + 1}` }, starter: true, subbedIn: false })),
+    { athlete: { displayName: 'Player A' }, starter: true, subbedIn: false }, // off at half-time
+    { athlete: { displayName: 'Player B' }, starter: false, subbedIn: true }, // on at half-time
+  ];
+  const commentary = [
+    {
+      text: 'Substitution, Tottenham Hotspur. Player B replaces Player A.',
+      time: { value: 2700 }, // 45th minute
+      play: { participants: [{ athlete: { displayName: 'Player B' } }, { athlete: { displayName: 'Player A' } }] },
+    },
+    {
+      text: 'Goal!  Tottenham Hotspur 1, Everton 0. Ever Present 1 header (45+2\'). Assisted by Ever Present 2.',
+      time: { value: 2820 },
+      play: { participants: [{ athlete: { displayName: 'Ever Present 1' } }, { athlete: { displayName: 'Ever Present 2' } }] },
+    },
+  ];
+  const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 0, roster: halfTimeRoster });
+  const match = core.leagueMatchFromEvidence(
+    { mw: 4, opponent: 'Everton', venue: 'H', date: '2026-09-12T17:30:00+01:00', competition: 'Premier League' },
+    evidence
+  );
+  assert.equal(match.goalReconciliation.status, 'reconciled');
+  const goal = match.goals[0];
+  assert.equal(goal.minute, 45);
+  assert.equal(goal.period, 'H1');
+  const { onPitch, ambiguous } = getPlayersOnPitchAtGoal(match, goal);
+  assert.deepEqual(ambiguous, [], 'the half-time boundary must resolve deterministically, not fall back to ambiguous');
+  assert.ok(onPitch.includes('Player A'), 'Player A (off exactly at half-time) played the whole first half and must be credited for the 45+2 goal');
+  assert.ok(!onPitch.includes('Player B'), 'Player B (on exactly at half-time) played no part of the first half and must NOT be credited for the 45+2 goal');
 }
 
 // PART 7 — goal with no assist: text has no "Assist" keyword -> assist null,
