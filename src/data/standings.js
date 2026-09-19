@@ -12,15 +12,15 @@ export const STANDINGS = [
   {pos:9,team:"Chelsea",w:2,d:1,l:2,gf:10,ga:12,gd:-2,pts:7},
   {pos:10,team:"Liverpool",w:1,d:3,l:0,gf:6,ga:4,gd:2,pts:6},
   {pos:11,team:"Ipswich Town",w:2,d:0,l:3,gf:7,ga:11,gd:-4,pts:6},
-  {pos:12,team:"Nottingham Forest",w:1,d:2,l:1,gf:4,ga:4,gd:0,pts:5},
+  {pos:12,team:"Nottingham Forest",w:1,d:2,l:2,gf:4,ga:5,gd:-1,pts:5},
   {pos:13,team:"Manchester United",w:1,d:1,l:2,gf:7,ga:7,gd:0,pts:4},
   {pos:14,team:"Sunderland",w:1,d:1,l:2,gf:3,ga:5,gd:-2,pts:4},
   {pos:15,team:"Aston Villa",w:1,d:1,l:3,gf:4,ga:9,gd:-5,pts:4},
   {pos:16,team:"AFC Bournemouth",w:0,d:3,l:1,gf:6,ga:7,gd:-1,pts:3},
   {pos:17,team:"Crystal Palace",w:1,d:0,l:3,gf:6,ga:11,gd:-5,pts:3},
-  {pos:18,team:"Tottenham Hotspur",w:0,d:2,l:3,gf:2,ga:8,gd:-6,pts:2,isSpurs:true},
-  {pos:19,team:"Fulham",w:0,d:1,l:3,gf:4,ga:7,gd:-3,pts:1},
-  {pos:20,team:"Coventry City",w:0,d:0,l:4,gf:0,ga:10,gd:-10,pts:0},
+  {pos:18,team:"Coventry City",w:1,d:0,l:4,gf:1,ga:10,gd:-9,pts:3},
+  {pos:19,team:"Tottenham Hotspur",w:0,d:2,l:3,gf:2,ga:8,gd:-6,pts:2,isSpurs:true},
+  {pos:20,team:"Fulham",w:0,d:1,l:3,gf:4,ga:7,gd:-3,pts:1},
 ];
 
 // Latest first. Competitive and pre-season results may appear together.
