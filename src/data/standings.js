@@ -23,13 +23,18 @@ export const STANDINGS = [
   {pos:20,team:"Tottenham Hotspur",w:0,d:2,l:3,gf:2,ga:8,gd:-6,pts:2,isSpurs:true},
 ];
 
-// Latest first. Competitive and pre-season results may appear together.
+// Latest first. Premier League results only — this sits directly under the
+// PL table, so it must stay league-only. Cup fixtures (e.g. the 15 Sep
+// Carabao Cup match at Liverpool) belong on the Fixtures panel, not here; a
+// cup result was shown here in error previously — fixed 2026-09-21, see
+// project docs. Scorer left blank where goal evidence isn't yet reliably
+// reconciled (MW5 vs Aston Villa) rather than guessed — see seasonStats.js.
 export const LAST5 = [
-  {date:"15 Sep",home:"LIV",away:"TOT",score:"3-1",r:"L",scorer:"Gallagher 69'"},
+  {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:""},
   {date:"12 Sep",home:"TOT",away:"EVE",score:"0-0",r:"D",scorer:""},
   {date:"5 Sep",home:"NFO",away:"TOT",score:"0-0",r:"D",scorer:""},
   {date:"29 Aug",home:"TOT",away:"NEW",score:"0-2",r:"L",scorer:""},
-  {date:"26 Aug",home:"TOT",away:"CHA",score:"5-1",r:"W",scorer:"Moore 41'; Solanke 45'; Danso 67'; Sávio 82'; Davies 85'"},
+  {date:"22 Aug",home:"BRE",away:"TOT",score:"3-0",r:"L",scorer:""},
 ];
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.

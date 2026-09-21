@@ -198,17 +198,22 @@ function makeSub(player, on, off = 90) {
 }
 
 // --- Cross-check: real dataset invariants ----------------------------------
+// Five real matches now (MW1-5). MW5's goals are unresolved (undefined), so
+// it contributes 0 Spurs goals below by design — Spurs actually scored in
+// that match, but the goal evidence isn't reliably reconciled yet, so it
+// must not appear here. See test-match-events.js for the explicit
+// reviewed-vs-pending check.
 {
   const { combinations, unresolvedGoals } = mod.getAttackingCombinationStats(realMatches);
-  assert.equal(unresolvedGoals.length, 0, 'the real dataset has zero Spurs goals, so there is nothing to leave unresolved');
+  assert.equal(unresolvedGoals.length, 0, 'the reviewed matches have zero Spurs goals, so there is nothing to leave unresolved');
   const totalMinutes = combinations.reduce((sum, c) => sum + c.minutes, 0);
   assert.equal(totalMinutes, realMatches.length * 90, 'combination minutes must partition every match\'s full 90 minutes exactly once');
   const totalGF = combinations.reduce((sum, c) => sum + c.goalsScored, 0);
   const totalRealSpursGoals = realMatches.reduce((sum, m) => sum + (m.goals || []).filter(g => g.team === 'spurs').length, 0);
-  assert.equal(totalRealSpursGoals, 0, 'the current authoritative dataset has zero Spurs league goals');
+  assert.equal(totalRealSpursGoals, 0, 'zero Spurs goals are reflected so far — MW1-4 were genuinely goalless for Spurs, MW5 is unresolved, not zero');
   assert.equal(totalGF, totalRealSpursGoals);
   assert.ok(combinations.every(c => c.goalsScored === 0 && c.gfPer90 === 0));
-  assert.ok(combinations.every(c => c.smallSample === true), 'every combination from four matches must be flagged small-sample');
+  assert.ok(combinations.every(c => c.smallSample === true), 'every attacking combination is still small-sample across the five matches to date');
   assert.ok(combinations.length > 0, 'combinations must not be hidden just because every rate is currently zero');
   // Real evidence produces varying attacking-unit sizes — never forced to a
   // fixed front three/four.
