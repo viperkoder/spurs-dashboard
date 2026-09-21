@@ -218,18 +218,22 @@ function makeSub(player, on, off = 90) {
 }
 
 // --- Cross-check: real dataset invariants ----------------------------------
+// Five real matches now (MW1-5). MW5's goals are unresolved (undefined), so
+// it contributes 0 to totalRealOpponentGoals below by design (the 3 goals
+// Villa actually scored are not yet reflected here) — see
+// test-match-events.js for the explicit reviewed-vs-pending check.
 {
   const { combinations, unresolvedGoals } = mod.getDefensiveCombinationStats(realMatches);
-  assert.equal(unresolvedGoals.length, 0, 'none of the four real matches should have an unresolved defensive goal attribution');
+  assert.equal(unresolvedGoals.length, 0, 'none of the real matches should have an unresolved defensive goal attribution');
   const totalMinutes = combinations.reduce((sum, c) => sum + c.minutes, 0);
   assert.equal(totalMinutes, realMatches.length * 90, 'combination minutes must partition every match\'s full 90 minutes exactly once');
   const totalGC = combinations.reduce((sum, c) => sum + c.goalsConceded, 0);
   const totalRealOpponentGoals = realMatches.reduce((sum, m) => sum + (m.goals || []).filter(g => g.team === 'opponent').length, 0);
   assert.equal(totalGC, totalRealOpponentGoals, 'every opponent goal must be attributed to exactly one combination');
-  assert.equal(totalRealOpponentGoals, 5);
-  // With only four completed matches, every combination is a small sample —
+  assert.equal(totalRealOpponentGoals, 5, 'all 5 reviewed opponent goals are from MW1-4; MW5 (unresolved) contributes 0');
+  // With five matches, every defensive combination is still a small sample —
   // none should be silently hidden, and none should be shown as if reliable.
-  assert.ok(combinations.every(c => c.smallSample === true), 'every combination from four matches must be flagged small-sample');
+  assert.ok(combinations.every(c => c.smallSample === true), 'every defensive combination is still small-sample across the five matches to date');
   assert.ok(combinations.length > 0, 'combinations must not be hidden just because they are small-sample');
 }
 

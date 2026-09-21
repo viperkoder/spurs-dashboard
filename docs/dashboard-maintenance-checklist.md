@@ -883,6 +883,73 @@ piece of evidence become a false zero.
       should follow from Season Stats work without a new, separately
       authorized packet.
 
+### Latest results + Season Stats reconciliation, Team Diagnosis, RDZ context — 21 September 2026
+
+Not a new statistics phase (no V2.6) — a data-currency update on the
+completed V2/V2.5 infrastructure, plus two compact new sections built
+entirely from the existing engines.
+
+- [x] **Latest match incorporated:** MW5, Tottenham 2-3 Aston Villa
+      (19 Sep 2026), was already present on `main` from the daily
+      automation before this packet started. Verified current PL record:
+      P5 W0 D2 L3 GF2 GA8 GD-6 Pts2 (13.3% points return), reconciling
+      exactly against `standings.js`'s STANDINGS table.
+- [x] **MW5 "corruption" investigated and cleared — false alarm.** Several
+      MW5 appearance names (van Hecke, Robertson, Tonali, Marmoush, Savio,
+      Fernandes) were first suspected as wrong-club contamination; checked
+      against real-world football knowledge instead of this project's own
+      `squad.js`, where all are genuine 2026-signing Spurs players. No edit
+      was made. **Standing lesson, added here for future sessions:** verify
+      player identity against the dashboard's canonical `squad.js` and
+      reconciled match data before treating external discrepancies as
+      corruption. External club-affiliation assumptions are not sufficient
+      evidence for changing project data.
+- [x] **MW5 `goals[]` left unresolved (undefined), not fabricated** —
+      matches the existing V2.5 "unavailable" design exactly. Two
+      independent external sources for this match's scorers contradicted
+      each other on basic facts (different goalkeeper, different scorers),
+      so nothing was written rather than guessed.
+- [x] **Test suite corrected for a fifth real match**, not just bumped to
+      pass: `test-match-events.js` now explicitly asserts which matchweeks
+      are reviewed vs. legitimately pending (previously hard-required every
+      match to have reviewed goals, which broke on MW5 by design);
+      `test-midfield-influence.js`, `test-defensive-combinations.js` and
+      `test-attacking-combinations.js` had their real-dataset invariants
+      recomputed by running the actual engines (Bentancur+Tonali: 274 min,
+      5 matches, now the first combination anywhere to cross the
+      meaningful-sample floor; 14 combined midfield+defence rows, up from
+      12). New `npm run test:managerrecord`.
+- [x] **`standings.js` LAST5 fixed:** was showing a Carabao Cup result
+      (15 Sep, Liverpool) under the Premier League table and omitting the
+      most recent PL result entirely. Now shows the genuine last 5 PL
+      results only, cup fixtures excluded.
+- [x] **`SeasonStatsPanel.js`:** fixed a stale "Spurs have not yet scored"
+      message that went wrong once MW5's final score meant Spurs had
+      scored 2 (even though goal-by-goal attribution for MW5 is still
+      unresolved); added the same attribution-gap note to the defensive
+      footer. Added a **Team Diagnosis** card (Results/Stability/Defence/
+      Attack, computed live from the existing engines — no new stats
+      module) and an **RDZ** card (Roberto De Zerbi's career league-only
+      points-return record, `src/data/managerRecord.js`, computed from
+      sourced W/D/L, never hand-entered; three spells — the partial
+      2025/26 stretches at Marseille and Tottenham, and the 2013-2018
+      lower-division jobs — deliberately excluded rather than estimated,
+      full sourcing/gaps documented in that file's header).
+- [x] **Verification:** all 7 test suites (`test:matchday`, `test:onpitch`,
+      `test:matchevents`, `test:defensivecombinations`,
+      `test:midfieldinfluence`, `test:attackingcombinations`,
+      `test:managerrecord`), `check-secrets`, `node build.js` and
+      `git diff --check` pass.
+- [ ] **Not yet merged to main** — this cloud session's GitHub push proxy
+      blocks `viperkoder/spurs-dashboard` directly (same limitation as
+      every V2.x packet); delivered as branch
+      `season-stats-diagnosis-rdz-2026-09-21` + bundle for Kody/Viper to
+      apply and open a PR.
+- [ ] **Flagged, out of scope for this packet:** `automation/update-log.txt`
+      shows AI transfer/injury/news reconciliation failing since 20 Sep on
+      exhausted Anthropic API credit; free RSS/score refresh still runs.
+      No action taken here — Viper's call.
+
 ## Historical Season Stats V2 scope — completed
 
 The following scope is retained as history: delivered through V2.1–V2.5.

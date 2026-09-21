@@ -21,11 +21,39 @@ const onPitch = loadEsModule('../src/data/onPitch.js', [
 const season = loadEsModule('../src/data/seasonStats.js', ['LEAGUE_MATCHES']);
 const realMatches = season.LEAGUE_MATCHES;
 
-// --- Every real match reviewed so far has a valid `goals` field -----------
+// --- Every match's `goals` field, present or not, is structurally valid ---
+// (validateGoalEvents treats an absent `goals` field as valid — "not yet
+// reviewed" is a data-completeness question for the checklist, not a
+// structural error — so this only checks shape, never presence.)
 for (const match of realMatches) {
   const { valid, issues } = matchEvents.validateGoalEvents(match);
   assert.ok(valid, `MW${match.mw} goals should be structurally valid: ${issues.join('; ')}`);
-  assert.ok(Array.isArray(match.goals), `MW${match.mw} should have been reviewed (goals field present)`);
+}
+
+// --- Reviewed vs pending matches are distinguished explicitly, not just
+//     structurally valid — this is what stops a genuinely-unreviewed match
+//     from silently being read as "goalless" ------------------------------
+{
+  const reviewedMws = [1, 2, 3, 4];
+  const pendingMws = [5]; // MW5 (Aston Villa): goal-commentary evidence
+                          // unavailable at reconciliation time — left
+                          // unresolved on purpose, never fabricated.
+  for (const mw of reviewedMws) {
+    const match = realMatches.find(m => m.mw === mw);
+    assert.ok(match, `MW${mw} should exist in LEAGUE_MATCHES`);
+    assert.ok(Array.isArray(match.goals), `MW${mw} should have been reviewed (goals field present)`);
+  }
+  for (const mw of pendingMws) {
+    const match = realMatches.find(m => m.mw === mw);
+    assert.ok(match, `MW${mw} should exist in LEAGUE_MATCHES`);
+    assert.equal(match.goals, undefined, `MW${mw} goal evidence is not yet reliably reconciled — must stay unresolved (undefined), never fabricated or backfilled as empty`);
+  }
+  // Any match beyond the known reviewed/pending sets above needs this test
+  // updated deliberately, not silently assumed goalless or reviewed.
+  const knownMws = new Set([...reviewedMws, ...pendingMws]);
+  for (const match of realMatches) {
+    assert.ok(knownMws.has(match.mw), `MW${match.mw} is not accounted for in this test's reviewed/pending lists — update the lists before trusting this suite`);
+  }
 }
 
 // --- Genuinely goalless matches are represented as an empty array, not
