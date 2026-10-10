@@ -952,6 +952,16 @@ entirely from the existing engines.
 
 ## Historical Season Stats V2 scope — completed
 
+## Next-fixture reliability repair — 10 October 2026
+
+- [x] Root cause: the confirmed Manchester United fixture remained a timezone-less provisional `15:00` row. Browsers interpreted it in the visitor timezone; in Singapore it appeared to have passed seven hours early, so `getNextMatch()` advanced to Coventry City.
+- [x] Reconciled against Tottenham's official men's fixture list: Manchester United away, Premier League MD6, Old Trafford, 10 October at 17:30 BST / 11 October 00:30 SGT; Coventry corrected to Monday 19 October at 20:00 BST.
+- [x] Confirmed fixtures now carry an explicit UTC offset, scheduled status, verification marker and primary source. Provisional UK-local release dates use one Europe/London conversion rather than the visitor's timezone.
+- [x] Next-match selection rejects completed, postponed, cancelled, abandoned, eliminated, TBD, malformed, timezone-less verified and competition-contradictory rows. Verified fixtures take precedence over provisional fallback rows.
+- [x] Countdown consumes the exact selected fixture's validated `kickoffMs`; the Fixtures panel uses the same parser and renders in SGT.
+- [x] Added `test:fixtures` coverage for United-before-Coventry ordering, status and competition rejection, 00:30 SGT conversion, countdown identity, provisional fallback and post-kickoff rollover.
+- [x] All eight test suites, secret scan, production build and whitespace check passed. GitHub Pages and the Legion runtime embed must be verified after deployment before the repair is considered complete.
+
 The following scope is retained as history: delivered through V2.1–V2.5.
 There is no active next Season Stats packet; no V2.6 is authorized.
 

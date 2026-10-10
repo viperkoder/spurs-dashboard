@@ -32,8 +32,8 @@ export const PREMIER_LEAGUE_SCHEDULE = [
   {mw:3,  opponent:"Nottingham Forest",     venue:"A", date:"2026-09-05T15:00:00+01:00", provisional:false},
   {mw:4,  opponent:"Everton",               venue:"H", date:"2026-09-12T17:30:00+01:00", provisional:false},
   {mw:5,  opponent:"Aston Villa",           venue:"H", date:"2026-09-19T12:30:00+01:00", provisional:false, note:"Sat 19 Sep · 12:30 PM BST / 7:30 PM SGT", source:"https://www.tottenhamhotspur.com/the-stadium/local"},
-  {mw:6,  opponent:"Manchester United",     venue:"A", date:"2026-10-10T15:00:00", score:null, provisional:true},
-  {mw:7,  opponent:"Coventry City",         venue:"H", date:"2026-10-17T15:00:00", score:null, provisional:true},
+  {mw:6,  opponent:"Manchester United",     venue:"A", date:"2026-10-10T17:30:00+01:00", score:null, provisional:false, status:"scheduled", verified:true, source:"https://www.tottenhamhotspur.com/fixtures/men/", note:"Sat 10 Oct · 5:30 PM BST / Sun 11 Oct · 12:30 AM SGT · Old Trafford"},
+  {mw:7,  opponent:"Coventry City",         venue:"H", date:"2026-10-19T20:00:00+01:00", score:null, provisional:false, status:"scheduled", verified:true, source:"https://www.tottenhamhotspur.com/fixtures/men/", note:"Mon 19 Oct · 8:00 PM BST / Tue 20 Oct · 3:00 AM SGT"},
   {mw:8,  opponent:"Chelsea",               venue:"A", date:"2026-10-24T15:00:00", score:null, provisional:true},
   {mw:9,  opponent:"Crystal Palace",        venue:"H", date:"2026-10-31T15:00:00", score:null, provisional:true},
   {mw:10, opponent:"Leeds United",          venue:"A", date:"2026-11-07T15:00:00", score:null, provisional:true},
@@ -86,13 +86,45 @@ export const CUPS = [
   {comp:"Emirates FA Cup", round:"Final",             opponent:"TBD", venue:"N",   date:"2027-05-22T15:00:00", score:null, note:"Wembley Stadium"},
 ];
 
-// Combines all three competitions to find the true next match, whatever it is.
+const TERMINAL_STATUSES = new Set(["completed","postponed","cancelled","abandoned"]);
+const OFFSET_DATE = /(?:Z|[+-]\d{2}:\d{2})$/i;
+
+// The official release stores provisional UK-local kickoffs without an offset.
+// Convert those consistently instead of letting each visitor's browser timezone
+// reinterpret them. Confirmed TV-selected fixtures must carry an offset.
+export function fixtureKickoffMs(date){
+  if(typeof date!=="string" || !date.trim()) return NaN;
+  if(OFFSET_DATE.test(date)) return Date.parse(date);
+  const provisional=Date.parse(`${date}Z`);
+  if(!Number.isFinite(provisional)) return NaN;
+  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).formatToParts(new Date(provisional));
+  const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));
+  const represented=Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day),Number(p.hour),Number(p.minute),Number(p.second));
+  return provisional-(represented-provisional);
+}
+
+export function selectNextMatch(fixtures,now){
+  const nowMs=(now instanceof Date?now:new Date(now||Date.now())).getTime();
+  const eligible=(fixtures||[]).filter(f=>{
+    if(!f || f.eliminated || f.score!=null || f.opponent==="TBD" || TERMINAL_STATUSES.has(f.status)) return false;
+    if(f.expectedCompetition && f.competition!==f.expectedCompetition) return false;
+    const kickoffMs=fixtureKickoffMs(f.date);
+    return Number.isFinite(kickoffMs) && kickoffMs>nowMs && (!f.verified || OFFSET_DATE.test(f.date));
+  }).map(f=>({...f,kickoffMs:fixtureKickoffMs(f.date)}));
+  const verified=eligible.filter(f=>f.verified).sort((a,b)=>a.kickoffMs-b.kickoffMs);
+  const fallback=eligible.filter(f=>!f.verified).sort((a,b)=>a.kickoffMs-b.kickoffMs);
+  return verified[0]||fallback[0]||null;
+}
+
+export function countdownTargetMs(match){return match?match.kickoffMs:NaN;}
+
+// Combines all supported competitions. Verified, explicitly timestamped rows
+// take precedence; provisional schedule rows are only a safe fallback.
 export function getNextMatch(now){
-  now = now || new Date();
   const all = [
-    ...PRESEASON.map(f=>({...f, comp:"Pre-Season Friendly"})),
-    ...PREMIER_LEAGUE.map(f=>({...f, comp:`Premier League · MD${f.mw}`})),
-    ...CUPS.map(f=>({...f, comp:`${f.comp} — ${f.round}`})),
-  ].sort((a,b)=>new Date(a.date)-new Date(b.date));
-  return all.find(f => !f.eliminated && new Date(f.date) > now && f.score == null) || null;
+    ...PRESEASON.map(f=>({...f, comp:"Pre-Season Friendly",competition:"Pre-Season Friendly",expectedCompetition:"Pre-Season Friendly"})),
+    ...PREMIER_LEAGUE.map(f=>({...f, comp:`Premier League · MD${f.mw}`,competition:"Premier League",expectedCompetition:"Premier League"})),
+    ...CUPS.map(f=>({...f, comp:`${f.comp} — ${f.round}`,competition:f.comp,expectedCompetition:f.comp})),
+  ];
+  return selectNextMatch(all,now);
 }

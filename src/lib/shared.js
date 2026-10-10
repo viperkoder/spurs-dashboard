@@ -18,7 +18,7 @@ export function isSpursRelevant(title){
 // Shared small components used across every panel.
 // Edit this file alone to change Chip, widget headers, or bar styling globally.
 import { P } from '../data/theme.js';
-import { getNextMatch } from '../data/fixtures.js';
+import { getNextMatch, countdownTargetMs } from '../data/fixtures.js';
 import { NEWS, RSS_SOURCES, CORS_PROXIES } from '../data/news.js';
 
 // ── Shared live-news hook ────────────────────────────────────────────────
@@ -263,7 +263,7 @@ export function Clock(){
 // or competitive) — never hardcode a specific match/date here again.
 export function Countdown(){
   const match = getNextMatch();
-  const target = match ? new Date(match.date) : null;
+  const target = match ? new Date(countdownTargetMs(match)) : null;
   const [diff,setDiff]=useState(target?Math.max(0,target-new Date()):0);
   useEffect(()=>{
     if(!target) return;

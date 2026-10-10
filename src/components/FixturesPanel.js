@@ -2,7 +2,7 @@
 // Edit ONLY this file to change anything on the Fixtures tab's layout.
 // Edit src/data/fixtures.js to change the actual match data.
 import { P } from '../data/theme.js';
-import { PRESEASON, PREMIER_LEAGUE, CUPS } from '../data/fixtures.js';
+import { PRESEASON, PREMIER_LEAGUE, CUPS, fixtureKickoffMs } from '../data/fixtures.js';
 import { WH, Chip, MONTHS_LONG } from '../lib/shared.js';
 
 function monthKey(dateStr){
@@ -13,9 +13,9 @@ function monthKey(dateStr){
 function FixtureRow({f, label}){
   const played = f.score !== null && f.score !== undefined;
   const venueLabel = f.venue==="H"?"(H)":f.venue==="A"?"(A)":"(N)";
-  const d = new Date(f.date);
-  const dateLabel = d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
-  const timeLabel = d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const d = new Date(fixtureKickoffMs(f.date));
+  const dateLabel = d.toLocaleDateString('en-GB',{timeZone:'Asia/Singapore',weekday:'short',day:'numeric',month:'short'});
+  const timeLabel = d.toLocaleTimeString('en-GB',{timeZone:'Asia/Singapore',hour:'2-digit',minute:'2-digit'})+' SGT';
   return (
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",background:P.bgCard,borderRadius:5,border:`1px solid ${P.border}`,borderLeft:`3px solid ${played?P.green:P.muted}`,gap:10}}>
       <div style={{flex:1,minWidth:0}}>

@@ -8,6 +8,7 @@
     "check-secrets": "node scripts/check-secrets.js",
     "update:table": "node automation/league-table-update.js",
     "test:matchday": "node scripts/test-matchday.js",
+    "test:fixtures": "node scripts/test-fixtures.js",
     "test:onpitch": "node scripts/test-onpitch.js",
     "test:matchevents": "node scripts/test-match-events.js",
     "test:defensivecombinations": "node scripts/test-defensive-combinations.js",
