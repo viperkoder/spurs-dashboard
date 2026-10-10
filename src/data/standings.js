@@ -12,15 +12,15 @@ export const STANDINGS = [
   {pos:9,team:"Ipswich Town",w:3,d:0,l:3,gf:9,ga:12,gd:-3,pts:9},
   {pos:10,team:"Hull City",w:2,d:2,l:1,gf:6,ga:4,gd:2,pts:8},
   {pos:11,team:"Newcastle United",w:2,d:2,l:1,gf:9,ga:9,gd:0,pts:8},
-  {pos:12,team:"Manchester United",w:1,d:2,l:2,gf:8,ga:8,gd:0,pts:5},
+  {pos:12,team:"Manchester United",w:1,d:3,l:2,gf:9,ga:9,gd:0,pts:6},
   {pos:13,team:"Nottingham Forest",w:1,d:2,l:2,gf:4,ga:5,gd:-1,pts:5},
   {pos:14,team:"Aston Villa",w:1,d:2,l:3,gf:6,ga:11,gd:-5,pts:5},
   {pos:15,team:"Crystal Palace",w:1,d:1,l:3,gf:6,ga:11,gd:-5,pts:4},
   {pos:16,team:"Sunderland",w:1,d:1,l:4,gf:6,ga:12,gd:-6,pts:4},
   {pos:17,team:"AFC Bournemouth",w:0,d:3,l:3,gf:7,ga:13,gd:-6,pts:3},
-  {pos:18,team:"Coventry City",w:1,d:0,l:4,gf:1,ga:10,gd:-9,pts:3},
-  {pos:19,team:"Fulham",w:0,d:2,l:4,gf:6,ga:10,gd:-4,pts:2},
-  {pos:20,team:"Tottenham Hotspur",w:0,d:2,l:3,gf:2,ga:8,gd:-6,pts:2,isSpurs:true},
+  {pos:18,team:"Tottenham Hotspur",w:0,d:3,l:3,gf:3,ga:9,gd:-6,pts:3,isSpurs:true},
+  {pos:19,team:"Coventry City",w:1,d:0,l:4,gf:1,ga:10,gd:-9,pts:3},
+  {pos:20,team:"Fulham",w:0,d:2,l:4,gf:6,ga:10,gd:-4,pts:2},
 ];
 
 // Latest first. Premier League results only — this sits directly under the
