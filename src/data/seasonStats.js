@@ -732,30 +732,7 @@ export const LEAGUE_MATCHES = [
     },
     "sourceEventId": "401878773",
     "sources": [
-      "https://www.espn.com/soccer/match/_/gameId/401878773",
-      "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
-    ],
-    "goals": [
-      {
-        "team": "opponent",
-        "scorer": "Bryan Mbeumo",
-        "assist": "Matheus Cunha",
-        "minute": 73,
-        "stoppage": null,
-        "period": "H2",
-        "order": null,
-        "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
-      },
-      {
-        "team": "spurs",
-        "scorer": "Dominic Solanke",
-        "assist": "Sandro Tonali",
-        "minute": 90,
-        "stoppage": 2,
-        "period": "H2",
-        "order": null,
-        "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
-      }
+      "https://www.espn.com/soccer/match/_/gameId/401878773"
     ],
     "appearances": [
       {
@@ -846,8 +823,7 @@ export const LEAGUE_MATCHES = [
         "player": "Rodrigo Bentancur",
         "started": false,
         "on": 66,
-        "off": 78,
-        "dismissed": true
+        "off": 90
       },
       {
         "player": "Mateus Fernandes",
@@ -861,6 +837,28 @@ export const LEAGUE_MATCHES = [
       "Tosin Adarabioyo",
       "Martin Dúbravka",
       "Mathys Tel"
+    ],
+    "goals": [
+      {
+        "team": "opponent",
+        "scorer": "Bryan Mbeumo",
+        "assist": "Matheus Cunha",
+        "minute": 73,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Dominic Solanke",
+        "assist": "Sandro Tonali",
+        "minute": 90,
+        "stoppage": 2,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
+      }
     ]
   }
 ];
