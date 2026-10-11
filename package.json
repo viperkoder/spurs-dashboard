@@ -15,6 +15,7 @@
     "test:midfieldinfluence": "node scripts/test-midfield-influence.js",
     "test:attackingcombinations": "node scripts/test-attacking-combinations.js",
     "test:managerrecord": "node scripts/test-manager-record.js"
+    ,"test:scorerranking": "node scripts/test-scorer-ranking.js"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"

@@ -27,11 +27,10 @@ export const STANDINGS = [
 // PL table, so it must stay league-only. Cup fixtures (e.g. the 15 Sep
 // Carabao Cup match at Liverpool) belong on the Fixtures panel, not here; a
 // cup result was shown here in error previously — fixed 2026-09-21, see
-// project docs. Scorer left blank where goal evidence isn't yet reliably
-// reconciled (MW5 vs Aston Villa) rather than guessed — see seasonStats.js.
+// project docs. Scorers are source-backed in seasonStats.js.
 export const LAST5 = [
   {date:"10 Oct",home:"MUN",away:"TOT",score:"1-1",r:"D",scorer:"Solanke 90+2"},
-  {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:""},
+  {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:"Gallagher 86; van Hecke 90+8"},
   {date:"12 Sep",home:"TOT",away:"EVE",score:"0-0",r:"D",scorer:""},
   {date:"5 Sep",home:"NFO",away:"TOT",score:"0-0",r:"D",scorer:""},
   {date:"29 Aug",home:"TOT",away:"NEW",score:"0-2",r:"L",scorer:""},
@@ -44,9 +43,20 @@ export const SCORERS = [
   {name:"Ben Davies",g:1,a:0,apps:1},
   {name:"Conor Gallagher",g:1,a:0,apps:3},
   {name:"Dominic Solanke",g:2,a:0,apps:6},
+  {name:"Jan Paul van Hecke",g:1,a:0,apps:6},
   {name:"Kevin Danso",g:1,a:0,apps:1},
   {name:"Mateus Fernandes",g:0,a:2,apps:6},
   {name:"Archie Gray",g:0,a:1,apps:5},
   {name:"Rodrigo Bentancur",g:0,a:1,apps:6},
   {name:"Sandro Tonali",g:0,a:1,apps:4},
+  {name:"Mohammed Kudus",g:0,a:1,apps:4},
+  {name:"Andy Robertson",g:0,a:1,apps:5},
 ];
+
+// Goals, then assists, then source order. The final index comparison makes
+// ties deterministic without changing the editorial order of equal records.
+export function rankScorers(players=SCORERS){
+  return players.map((player,index)=>({player,index}))
+    .sort((a,b)=>(b.player.g-a.player.g)||(b.player.a-a.player.a)||(a.index-b.index))
+    .map(({player})=>player);
+}

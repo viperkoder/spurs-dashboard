@@ -7,7 +7,9 @@
 // Minute convention: regulation minutes only. A starter begins at 0; a player
 // entering in the displayed 68th minute begins at 68; players still on the
 // pitch at full time end at 90. Therefore every no-red-card match reconciles to
-// 11 * 90 = 990 team-player minutes, without counting stoppage time twice.
+// 11 * 90 = 990 team-player minutes, without counting stoppage time twice. A
+// dismissed player's interval ends at the dismissal minute and carries
+// `dismissed: true`, so the team-player total is reduced for the ten-man spell.
 //
 // Optional `goals` field (Season Stats V2.2 foundation, added 18 September
 // 2026): a source-backed list of goal events for the match — see
@@ -560,7 +562,60 @@ export const LEAGUE_MATCHES = [
     },
     "sourceEventId": "401879269",
     "sources": [
-      "https://www.espn.com/soccer/match/_/gameId/401879269"
+      "https://www.espn.com/soccer/match/_/gameId/401879269",
+      "https://www.tottenhamhotspur.com/news/1091022/late-goals-not-enough-against-villa"
+    ],
+    "goals": [
+      {
+        "team": "opponent",
+        "scorer": "Gianluca Manzambi",
+        "assist": null,
+        "minute": 45,
+        "stoppage": 4,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1091022/late-goals-not-enough-against-villa"
+      },
+      {
+        "team": "opponent",
+        "scorer": "Nicolas Jackson",
+        "assist": null,
+        "minute": 67,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1091022/late-goals-not-enough-against-villa"
+      },
+      {
+        "team": "opponent",
+        "scorer": "Emiliano Buendía",
+        "assist": null,
+        "minute": 79,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1091022/late-goals-not-enough-against-villa"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Conor Gallagher",
+        "assist": "Mohammed Kudus",
+        "minute": 86,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1091022/late-goals-not-enough-against-villa"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Jan Paul van Hecke",
+        "assist": "Andy Robertson",
+        "minute": 90,
+        "stoppage": 8,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1091022/late-goals-not-enough-against-villa"
+      }
     ],
     "appearances": [
       {
@@ -677,7 +732,30 @@ export const LEAGUE_MATCHES = [
     },
     "sourceEventId": "401878773",
     "sources": [
-      "https://www.espn.com/soccer/match/_/gameId/401878773"
+      "https://www.espn.com/soccer/match/_/gameId/401878773",
+      "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
+    ],
+    "goals": [
+      {
+        "team": "opponent",
+        "scorer": "Bryan Mbeumo",
+        "assist": "Matheus Cunha",
+        "minute": 73,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Dominic Solanke",
+        "assist": "Sandro Tonali",
+        "minute": 90,
+        "stoppage": 2,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
+      }
     ],
     "appearances": [
       {
@@ -768,7 +846,8 @@ export const LEAGUE_MATCHES = [
         "player": "Rodrigo Bentancur",
         "started": false,
         "on": 66,
-        "off": 90
+        "off": 78,
+        "dismissed": true
       },
       {
         "player": "Mateus Fernandes",

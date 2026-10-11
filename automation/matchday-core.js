@@ -335,9 +335,15 @@ function validateLeagueMatch(match) {
       throw new Error(`Invalid minute range for ${p.player}`);
     }
     if (p.started !== (p.on === 0)) throw new Error(`Start/minute mismatch for ${p.player}`);
+    if (p.dismissed !== undefined && p.dismissed !== true) throw new Error(`Invalid dismissed flag for ${p.player}`);
+    if (p.dismissed === true && p.off >= 90) throw new Error(`Dismissed player ${p.player} must leave before full time`);
   }
   const totalMinutes = match.appearances.reduce((sum, p) => sum + p.off - p.on, 0);
-  if (totalMinutes !== 990) throw new Error(`Premier League player minutes total ${totalMinutes}, expected 990`);
+  const dismissalReduction = match.appearances
+    .filter(p => p.dismissed === true)
+    .reduce((sum, p) => sum + (90 - p.off), 0);
+  const expectedMinutes = 990 - dismissalReduction;
+  if (totalMinutes !== expectedMinutes) throw new Error(`Premier League player minutes total ${totalMinutes}, expected ${expectedMinutes}`);
   if ((match.unused || []).some(name => names.has(name))) throw new Error('Unused substitute also counted as an appearance');
   return true;
 }

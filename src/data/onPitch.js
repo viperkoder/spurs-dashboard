@@ -15,17 +15,14 @@
 // already stores each player's on-pitch interval directly as regulation
 // minutes `on`/`off` — starters begin at 0, a substitute's `on` is their
 // entry minute, and `off` is the minute a player left (or 90 if they played
-// to full time). That is the existing, audited evidence; this module does
+// to full time). A dismissal is represented by that early `off` boundary and
+// `dismissed: true`, leaving a shorter active-player roster thereafter. That
+// is the existing, audited evidence; this module does
 // not reconstruct intervals from raw substitution events because the source
 // data already is the interval, not a stream of events to replay.
 //
-// Known data gap (identified, not fabricated): LEAGUE_MATCHES currently
-// carries no goal-event (minute/scorer) records — Spurs have not scored a
-// league goal this season (GF 0) and opponent goal minutes are not yet
-// captured anywhere in the repo (see docs/dashboard-maintenance-checklist.md,
-// "Next Season Stats packet"). The goal-attribution functions below accept a
-// `goal` object as an explicit input so later phases can supply real,
-// source-backed goal events once that data exists; this module invents none.
+// Goal-attribution functions below consume only the source-backed goal events
+// stored on a match; this module invents none.
 //
 // Same-minute honesty (goal vs. substitution): minute-only data cannot show
 // whether a goal happened before or after a substitution reported in the
@@ -96,6 +93,8 @@ export function validateOnPitchData(match, options = {}) {
     if (typeof appearance.started !== 'boolean') issues.push(`${label}: started flag is missing or not boolean`);
     if (appearance.started === true && appearance.on !== 0) issues.push(`${label}: started but on minute is not 0`);
     if (appearance.started === false && appearance.on === 0) issues.push(`${label}: substitute has on minute 0`);
+    if (appearance.dismissed !== undefined && appearance.dismissed !== true) issues.push(`${label}: dismissed flag must be true when present`);
+    if (appearance.dismissed === true && appearance.off >= duration) issues.push(`${label}: dismissed player must leave before full time`);
     if (appearance.started) startersCount += 1;
   });
 

@@ -346,8 +346,20 @@ for (const match of realMatches) {
   const { valid, issues } = onPitch.validateOnPitchData(match);
   assert.ok(valid, `MW${match.mw} on-pitch data should be structurally valid: ${issues.join('; ')}`);
   for (const minute of [0, 30, 60, 90]) {
-    assert.equal(onPitch.getOnPitchAt(match, minute).onPitch.length, 11, `MW${match.mw} minute ${minute} should have 11 players on pitch`);
+    const expected = match.mw === 6 && minute >= 78 ? 10 : 11;
+    assert.equal(onPitch.getOnPitchAt(match, minute).onPitch.length, expected, `MW${match.mw} minute ${minute} should have ${expected} players on pitch`);
   }
+}
+
+// Real MW6 dismissal: Bentancur leaves at 78 without a replacement, and
+// the sourced 90+2 equaliser belongs to the ten-man interval.
+{
+  const match = realMatches.find(candidate=>candidate.mw===6);
+  assert.equal(onPitch.getOnPitchAt(match,77).onPitch.length,11);
+  assert.equal(onPitch.getOnPitchAt(match,78).onPitch.length,10);
+  assert.ok(!onPitch.getOnPitchAt(match,78).onPitch.includes('Rodrigo Bentancur'));
+  const equaliser = match.goals.find(goal=>goal.team==='spurs');
+  assert.equal(onPitch.getPlayersOnPitchAtGoal(match,equaliser).onPitch.length,10);
 }
 
 console.log('on-pitch tests passed');

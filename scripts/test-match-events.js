@@ -34,12 +34,8 @@ for (const match of realMatches) {
 //     structurally valid — this is what stops a genuinely-unreviewed match
 //     from silently being read as "goalless" ------------------------------
 {
-  const reviewedMws = [1, 2, 3, 4];
-  const pendingMws = [5, 6]; // MW5 (Aston Villa): goal-commentary evidence
-                             // unavailable at reconciliation time. MW6
-                             // (Manchester United): the 78' dismissal needs
-                             // dismissal-aware intervals before its 90+2
-                             // goal can be attributed to an on-pitch unit.
+  const reviewedMws = [1, 2, 3, 4, 5, 6];
+  const pendingMws = [];
   for (const mw of reviewedMws) {
     const match = realMatches.find(m => m.mw === mw);
     assert.ok(match, `MW${mw} should exist in LEAGUE_MATCHES`);
@@ -56,6 +52,19 @@ for (const match of realMatches) {
   for (const match of realMatches) {
     assert.ok(knownMws.has(match.mw), `MW${match.mw} is not accounted for in this test's reviewed/pending lists — update the lists before trusting this suite`);
   }
+}
+
+// MW6 red-card ordering is fully source-backed: Mbeumo scored while Spurs
+// had eleven; Solanke equalised after Bentancur's 78th-minute dismissal.
+{
+  const match = realMatches.find(m=>m.mw===6);
+  const mwu = match.goals.find(goal=>goal.team==='opponent');
+  const equaliser = match.goals.find(goal=>goal.team==='spurs');
+  assert.equal(onPitch.getPlayersOnPitchAtGoal(match,mwu).onPitch.length,11);
+  const tenMen = onPitch.getPlayersOnPitchAtGoal(match,equaliser).onPitch;
+  assert.equal(tenMen.length,10);
+  assert.ok(!tenMen.includes('Rodrigo Bentancur'));
+  assert.ok(tenMen.includes('Dominic Solanke'));
 }
 
 // --- Genuinely goalless matches are represented as an empty array, not

@@ -34,7 +34,9 @@ const seasonContext = { Map };
 vm.runInNewContext(`${seasonStatsSource.replace(/^export\s+/gm, '')}\nthis.__season={LEAGUE_MATCHES,getLeagueSummary,getPlayerUsage,withLeagueResults};`, seasonContext);
 const currentMatches = seasonContext.__season.LEAGUE_MATCHES;
 currentMatches.forEach(core.validateLeagueMatch);
-assert.equal(seasonContext.__season.getPlayerUsage(currentMatches).reduce((sum,p)=>sum+p.minutes,0),currentMatches.length*990);
+const expectedTeamPlayerMinutes = currentMatches.reduce((sum,match)=>sum+990-match.appearances
+  .filter(p=>p.dismissed===true).reduce((gap,p)=>gap+90-p.off,0),0);
+assert.equal(seasonContext.__season.getPlayerUsage(currentMatches).reduce((sum,p)=>sum+p.minutes,0),expectedTeamPlayerMinutes);
 const liveUsage = seasonContext.__season.getPlayerUsage(currentMatches);
 liveUsage.forEach(player => {
   assert.equal(player.apps, player.starts + player.subApps);
@@ -73,6 +75,14 @@ const synthetic = {
   appearances:[...matches[2].appearances.map(p => ({...p}))], unused:[...matches[2].unused],
 };
 core.validateLeagueMatch(synthetic);
+
+const dismissalSynthetic = {
+  ...synthetic,
+  mw: 38,
+  appearances: synthetic.appearances.map((p,index)=>index===0?{...p,off:78,dismissed:true}:{...p}),
+};
+assert.doesNotThrow(()=>core.validateLeagueMatch(dismissalSynthetic));
+assert.throws(()=>core.validateLeagueMatch({...dismissalSynthetic,appearances:dismissalSynthetic.appearances.map(p=>p.dismissed?{...p,off:90}:p)}),/Dismissed player/);
 const rolled = seasonContext.__season.getPlayerUsage([...matches, synthetic]);
 const rolledKinsky = rolled.find(player => player.player === 'Antonín Kinsky');
 assert.deepEqual(JSON.parse(JSON.stringify(rolledKinsky)), { player: 'Antonín Kinsky', apps: 4, starts: 4, subApps: 0, minutes: 360, w: 1, d: 1, l: 2 });

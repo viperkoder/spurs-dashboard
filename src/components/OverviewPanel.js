@@ -1,7 +1,7 @@
 // Overview tab — season stats, EPL table, last 5 results, top scorers.
 // Edit ONLY this file to change anything on the Overview tab.
 import { P } from '../data/theme.js';
-import { STANDINGS, LAST5, SCORERS } from '../data/standings.js';
+import { STANDINGS, LAST5, SCORERS, rankScorers } from '../data/standings.js';
 import { ANON_BRIEFS } from '../data/transfers.js';
 import { WH, Chip } from '../lib/shared.js';
 import { RadialGauge, CompareBar, InlineBar } from '../lib/charts.js';
@@ -25,7 +25,8 @@ export function OverviewPanel({liveNews}){
   const leagueAvgGF = STANDINGS.reduce((s,r)=>s+r.gf,0)/STANDINGS.length;
   const leagueAvgGA = STANDINGS.reduce((s,r)=>s+r.ga,0)/STANDINGS.length;
   const played = spurs ? spurs.w+spurs.d+spurs.l : 0;
-  const topScorerGA = Math.max(...SCORERS.map(s=>s.g+s.a), 1);
+  const rankedScorers = rankScorers(SCORERS);
+  const topScorerGA = Math.max(...rankedScorers.map(s=>s.g+s.a), 1);
   // Same live-fetched, already-filtered source the News Centre tab uses —
   // fetched once in App.js and passed down, so this always agrees with the
   // News Centre tab and doesn't re-fetch every time you switch to this tab.
@@ -172,7 +173,7 @@ export function OverviewPanel({liveNews}){
           <WH lg>Top Scorers 2026/27</WH>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {SCORERS.length===0 && <div style={{padding:"18px",background:P.bgCard,borderRadius:6,border:`1px solid ${P.border}`,color:P.muted,fontSize:12}}>Competitive scorer totals begin after Matchday 1.</div>}
-            {SCORERS.map((p,i)=>(
+            {rankedScorers.map((p,i)=>(
               <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 12px",background:P.bgCard,borderRadius:5,border:`1px solid ${P.border}`}}>
                 <div style={{width:26,height:26,borderRadius:4,background:i===0?P.gold:i===1?"#C0C0C0":i===2?"#CD7F32":P.dim,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,color:i<3?P.bg:P.muted,flexShrink:0}}>{i+1}</div>
                 <div style={{flex:1}}>
