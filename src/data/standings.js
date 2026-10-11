@@ -1,15 +1,15 @@
 // 2026/27 Premier League. The complete table is refreshed from structured
 // standings data as results arrive across each multi-day matchweek.
 export const STANDINGS = [
-  {pos:1,team:"Manchester City",w:5,d:0,l:0,gf:13,ga:5,gd:8,pts:15},
+  {pos:1,team:"Manchester City",w:6,d:0,l:0,gf:16,ga:5,gd:11,pts:18},
   {pos:2,team:"Arsenal",w:5,d:0,l:1,gf:10,ga:5,gd:5,pts:15},
   {pos:3,team:"Brighton & Hove Albion",w:4,d:1,l:1,gf:18,ga:5,gd:13,pts:13},
   {pos:4,team:"Brentford",w:2,d:4,l:0,gf:12,ga:6,gd:6,pts:10},
   {pos:5,team:"Everton",w:2,d:4,l:0,gf:8,ga:5,gd:3,pts:10},
   {pos:6,team:"Chelsea",w:3,d:1,l:2,gf:15,ga:13,gd:2,pts:10},
   {pos:7,team:"Leeds United",w:2,d:3,l:1,gf:8,ga:5,gd:3,pts:9},
-  {pos:8,team:"Liverpool",w:2,d:3,l:0,gf:7,ga:4,gd:3,pts:9},
-  {pos:9,team:"Hull City",w:2,d:3,l:1,gf:8,ga:6,gd:2,pts:9},
+  {pos:8,team:"Hull City",w:2,d:3,l:1,gf:8,ga:6,gd:2,pts:9},
+  {pos:9,team:"Liverpool",w:2,d:3,l:1,gf:7,ga:7,gd:0,pts:9},
   {pos:10,team:"Ipswich Town",w:3,d:0,l:3,gf:9,ga:12,gd:-3,pts:9},
   {pos:11,team:"Newcastle United",w:2,d:2,l:1,gf:9,ga:9,gd:0,pts:8},
   {pos:12,team:"Crystal Palace",w:2,d:1,l:3,gf:9,ga:12,gd:-3,pts:7},
