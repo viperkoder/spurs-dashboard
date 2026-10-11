@@ -64,7 +64,7 @@ export const RDZ_SEASONS = [
   },
   {
     season: "2026/27", club: "Tottenham Hotspur", league: "Premier League",
-    played: 5, w: 0, d: 2, l: 3, status: "ongoing",
+    played: 6, w: 0, d: 3, l: 3, status: "ongoing",
     note: "Current season — updates as this dashboard's Season Stats reconciles each completed match.",
     source: null,
   },

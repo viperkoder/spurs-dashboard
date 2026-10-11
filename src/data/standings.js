@@ -30,11 +30,11 @@ export const STANDINGS = [
 // project docs. Scorer left blank where goal evidence isn't yet reliably
 // reconciled (MW5 vs Aston Villa) rather than guessed — see seasonStats.js.
 export const LAST5 = [
+  {date:"10 Oct",home:"MUN",away:"TOT",score:"1-1",r:"D",scorer:"Solanke 90+2"},
   {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:""},
   {date:"12 Sep",home:"TOT",away:"EVE",score:"0-0",r:"D",scorer:""},
   {date:"5 Sep",home:"NFO",away:"TOT",score:"0-0",r:"D",scorer:""},
   {date:"29 Aug",home:"TOT",away:"NEW",score:"0-2",r:"L",scorer:""},
-  {date:"22 Aug",home:"BRE",away:"TOT",score:"3-0",r:"L",scorer:""},
 ];
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.
@@ -43,9 +43,10 @@ export const SCORERS = [
   {name:"Sávio",g:1,a:1,apps:4},
   {name:"Ben Davies",g:1,a:0,apps:1},
   {name:"Conor Gallagher",g:1,a:0,apps:3},
-  {name:"Dominic Solanke",g:1,a:0,apps:6},
+  {name:"Dominic Solanke",g:2,a:0,apps:6},
   {name:"Kevin Danso",g:1,a:0,apps:1},
   {name:"Mateus Fernandes",g:0,a:2,apps:6},
   {name:"Archie Gray",g:0,a:1,apps:5},
   {name:"Rodrigo Bentancur",g:0,a:1,apps:6},
+  {name:"Sandro Tonali",g:0,a:1,apps:4},
 ];

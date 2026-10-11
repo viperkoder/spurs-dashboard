@@ -134,16 +134,16 @@ function makeSub(player, on, off = 90) {
 }
 
 // --- 7. Identical combinations aggregate independent of player ordering ----
-// (real data: Bentancur+Tonali recur across all five matches to date; also
+// (real data: Bentancur+Tonali recur across all six matches to date; also
 // proven synthetically with reversed appearance order. MW5's goals are
 // unresolved — see test-match-events.js — so goalsConceded is unaffected
-// by MW5 even though minutes/matches include it.)
+// by MW5 or MW6 even though minutes/matches include them.)
 {
   const { units } = mod.getMidfieldUnitStats(realMatches);
   const bentancurTonali = units.find(u => u.players.length === 2 && ['Rodrigo Bentancur', 'Sandro Tonali'].every(p => u.players.includes(p)));
   assert.ok(bentancurTonali, 'Bentancur+Tonali unit must exist and merge across matches regardless of player order within each spell');
-  assert.equal(bentancurTonali.matches, 5);
-  assert.equal(bentancurTonali.minutes, 274);
+  assert.equal(bentancurTonali.matches, 6);
+  assert.equal(bentancurTonali.minutes, 290);
   assert.equal(bentancurTonali.goalsConceded, 2);
   assert.equal(bentancurTonali.smallSample, false, 'Bentancur+Tonali has now crossed both sample floors (270 minutes, 3 matches) — first midfield unit to do so');
 
@@ -221,7 +221,7 @@ function makeSub(player, on, off = 90) {
   assert.equal(unitMinutes, realMatches.length * 90, 'midfield-unit minutes must partition every match\'s full 90 minutes exactly once');
   const unitGC = units.reduce((sum, u) => sum + u.goalsConceded, 0);
   const totalRealOpponentGoals = realMatches.reduce((sum, m) => sum + (m.goals || []).filter(g => g.team === 'opponent').length, 0);
-  assert.equal(totalRealOpponentGoals, 5, 'all 5 reviewed opponent goals are from MW1-4; MW5 (unresolved) contributes 0, not the 3 Villa actually scored');
+  assert.equal(totalRealOpponentGoals, 5, 'all 5 reviewed opponent goals are from MW1-4; pending MW5/MW6 goal events contribute 0 rather than fabricated attribution');
   assert.equal(unitGC, totalRealOpponentGoals, 'every opponent goal must be attributed to exactly one midfield unit');
   assert.equal(units.filter(u => u.smallSample === false).length, 1, 'exactly one midfield unit (Bentancur+Tonali) has crossed both sample floors so far');
 
@@ -232,7 +232,7 @@ function makeSub(player, on, off = 90) {
   const combinedGC = combinations.reduce((sum, c) => sum + c.goalsConceded, 0);
   assert.equal(combinedGC, totalRealOpponentGoals, 'every opponent goal must be attributed to exactly one midfield+defence combination');
   assert.ok(combinations.every(c => c.smallSample === true), 'every midfield+defence combination is still small-sample (no combined row has crossed both floors yet)');
-  assert.equal(combinations.length, 14, 'five matches, each split into merged segments by independent defensive/midfield substitutions, now yield fourteen distinct combined rows');
+  assert.equal(combinations.length, 18, 'six matches, each split into merged segments by independent defensive/midfield substitutions, now yield eighteen distinct combined rows');
 }
 
 console.log('midfield-influence tests passed');

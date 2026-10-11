@@ -35,9 +35,11 @@ for (const match of realMatches) {
 //     from silently being read as "goalless" ------------------------------
 {
   const reviewedMws = [1, 2, 3, 4];
-  const pendingMws = [5]; // MW5 (Aston Villa): goal-commentary evidence
-                          // unavailable at reconciliation time — left
-                          // unresolved on purpose, never fabricated.
+  const pendingMws = [5, 6]; // MW5 (Aston Villa): goal-commentary evidence
+                             // unavailable at reconciliation time. MW6
+                             // (Manchester United): the 78' dismissal needs
+                             // dismissal-aware intervals before its 90+2
+                             // goal can be attributed to an on-pitch unit.
   for (const mw of reviewedMws) {
     const match = realMatches.find(m => m.mw === mw);
     assert.ok(match, `MW${mw} should exist in LEAGUE_MATCHES`);

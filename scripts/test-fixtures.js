@@ -25,6 +25,6 @@ assert.equal(selectNextMatch([{...united,competition:'Carabao Cup'},coventry],no
 assert.equal(selectNextMatch([{...united,date:'2026-10-10T17:30:00'},coventry],now).opponent,'Coventry City','verified fixture without timezone must be rejected');
 assert.equal(selectNextMatch([{opponent:'Chelsea',date:'2026-10-24T15:00:00',competition:'Premier League',expectedCompetition:'Premier League',score:null,provisional:true}],now).opponent,'Chelsea','provisional official schedule remains a fallback');
 assert.equal(fixtureKickoffMs('2026-10-24T15:00:00'),Date.parse('2026-10-24T14:00:00Z'),'UK-local provisional time must parse consistently during BST');
-assert.equal(getNextMatch(now).opponent,'Manchester United');
+assert.equal(getNextMatch(now).opponent,'Coventry City','a populated final result must roll the live schedule to Coventry even when the test clock precedes kickoff');
 assert.equal(getNextMatch(new Date('2026-10-10T16:31:00Z')).opponent,'Coventry City','live schedule must roll over after kickoff');
 console.log('PASS: verified next-fixture selection, status/competition validation, SGT conversion, countdown identity and rollover.');

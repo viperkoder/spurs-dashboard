@@ -954,6 +954,15 @@ entirely from the existing engines.
 
 ## Next-fixture reliability repair — 10 October 2026
 
+## Manchester United post-match reconciliation — 11 October 2026
+
+- [x] Confirmed Manchester United 1-1 Tottenham from Tottenham's official match report and ESPN event `401878773`: Bryan Mbeumo 73; Dominic Solanke 90+2 (Sandro Tonali assist); Rodrigo Bentancur sent off 78.
+- [x] Confirmed the automated deterministic update had already added MW6 player usage, the 1-1 fixture result and the refreshed 20-club table to GitHub `main`.
+- [x] Restored the missing Manchester United draw to `LAST5`, removed the sixth/oldest row, and reconciled Solanke's goal and Tonali's assist in the existing competitive scorer materialisation.
+- [x] Updated the current Roberto De Zerbi league row to P6 W0 D3 L3, three points.
+- [x] Preserved the existing MW6 appearance evidence exactly as ingested. Bentancur's dismissal exposes the documented red-card interval limitation: the current 990-minute validator cannot shorten his appearance to 78 without a separate, tested dismissal-aware data-model change. No combination goal event was added, avoiding false attribution of Solanke's 90+2 goal to an eleven-player unit.
+- [ ] Matchday automation still gates `LAST5`, `SCORERS` and squad materialisations behind optional AI reconciliation even after deterministic league evidence succeeds. This match was reconciled manually; changing that workflow is a separate reliability repair, not required to correct the live match data.
+
 - [x] Root cause: the confirmed Manchester United fixture remained a timezone-less provisional `15:00` row. Browsers interpreted it in the visitor timezone; in Singapore it appeared to have passed seven hours early, so `getNextMatch()` advanced to Coventry City.
 - [x] Reconciled against Tottenham's official men's fixture list: Manchester United away, Premier League MD6, Old Trafford, 10 October at 17:30 BST / 11 October 00:30 SGT; Coventry corrected to Monday 19 October at 20:00 BST.
 - [x] Confirmed fixtures now carry an explicit UTC offset, scheduled status, verification marker and primary source. Provisional UK-local release dates use one Europe/London conversion rather than the visitor's timezone.

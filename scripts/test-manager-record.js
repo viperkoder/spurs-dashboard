@@ -36,11 +36,11 @@ assert.equal(shakhtar.status, 'partial', 'the 2021-22 Ukrainian Premier League s
 assert.equal(shakhtar.points, 47);
 
 // --- Current Tottenham row must match this dashboard's own reconciled
-//     season summary (5 played, 0-2-3, 2 points) — never a stale copy ---
+//     season summary (6 played, 0-3-3, 3 points) — never a stale copy ---
 const spurs = seasons.find(r => r.club === 'Tottenham Hotspur' && r.status === 'ongoing');
 assert.ok(spurs, 'current ongoing Tottenham row must exist');
-assert.equal(spurs.played, 5);
-assert.equal(spurs.points, 2);
+assert.equal(spurs.played, 6);
+assert.equal(spurs.points, 3);
 
 // --- Career totals must be a straight sum of the listed rows, and must
 //     themselves reconcile ------------------------------------------------
