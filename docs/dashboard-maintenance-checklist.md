@@ -1002,3 +1002,12 @@ Architecture review: existing `LEAGUE_MATCHES`, appearance intervals and `getPla
 - [x] Anthropic insufficient-credit handling is already safely non-fatal and remains unchanged. Genuine unrelated errors still fail; no credit purchase, provider migration or new dependencies.
 - [x] Existing Matchday workflow now also runs for guardrail/core/workflow changes on PRs and main pushes. PRs cannot publish changes or invoke the secondary transfer sweep; data-only bot commits do not match push paths, avoiding recursion. The scheduled job and its failure reporting remain intact.
 - [x] GitHub-hosted Matchday [PR run 35087136948](https://github.com/viperkoder/spurs-dashboard/actions/runs/35087136948) and [main run 35087189561](https://github.com/viperkoder/spurs-dashboard/actions/runs/35087189561) both succeeded. [PR #3](https://github.com/viperkoder/spurs-dashboard/pull/3) merged as `c4a916ef0c6302db79bf55050e283e9d291ce593`. Main completed table refresh, reconciliation and guardrails; no new data meant rebuild/commit correctly skipped with a successful job. The original recurring assertion failure is resolved; genuine future errors remain visible.
+
+## Bundled match/statistics follow-up — 11 October decision, captured 12 October 2026
+
+- [ ] Verify the statistics page reflects the latest match before declaring it updated.
+- [ ] Show Villa scorers consistently with the Manchester United scorer annotation, using source evidence.
+- [ ] Order contributions by goals descending, then assists descending: examples 2G 1A, 2G, 1G 1A, 1G, 1A. Verify Solanke's position from current counts rather than hard-coding a name.
+- [ ] Coordinate this approved packet with the new Legion post-match snippet and homepage-placement review, preserving independent statistics authority.
+
+These are captured requirements, not a claim that source data, code or production was changed.
