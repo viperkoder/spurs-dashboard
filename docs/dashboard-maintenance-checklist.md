@@ -73,6 +73,7 @@ conflicting matches fail closed and retry without changing dashboard data.
 - [x] Confirmed the automated 10 October Manchester United 1-1 Tottenham ingestion populated the shared completed-match record, fixture result and player usage; later table-only runs continued refreshing all 20 clubs across the matchweek.
 - [x] Made Recent Form deterministic from the same completed `LEAGUE_MATCHES` records, so final score/outcome/date no longer wait for optional Anthropic reconciliation. Scorer text is shown only when reconciled goal evidence exists.
 - [x] Restored the verified home/away venue on the two older automated league records that predated venue ingestion; future records now carry the schedule venue automatically.
+- [x] Added deterministic Tottenham red-card ingestion from the existing commentary evidence and protected reviewed dismissal intervals from being erased if a later provider payload omits that event.
 - [x] Completed league fixtures now expose `status: "completed"` to the fixture UI and display a `FINAL` badge.
 - [x] Existing ESPN terminal statuses are persisted as postponed, cancelled or abandoned, excluded from the upcoming countdown, displayed explicitly and committed by the same matchday workflow. No replacement scheduler or provider was added.
 - [x] Added regression coverage for final score/status, upcoming rollover, postponed/abandoned handling, deterministic recent form and idempotent terminal updates. Existing duplicate-prevention and standings validation remain in the matchday suite.

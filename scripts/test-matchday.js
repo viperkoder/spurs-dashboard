@@ -132,6 +132,32 @@ assert.equal(extracted.appearances.find(p => p.player === 'Starter 11').off, 60)
 assert.equal(extracted.appearances.find(p => p.player === 'Sub One').on, 60);
 assert.deepEqual(extracted.unused, ['Unused One']);
 
+const dismissalEvidence={
+  event:{id:'dismissal-event',competitors:[
+    {team:{displayName:'Tottenham Hotspur'},score:'0'},
+    {team:{displayName:'Everton'},score:'0'},
+  ]},
+  summary:{
+    rosters:[{team:{displayName:'Tottenham Hotspur'},roster:evidenceRoster.slice(0,11)}],
+    commentary:[{
+      text:'Starter 11 (Tottenham Hotspur) is shown the red card.',
+      time:{value:4640},
+      play:{participants:[{athlete:{displayName:'Starter 11'}}]},
+    }],
+  },
+};
+const dismissed=core.leagueMatchFromEvidence(
+  {mw:38,opponent:'Everton',venue:'H',date:'2027-05-30T16:00:00+01:00',competition:'Premier League'},
+  dismissalEvidence
+);
+assert.equal(dismissed.appearances.find(p=>p.player==='Starter 11').off,78);
+assert.equal(dismissed.appearances.find(p=>p.player==='Starter 11').dismissed,true);
+const dismissalStored=core.upsertLeagueMatch(seasonStatsSource,dismissed);
+const withoutDismissal={...dismissed,appearances:dismissed.appearances.map(p=>p.player==='Starter 11'?{...p,off:90,dismissed:undefined}:p)};
+const dismissalPreserved=core.getLeagueMatches(core.upsertLeagueMatch(dismissalStored,withoutDismissal)).find(m=>m.mw===38);
+assert.equal(dismissalPreserved.appearances.find(p=>p.player==='Starter 11').off,78,'reviewed dismissal interval must survive pruned provider commentary');
+assert.equal(dismissalPreserved.appearances.find(p=>p.player==='Starter 11').dismissed,true);
+
 const clubs = Array.from({ length: 20 }, (_, i) => ({
   team: i === 19 ? 'Tottenham Hotspur' : `Club ${i + 1}`,
   rank: i + 1, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0,

@@ -825,7 +825,8 @@ export const LEAGUE_MATCHES = [
         "player": "Rodrigo Bentancur",
         "started": false,
         "on": 66,
-        "off": 90
+        "off": 78,
+        "dismissed": true
       },
       {
         "player": "Mateus Fernandes",

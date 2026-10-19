@@ -337,6 +337,19 @@ function leagueMatchFromEvidence(fixture, evidence) {
     byName.get(outgoing).off = minute;
   });
 
+  const dismissalEvents = (evidence.summary?.commentary || []).filter(event =>
+    /Tottenham Hotspur/i.test(event.text || '') && /red card|sent off|dismissed/i.test(event.text || '')
+  );
+  dismissalEvents.forEach(event => {
+    const minute = Math.min(90, Math.ceil(Number(event.time?.value ?? event.play?.clock?.value) / 60));
+    const player = event.play?.participants?.[0]?.athlete?.displayName;
+    if (!Number.isInteger(minute) || !byName.has(player)) {
+      throw new Error(`Incomplete dismissal evidence: ${event.text || 'unknown event'}`);
+    }
+    byName.get(player).off = minute;
+    byName.get(player).dismissed = true;
+  });
+
   const score = resultFromEvidence(evidence);
   const goalReconciliation = extractGoalEvents(evidence, score);
 
@@ -453,6 +466,17 @@ function upsertLeagueMatch(source, incoming) {
     // field yet (never reviewed) can receive automated evidence.
     const next = { ...record };
     if (matches[index].goals !== undefined) next.goals = matches[index].goals;
+    // A later provider payload can omit or prune commentary. Preserve an
+    // already-reviewed dismissal interval rather than silently restoring the
+    // player to 90 minutes and corrupting every on-pitch combination.
+    for (const reviewed of matches[index].appearances || []) {
+      if (reviewed.dismissed !== true) continue;
+      const incoming = next.appearances.find(appearance => appearance.player === reviewed.player);
+      if (incoming && incoming.dismissed !== true) {
+        incoming.off = reviewed.off;
+        incoming.dismissed = true;
+      }
+    }
     matches[index] = next;
   } else {
     matches.push(record);
