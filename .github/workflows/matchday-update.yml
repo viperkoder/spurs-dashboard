@@ -57,7 +57,7 @@ jobs:
         run: |
           match_output=$(node automation/matchday-update.js)
           echo "$match_output"
-          if grep -Eq '^Updated completed (match|league usage):' <<< "$match_output"; then
+          if grep -Eq '^Updated (completed (match|league usage)|fixture status):' <<< "$match_output"; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"

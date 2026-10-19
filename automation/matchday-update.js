@@ -47,6 +47,8 @@ async function findFinalEvent(fixture) {
   if (!slug) return null;
   const data = await espnJson(`https://site.api.espn.com/apis/site/v2/sports/soccer/${slug}/scoreboard?dates=${ymd(fixture.date)}`);
   const event = (data.events || []).find(e => isTottenhamEvent(e, fixture.opponent));
+  const terminalStatus = core.terminalEventStatus(event);
+  if (event && terminalStatus) return { event: compactEvent(event), terminalStatus };
   if (!event || event.status?.type?.completed !== true) return null;
   const summary = await espnJson(`https://site.api.espn.com/apis/site/v2/sports/soccer/${slug}/summary?event=${event.id}`);
   let standings = null;
@@ -101,19 +103,29 @@ function validate(reconciliation, fixture, evidence) {
 
 (async () => {
   const state = core.readState(STATE_PATH);
-  const fixtureSource = fs.readFileSync(FIXTURES_PATH, 'utf8');
+  let fixtureSource = fs.readFileSync(FIXTURES_PATH, 'utf8');
   const due = core.dueFixtures(fixtureSource, state);
   if (!due.length) return console.log('No fixture has reached kickoff + 2 hours.');
 
   for (const fixture of due) {
     const evidence = await findFinalEvent(fixture);
     if (!evidence) { console.log(`Pending final evidence: ${fixture.opponent}`); continue; }
+    if (evidence.terminalStatus) {
+      fixtureSource = core.applyFixtureStatus(fixtureSource, fixture, evidence.terminalStatus);
+      fs.writeFileSync(FIXTURES_PATH, fixtureSource);
+      state.processed = [...new Set([...(state.processed || []), core.fixtureKey(fixture)])];
+      state.lastProcessed = { fixture: core.fixtureKey(fixture), eventId: evidence.event.id, status: evidence.terminalStatus, at: new Date().toISOString() };
+      fs.writeFileSync(STATE_PATH, `${JSON.stringify(state, null, 2)}\n`);
+      console.log(`Updated fixture status: ${fixture.opponent} ${evidence.terminalStatus}`);
+      continue;
+    }
     // Player usage is deterministic from the same ESPN match evidence used by
     // the normal match update. Fail closed before touching any dashboard file
     // if a league lineup, substitution or minute boundary is incomplete.
     const leagueMatch = core.leagueMatchFromEvidence(fixture, evidence);
     let leagueUsageChanged = false;
     const squadSource = fs.readFileSync(SQUAD_PATH, 'utf8');
+    let standingsSource = fs.readFileSync(STANDINGS_PATH, 'utf8');
     if (leagueMatch) {
       // Part 3: surface the goal-reconciliation outcome — never silent.
       const gr = leagueMatch.goalReconciliation;
@@ -135,10 +147,20 @@ function validate(reconciliation, fixture, evidence) {
       }
       const seasonStatsSource = fs.readFileSync(SEASON_STATS_PATH, 'utf8');
       const nextSeasonStats = core.upsertLeagueMatch(seasonStatsSource, leagueMatch);
-      leagueUsageChanged = nextSeasonStats !== seasonStatsSource;
-      if (leagueUsageChanged) fs.writeFileSync(SEASON_STATS_PATH, nextSeasonStats);
+      const seasonStatsChanged = nextSeasonStats !== seasonStatsSource;
+      if (seasonStatsChanged) fs.writeFileSync(SEASON_STATS_PATH, nextSeasonStats);
+      const nextStandings = core.replaceExportedArray(
+        standingsSource,
+        'LAST5',
+        core.renderLastFive(core.leagueLastFive(core.getLeagueMatches(nextSeasonStats)))
+      );
+      const recentFormChanged = nextStandings !== standingsSource;
+      if (recentFormChanged) {
+        fs.writeFileSync(STANDINGS_PATH, nextStandings);
+        standingsSource = nextStandings;
+      }
+      leagueUsageChanged = seasonStatsChanged || recentFormChanged;
     }
-    const standingsSource = fs.readFileSync(STANDINGS_PATH, 'utf8');
     let result;
     try {
       result = await askClaude(fixture, evidence, standingsSource, squadSource);

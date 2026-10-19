@@ -67,6 +67,17 @@ then runs the existing transfer/injury sweep in the same coherent update.
 Extra-time, delayed, abandoned, missing or
 conflicting matches fail closed and retry without changing dashboard data.
 
+## Automatic dashboard verification — 19 October 2026
+
+- [x] Confirmed the existing GitHub-hosted matchday workflow runs without a Mac session and uses the current ESPN structured scoreboard, summary and standings endpoints already present in the repository.
+- [x] Confirmed the automated 10 October Manchester United 1-1 Tottenham ingestion populated the shared completed-match record, fixture result and player usage; later table-only runs continued refreshing all 20 clubs across the matchweek.
+- [x] Made Recent Form deterministic from the same completed `LEAGUE_MATCHES` records, so final score/outcome/date no longer wait for optional Anthropic reconciliation. Scorer text is shown only when reconciled goal evidence exists.
+- [x] Restored the verified home/away venue on the two older automated league records that predated venue ingestion; future records now carry the schedule venue automatically.
+- [x] Completed league fixtures now expose `status: "completed"` to the fixture UI and display a `FINAL` badge.
+- [x] Existing ESPN terminal statuses are persisted as postponed, cancelled or abandoned, excluded from the upcoming countdown, displayed explicitly and committed by the same matchday workflow. No replacement scheduler or provider was added.
+- [x] Added regression coverage for final score/status, upcoming rollover, postponed/abandoned handling, deterministic recent form and idempotent terminal updates. Existing duplicate-prevention and standings validation remain in the matchday suite.
+- [ ] VKOS registry reconciliation for this maintenance packet remains pending for Viper; this scoped dashboard correction did not modify the separate `vk-ops` repository.
+
 ## Season Stats V1 — implemented 12 September 2026
 
 - [x] Added the Season Stats navigation/page with dynamic P/W/D/L/points and sortable Premier League Player Usage (Apps, Starts, Sub Apps, Minutes, W/D/L).

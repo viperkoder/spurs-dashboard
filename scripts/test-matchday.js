@@ -3,7 +3,7 @@ const core = require('../automation/matchday-core');
 const { validateStandings } = require('../automation/league-table-update');
 
 const fixtures = `export const PREMIER_LEAGUE_SCHEDULE = [
-  {mw:1, opponent:"Brentford", venue:"A", date:"2026-08-22T17:30:00"},
+  {mw:1, opponent:"Brentford", venue:"A", date:"2026-08-22T17:30:00", status:"scheduled"},
 ];`;
 
 // August is BST: 17:30 UK kickoff is 16:30 UTC; eligibility begins 18:30 UTC.
@@ -13,6 +13,15 @@ assert.equal(core.dueFixtures(fixtures, { processed: [] }, new Date('2026-08-22T
 assert.equal(core.dueFixtures(fixtures, { processed: [] }, new Date('2026-08-22T18:30:00Z')).length, 1);
 const due = core.dueFixtures(fixtures, { processed: [] }, new Date('2026-08-22T18:30:00Z'))[0];
 assert.equal(core.dueFixtures(fixtures, { processed: [core.fixtureKey(due)] }, new Date('2026-08-22T18:30:00Z')).length, 0);
+assert.equal(core.dueFixtures(fixtures.replace('status:"scheduled"','status:"postponed"'), { processed: [] }, new Date('2026-08-22T18:30:00Z')).length, 0);
+assert.equal(core.dueFixtures(fixtures.replace('status:"scheduled"','status:"abandoned"'), { processed: [] }, new Date('2026-08-22T18:30:00Z')).length, 0);
+assert.equal(core.terminalEventStatus({status:{type:{name:'STATUS_POSTPONED'}}}),'postponed');
+assert.equal(core.terminalEventStatus({status:{type:{description:'Match Abandoned'}}}),'abandoned');
+assert.equal(core.terminalEventStatus({status:{type:{detail:'Cancelled'}}}),'cancelled');
+const statusFixture='export const PREMIER_LEAGUE_SCHEDULE = [\n  {mw:7,opponent:"Coventry City",venue:"H",date:"2026-10-19T20:00:00+01:00",status:"scheduled"}\n];';
+const postponed=core.applyFixtureStatus(statusFixture,{opponent:'Coventry City',date:'2026-10-19T20:00:00+01:00'},'postponed');
+assert.match(postponed,/status:"postponed"/);
+assert.equal(core.applyFixtureStatus(postponed,{opponent:'Coventry City',date:'2026-10-19T20:00:00+01:00'},'postponed'),postponed,'terminal status update must be idempotent');
 const cupFixtures = `export const CUPS = [
   {comp:"Carabao Cup", opponent:"Charlton Athletic", venue:"H", date:"2026-08-26T18:45:00Z", score:null},
 ];`;
@@ -91,6 +100,11 @@ const regressionSource = core.replaceExportedArray(seasonStatsSource, 'LEAGUE_MA
 const upserted = core.getLeagueMatches(core.upsertLeagueMatch(regressionSource, synthetic));
 assert.equal(upserted.length, 4);
 assert.equal(upserted.find(match => match.mw === 4).score.spurs, 2);
+const recent=core.leagueLastFive([...matches,synthetic]);
+assert.equal(recent[0].score,'2-0');
+assert.equal(recent[0].r,'W');
+assert.equal(recent[0].date,'12 Sep');
+assert.equal(recent.length,4);
 
 const evidenceRoster = Array.from({length:11}, (_,index) => ({
   athlete:{displayName:`Starter ${index + 1}`}, starter:true, subbedIn:false,

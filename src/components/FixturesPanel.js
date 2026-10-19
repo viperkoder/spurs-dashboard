@@ -12,12 +12,15 @@ function monthKey(dateStr){
 
 function FixtureRow({f, label}){
   const played = f.score !== null && f.score !== undefined;
+  const terminal = ["postponed","cancelled","abandoned"].includes(f.status);
+  const statusLabel = played ? "FINAL" : terminal ? f.status.toUpperCase() : f.eliminated ? "ELIMINATED" : "UPCOMING";
+  const statusColor = played ? P.green : terminal ? P.amber : P.muted;
   const venueLabel = f.venue==="H"?"(H)":f.venue==="A"?"(A)":"(N)";
   const d = new Date(fixtureKickoffMs(f.date));
   const dateLabel = d.toLocaleDateString('en-GB',{timeZone:'Asia/Singapore',weekday:'short',day:'numeric',month:'short'});
   const timeLabel = d.toLocaleTimeString('en-GB',{timeZone:'Asia/Singapore',hour:'2-digit',minute:'2-digit'})+' SGT';
   return (
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",background:P.bgCard,borderRadius:5,border:`1px solid ${P.border}`,borderLeft:`3px solid ${played?P.green:P.muted}`,gap:10}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",background:P.bgCard,borderRadius:5,border:`1px solid ${P.border}`,borderLeft:`3px solid ${statusColor}`,gap:10}}>
       <div style={{flex:1,minWidth:0}}>
         <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
           {label && <span style={{fontSize:10,color:P.gold,fontWeight:800}}>{label}</span>}
@@ -35,17 +38,16 @@ function FixtureRow({f, label}){
         </details>}
       </div>
       <div style={{textAlign:"right",flexShrink:0}}>
-        {played
-          ? <div style={{fontSize:18,fontWeight:900,color:P.green}}>{f.score}</div>
-          : <Chip label={f.eliminated?"Eliminated":"Upcoming"} color={P.muted}/>}
+        {played && <div style={{fontSize:18,fontWeight:900,color:P.green}}>{f.score}</div>}
+        <Chip label={statusLabel} color={statusColor}/>
       </div>
     </div>
   );
 }
 
 // Groups a flat fixture list by month, auto-collapsing any month where every
-// fixture already has a score (fully played) so the page doesn't open as one
-// giant scroll — you land near whatever's actually still relevant.
+// fixture is final or has a verified terminal status so the page doesn't open
+// as one giant scroll — you land near whatever's actually still relevant.
 function MonthGroups({fixtures, labelFn}){
   const [open,setOpen]=useState(null); // month key of the one manually toggled, if any
   const groups = {};
@@ -58,12 +60,12 @@ function MonthGroups({fixtures, labelFn}){
     <div style={{display:"flex",flexDirection:"column",gap:10}}>
       {keys.map(k=>{
         const items=groups[k];
-        const allPlayed = items.every(f=>f.score!==null && f.score!==undefined);
-        const isOpen = open===k ? true : open===k+"-closed" ? false : !allPlayed;
+        const allResolved = items.every(f=>(f.score!==null && f.score!==undefined)||["postponed","cancelled","abandoned"].includes(f.status));
+        const isOpen = open===k ? true : open===k+"-closed" ? false : !allResolved;
         return (
           <div key={k}>
             <div onClick={()=>setOpen(isOpen?k+"-closed":k)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer",padding:"6px 2px"}}>
-              <span style={{fontSize:12,fontWeight:800,color:P.gold,letterSpacing:"0.1em",textTransform:"uppercase"}}>{k}{allPlayed?" — played":""}</span>
+              <span style={{fontSize:12,fontWeight:800,color:P.gold,letterSpacing:"0.1em",textTransform:"uppercase"}}>{k}{allResolved?" — resolved":""}</span>
               <span style={{fontSize:11,color:P.muted}}>{isOpen?"▲":"▾"}</span>
             </div>
             {isOpen && (

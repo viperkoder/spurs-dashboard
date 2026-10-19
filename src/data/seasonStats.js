@@ -555,6 +555,7 @@ export const LEAGUE_MATCHES = [
   {
     "mw": 5,
     "opponent": "Aston Villa",
+    "venue": "H",
     "date": "2026-09-19T12:30:00+01:00",
     "score": {
       "spurs": 2,
@@ -725,6 +726,7 @@ export const LEAGUE_MATCHES = [
   {
     "mw": 6,
     "opponent": "Manchester United",
+    "venue": "A",
     "date": "2026-10-10T17:30:00+01:00",
     "score": {
       "spurs": 1,
@@ -900,6 +902,6 @@ export function withLeagueResults(fixtures,matches=LEAGUE_MATCHES){
   const byMatchweek=new Map(matches.map(match=>[match.mw,match]));
   return fixtures.map(fixture=>{
     const played=byMatchweek.get(fixture.mw);
-    return {...fixture,score:played?`${played.score.spurs}-${played.score.opponent}`:null};
+    return {...fixture,score:played?`${played.score.spurs}-${played.score.opponent}`:null,status:played?"completed":(fixture.status||"scheduled")};
   });
 }

@@ -27,4 +27,7 @@ assert.equal(selectNextMatch([{opponent:'Chelsea',date:'2026-10-24T15:00:00',com
 assert.equal(fixtureKickoffMs('2026-10-24T15:00:00'),Date.parse('2026-10-24T14:00:00Z'),'UK-local provisional time must parse consistently during BST');
 assert.equal(getNextMatch(now).opponent,'Coventry City','a populated final result must roll the live schedule to Coventry even when the test clock precedes kickoff');
 assert.equal(getNextMatch(new Date('2026-10-10T16:31:00Z')).opponent,'Coventry City','live schedule must roll over after kickoff');
+const joined=context.withLeagueResults([{mw:6,status:'scheduled'}],[{mw:6,score:{spurs:1,opponent:1}}]);
+assert.equal(joined[0].score,'1-1','completed result must populate the fixture score');
+assert.equal(joined[0].status,'completed','completed result must expose a final status');
 console.log('PASS: verified next-fixture selection, status/competition validation, SGT conversion, countdown identity and rollover.');

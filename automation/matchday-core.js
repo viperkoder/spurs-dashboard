@@ -16,7 +16,9 @@ function fixtureSections(source) {
         section: name === 'PREMIER_LEAGUE_SCHEDULE' ? 'PREMIER_LEAGUE' : name,
         mw,
         opponent: value('opponent'),
+        venue: value('venue'),
         date: value('date'),
+        status: value('status') || 'scheduled',
         competition: value('comp') || (name === 'PREMIER_LEAGUE_SCHEDULE' ? 'Premier League' : name === 'PRESEASON' ? 'Friendly' : 'Cup'),
         eliminated: /eliminated:true/.test(body),
       };
@@ -30,11 +32,24 @@ function dueFixtures(source, state, now = new Date()) {
   return fixtureSections(source).filter(f => {
     const kickoff = ukLocalTimeMs(f.date);
     const key = fixtureKey(f);
-    return !f.eliminated && Number.isFinite(kickoff) &&
+    return !f.eliminated && !['completed', 'postponed', 'cancelled', 'abandoned'].includes(f.status) && Number.isFinite(kickoff) &&
       nowMs >= kickoff + AFTER_KICKOFF_MS &&
       nowMs - kickoff <= MATCH_WINDOW_MS &&
       !done.has(key);
   });
+}
+
+function terminalEventStatus(event) {
+  const text = [
+    event?.status?.type?.name,
+    event?.status?.type?.description,
+    event?.status?.type?.detail,
+    event?.status?.type?.shortDetail,
+  ].filter(Boolean).join(' ').toLowerCase();
+  if (text.includes('postpon')) return 'postponed';
+  if (text.includes('abandon')) return 'abandoned';
+  if (text.includes('cancel')) return 'cancelled';
+  return null;
 }
 
 function ukLocalTimeMs(isoWithoutZone) {
@@ -77,6 +92,18 @@ function applyFixtureScore(source, fixture, result) {
   return source.replace(re, `$1${js(`${result.spurs}-${result.opponent}`)}`);
 }
 
+function applyFixtureStatus(source, fixture, status) {
+  if (!['postponed', 'cancelled', 'abandoned'].includes(status)) throw new Error(`Unsupported terminal fixture status: ${status}`);
+  const escapedOpponent = fixture.opponent.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const escapedDate = fixture.date.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`\\{[^{}]*opponent:"${escapedOpponent}"[^{}]*date:"${escapedDate}"[^{}]*\\}`);
+  if (!re.test(source)) throw new Error(`Fixture row not found: ${fixture.opponent} ${fixture.date}`);
+  return source.replace(re, row => {
+    if (/status:"[^"]*"/.test(row)) return row.replace(/status:"[^"]*"/, `status:${js(status)}`);
+    return row.replace(/}$/, `, status:${js(status)}}`);
+  });
+}
+
 function renderStandings(rows) {
   return rows.map((r, index) =>
     `  {pos:${index + 1},team:${js(r.team)},w:${r.w},d:${r.d},l:${r.l},gf:${r.gf},ga:${r.ga},gd:${r.gd},pts:${r.pts}${r.team === 'Tottenham Hotspur' ? ',isSpurs:true' : ''}},`
@@ -87,6 +114,45 @@ function renderLastFive(rows) {
   return rows.slice(0, 5).map(r =>
     `  {date:${js(r.date)},home:${js(r.home)},away:${js(r.away)},score:${js(r.score)},r:${js(r.r)},scorer:${js(r.scorer || '')}},`
   );
+}
+
+function teamCode(name) {
+  const known = {
+    'AFC Bournemouth': 'BOU', Arsenal: 'ARS', 'Aston Villa': 'AVL', Brentford: 'BRE',
+    'Brighton & Hove Albion': 'BHA', Chelsea: 'CHE', 'Coventry City': 'COV',
+    'Crystal Palace': 'CRY', Everton: 'EVE', Fulham: 'FUL', 'Hull City': 'HUL',
+    'Ipswich Town': 'IPS', 'Leeds United': 'LEE', Liverpool: 'LIV',
+    'Manchester City': 'MCI', 'Manchester United': 'MUN', 'Newcastle United': 'NEW',
+    'Nottingham Forest': 'NFO', Sunderland: 'SUN', 'Tottenham Hotspur': 'TOT',
+  };
+  return known[name] || String(name || '').replace(/[^A-Za-z]/g, '').slice(0, 3).toUpperCase();
+}
+
+function scorerLabel(goal) {
+  const parts = String(goal.scorer || '').trim().split(/\s+/);
+  let name = parts.at(-1) || '';
+  if (parts.length > 1 && /^(van|von|de|del|da|dos)$/i.test(parts.at(-2))) name = `${parts.at(-2)} ${name}`;
+  const minute = Number.isFinite(goal.minute) ? `${goal.minute}${Number.isFinite(goal.stoppage) ? `+${goal.stoppage}` : ''}` : '';
+  return [name, minute].filter(Boolean).join(' ');
+}
+
+function leagueLastFive(matches) {
+  return [...(matches || [])]
+    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+    .slice(0, 5)
+    .map(match => {
+      const home = match.venue === 'H' ? 'TOT' : teamCode(match.opponent);
+      const away = match.venue === 'H' ? teamCode(match.opponent) : 'TOT';
+      const score = match.venue === 'H'
+        ? `${match.score.spurs}-${match.score.opponent}`
+        : `${match.score.opponent}-${match.score.spurs}`;
+      const date = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', day: 'numeric', month: 'short' }).format(new Date(match.date)).replace('Sept', 'Sep');
+      const scorer = Array.isArray(match.goals)
+        ? match.goals.filter(goal => goal.team === 'spurs').map(scorerLabel).filter(Boolean).join('; ')
+        : '';
+      const r = match.score.spurs > match.score.opponent ? 'W' : match.score.spurs < match.score.opponent ? 'L' : 'D';
+      return { date, home, away, score, r, scorer };
+    });
 }
 
 function renderScorers(rows) {
@@ -421,6 +487,7 @@ function readState(path) {
 module.exports = {
   AFTER_KICKOFF_MS,
   applyFixtureScore,
+  applyFixtureStatus,
   compareGoalEvidence,
   dueFixtures,
   extractGoalEvents,
@@ -428,6 +495,7 @@ module.exports = {
   calculatePlayerUsage,
   detectUnknownPlayers,
   getLeagueMatches,
+  leagueLastFive,
   leagueMatchFromEvidence,
   readState,
   renderLastFive,
@@ -435,6 +503,7 @@ module.exports = {
   renderStandings,
   replaceExportedArray,
   ukLocalTimeMs,
+  terminalEventStatus,
   updateSquad,
   upsertLeagueMatch,
   validateGoalEvidence,
