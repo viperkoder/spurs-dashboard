@@ -863,6 +863,124 @@ export const LEAGUE_MATCHES = [
         "source": "https://www.tottenhamhotspur.com/news/1092132/manchester-united-1-1-spurs-match-report"
       }
     ]
+  },
+  {
+    "mw": 7,
+    "opponent": "Coventry City",
+    "venue": "H",
+    "date": "2026-10-19T20:00:00+01:00",
+    "score": {
+      "spurs": 3,
+      "opponent": 1
+    },
+    "sourceEventId": "401879257",
+    "sources": [
+      "https://www.espn.com/soccer/match/_/gameId/401879257"
+    ],
+    "appearances": [
+      {
+        "player": "Conor Gallagher",
+        "started": false,
+        "on": 69,
+        "off": 90
+      },
+      {
+        "player": "Mathys Tel",
+        "started": false,
+        "on": 87,
+        "off": 90
+      },
+      {
+        "player": "Dejan Kulusevski",
+        "started": false,
+        "on": 87,
+        "off": 90
+      },
+      {
+        "player": "Ben Davies",
+        "started": false,
+        "on": 69,
+        "off": 90
+      },
+      {
+        "player": "Mateus Fernandes",
+        "started": false,
+        "on": 71,
+        "off": 90
+      },
+      {
+        "player": "Antonín Kinsky",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Tosin Adarabioyo",
+        "started": true,
+        "on": 0,
+        "off": 71
+      },
+      {
+        "player": "Micky van de Ven",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Jan Paul van Hecke",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Sandro Tonali",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "James Maddison",
+        "started": true,
+        "on": 0,
+        "off": 69
+      },
+      {
+        "player": "Archie Gray",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Andy Robertson",
+        "started": true,
+        "on": 0,
+        "off": 69
+      },
+      {
+        "player": "Mohammed Kudus",
+        "started": true,
+        "on": 0,
+        "off": 87
+      },
+      {
+        "player": "Omar Marmoush",
+        "started": true,
+        "on": 0,
+        "off": 87
+      },
+      {
+        "player": "Dominic Solanke",
+        "started": true,
+        "on": 0,
+        "off": 90
+      }
+    ],
+    "unused": [
+      "Martin Dúbravka",
+      "Callum Olusesi",
+      "Marcos Senesi",
+      "Luca Williams-Barnett"
+    ]
   }
 ];
 

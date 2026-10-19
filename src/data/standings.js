@@ -16,11 +16,11 @@ export const STANDINGS = [
   {pos:13,team:"Manchester United",w:1,d:4,l:2,gf:10,ga:10,gd:0,pts:7},
   {pos:14,team:"Crystal Palace",w:2,d:1,l:4,gf:9,ga:17,gd:-8,pts:7},
   {pos:15,team:"AFC Bournemouth",w:1,d:3,l:3,gf:9,ga:13,gd:-4,pts:6},
-  {pos:16,team:"Coventry City",w:2,d:0,l:4,gf:5,ga:11,gd:-6,pts:6},
-  {pos:17,team:"Fulham",w:1,d:2,l:4,gf:7,ga:10,gd:-3,pts:5},
-  {pos:18,team:"Nottingham Forest",w:1,d:2,l:4,gf:5,ga:9,gd:-4,pts:5},
-  {pos:19,team:"Sunderland",w:1,d:1,l:5,gf:6,ga:14,gd:-8,pts:4},
-  {pos:20,team:"Tottenham Hotspur",w:0,d:3,l:3,gf:3,ga:9,gd:-6,pts:3,isSpurs:true},
+  {pos:16,team:"Tottenham Hotspur",w:1,d:3,l:3,gf:6,ga:10,gd:-4,pts:6,isSpurs:true},
+  {pos:17,team:"Coventry City",w:2,d:0,l:5,gf:6,ga:14,gd:-8,pts:6},
+  {pos:18,team:"Fulham",w:1,d:2,l:4,gf:7,ga:10,gd:-3,pts:5},
+  {pos:19,team:"Nottingham Forest",w:1,d:2,l:4,gf:5,ga:9,gd:-4,pts:5},
+  {pos:20,team:"Sunderland",w:1,d:1,l:5,gf:6,ga:14,gd:-8,pts:4},
 ];
 
 // Latest first. Premier League results only — this sits directly under the
@@ -29,11 +29,11 @@ export const STANDINGS = [
 // cup result was shown here in error previously — fixed 2026-09-21, see
 // project docs. Scorers are source-backed in seasonStats.js.
 export const LAST5 = [
+  {date:"19 Oct",home:"TOT",away:"COV",score:"3-1",r:"W",scorer:""},
   {date:"10 Oct",home:"MUN",away:"TOT",score:"1-1",r:"D",scorer:"Solanke 90+2"},
   {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:"Gallagher 86; van Hecke 90+8"},
   {date:"12 Sep",home:"TOT",away:"EVE",score:"0-0",r:"D",scorer:""},
   {date:"5 Sep",home:"NFO",away:"TOT",score:"0-0",r:"D",scorer:""},
-  {date:"29 Aug",home:"TOT",away:"NEW",score:"0-2",r:"L",scorer:""},
 ];
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.
