@@ -1,8 +1,8 @@
-19/10/2026, 12:25:47
+20/10/2026, 11:03:20
 Headlines checked: 41 across 7 RSS sources + Twitter Pulse
 Changes applied: YES
 
 Summary: Free deterministic refresh completed. Optional AI transfer/injury reconciliation was deferred.
 
 WARNING: Optional AI reconciliation deferred. The free RSS/news/score refresh still completed.
-Reason: Claude API error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CgBbKFUz4imLycum9TXFo"}
+Reason: Claude API error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CgDNqRECYMXDjqPtT36Cw"}
