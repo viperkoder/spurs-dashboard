@@ -34,7 +34,7 @@ for (const match of realMatches) {
 //     structurally valid — this is what stops a genuinely-unreviewed match
 //     from silently being read as "goalless" ------------------------------
 {
-  const reviewedMws = [1, 2, 3, 4, 5, 6];
+  const reviewedMws = [1, 2, 3, 4, 5, 6, 7];
   const pendingMws = [];
   for (const mw of reviewedMws) {
     const match = realMatches.find(m => m.mw === mw);
@@ -52,6 +52,18 @@ for (const match of realMatches) {
   for (const match of realMatches) {
     assert.ok(knownMws.has(match.mw), `MW${match.mw} is not accounted for in this test's reviewed/pending lists — update the lists before trusting this suite`);
   }
+}
+
+// MW7 Coventry 3-1: structured evidence includes the away equaliser and
+// all three verified Spurs scorers, including Davies at 90+6.
+{
+  const match = realMatches.find(m => m.mw === 7);
+  const { spurs, opponent } = matchEvents.splitGoalsByTeam(match);
+  assert.equal(spurs.length, 3);
+  assert.equal(opponent.length, 1);
+  assert.deepEqual(spurs.map(goal => goal.scorer), ['James Maddison', 'Omar Marmoush', 'Ben Davies']);
+  assert.equal(spurs.at(-1).minute, 90);
+  assert.equal(spurs.at(-1).stoppage, 6);
 }
 
 // MW6 red-card ordering is fully source-backed: Mbeumo scored while Spurs

@@ -116,6 +116,15 @@ temporary provider outages are recorded as visible GitHub Actions warnings and
 in `automation/update-log.txt`; they defer transfer/injury/whisper reconciliation
 without failing or hiding the deterministic update.
 
+## Coventry statistics repair — 22 October 2026
+
+- [x] Corrected goal-team extraction to prefer ESPN's structured `play.team` field. The previous scoreline-text fallback misread Coventry's 1-1 equaliser as a Tottenham goal because the home team appears first in the scoreline.
+- [x] Added the provider's displayed clock as the authoritative added-time source, preserving Ben Davies' verified 90+6 goal instead of flattening it to 90.
+- [x] Materialise verified Premier League scorer, assist and appearance deltas from the same score-count-checked match record. The paid-model reconciliation remains available for unresolved evidence but is no longer required for factual league player totals.
+- [x] Reconciled MW7 Coventry goals, assists, appearances, Recent Form and Top Scorers; added the missing MW6 processed key so the historical Manchester United update cannot be counted twice.
+- [x] Extended match-event, matchday, fixture and combination regression coverage through MW7; full build and secret scan pass.
+- [ ] VKOS registry reconciliation for this repair remains pending for Viper; no `vk-ops` checkout was available in this task.
+
 ## Post-match reconciliation — 16 September 2026
 
 - [x] Audited current GitHub main `19154cc`, repository rules, clean cloud checkout and matchday/Season Stats architecture. Viper's Mac clone is outside this environment and was not inspected.

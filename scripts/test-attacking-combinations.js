@@ -198,7 +198,7 @@ function makeSub(player, on, off = 90) {
 }
 
 // --- Cross-check: real dataset invariants ----------------------------------
-// All six real matches now have reviewed goal evidence.
+// All seven real matches now have reviewed goal evidence.
 {
   const { combinations, unresolvedGoals } = mod.getAttackingCombinationStats(realMatches);
   assert.equal(unresolvedGoals.length, 0, 'all reviewed Spurs goals resolve to source-backed on-pitch units');
@@ -206,9 +206,9 @@ function makeSub(player, on, off = 90) {
   assert.equal(totalMinutes, realMatches.length * 90, 'combination minutes must partition every match\'s full 90 minutes exactly once');
   const totalGF = combinations.reduce((sum, c) => sum + c.goalsScored, 0);
   const totalRealSpursGoals = realMatches.reduce((sum, m) => sum + (m.goals || []).filter(g => g.team === 'spurs').length, 0);
-  assert.equal(totalRealSpursGoals, 3, 'the two Villa goals and the Manchester United equaliser are reflected');
+  assert.equal(totalRealSpursGoals, 6, 'all verified Spurs goals through MW7 are reflected');
   assert.equal(totalGF, totalRealSpursGoals);
-  assert.ok(combinations.every(c => c.smallSample === true), 'every attacking combination is still small-sample across the five matches to date');
+  assert.ok(combinations.every(c => c.smallSample === true), 'every attacking combination is still small-sample across the seven matches to date');
   assert.ok(combinations.length > 0, 'combinations must not be hidden just because every rate is currently zero');
   // Real evidence produces varying attacking-unit sizes — never forced to a
   // fixed front three/four.

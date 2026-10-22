@@ -218,7 +218,7 @@ function makeSub(player, on, off = 90) {
 }
 
 // --- Cross-check: real dataset invariants ----------------------------------
-// All six real matches now have reviewed goal evidence.
+// All seven real matches now have reviewed goal evidence.
 {
   const { combinations, unresolvedGoals } = mod.getDefensiveCombinationStats(realMatches);
   assert.equal(unresolvedGoals.length, 0, 'none of the real matches should have an unresolved defensive goal attribution');
@@ -227,10 +227,10 @@ function makeSub(player, on, off = 90) {
   const totalGC = combinations.reduce((sum, c) => sum + c.goalsConceded, 0);
   const totalRealOpponentGoals = realMatches.reduce((sum, m) => sum + (m.goals || []).filter(g => g.team === 'opponent').length, 0);
   assert.equal(totalGC, totalRealOpponentGoals, 'every opponent goal must be attributed to exactly one combination');
-  assert.equal(totalRealOpponentGoals, 9, 'all nine opponent goals through MW6 are source-backed and attributed');
-  // With six matches, every defensive combination is still a small sample —
+  assert.equal(totalRealOpponentGoals, 10, 'all ten opponent goals through MW7 are source-backed and attributed');
+  // With seven matches, every defensive combination is still a small sample —
   // none should be silently hidden, and none should be shown as if reliable.
-  assert.ok(combinations.every(c => c.smallSample === true), 'every defensive combination is still small-sample across the six matches to date');
+  assert.ok(combinations.every(c => c.smallSample === true), 'every defensive combination is still small-sample across the seven matches to date');
   assert.ok(combinations.length > 0, 'combinations must not be hidden just because they are small-sample');
 }
 

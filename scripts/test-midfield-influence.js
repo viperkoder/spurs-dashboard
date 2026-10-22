@@ -207,7 +207,7 @@ function makeSub(player, on, off = 90) {
 }
 
 // --- Cross-check: real dataset invariants ----------------------------------
-// All six real matches now have reviewed goal evidence.
+// All seven real matches now have reviewed goal evidence.
 {
   const { units, unresolvedGoals: unitUnresolved } = mod.getMidfieldUnitStats(realMatches);
   assert.equal(unitUnresolved.length, 0, 'none of the real matches should have an unresolved midfield-unit goal attribution');
@@ -215,7 +215,7 @@ function makeSub(player, on, off = 90) {
   assert.equal(unitMinutes, realMatches.length * 90, 'midfield-unit minutes must partition every match\'s full 90 minutes exactly once');
   const unitGC = units.reduce((sum, u) => sum + u.goalsConceded, 0);
   const totalRealOpponentGoals = realMatches.reduce((sum, m) => sum + (m.goals || []).filter(g => g.team === 'opponent').length, 0);
-  assert.equal(totalRealOpponentGoals, 9, 'all nine opponent goals through MW6 are source-backed and attributed');
+  assert.equal(totalRealOpponentGoals, 10, 'all ten opponent goals through MW7 are source-backed and attributed');
   assert.equal(unitGC, totalRealOpponentGoals, 'every opponent goal must be attributed to exactly one midfield unit');
   assert.equal(units.filter(u => u.smallSample === false).length, 1, 'exactly one midfield unit (Bentancur+Tonali) has crossed both sample floors so far');
 
@@ -226,7 +226,7 @@ function makeSub(player, on, off = 90) {
   const combinedGC = combinations.reduce((sum, c) => sum + c.goalsConceded, 0);
   assert.equal(combinedGC, totalRealOpponentGoals, 'every opponent goal must be attributed to exactly one midfield+defence combination');
   assert.ok(combinations.every(c => c.smallSample === true), 'every midfield+defence combination is still small-sample (no combined row has crossed both floors yet)');
-  assert.equal(combinations.length, 19, 'the MW6 dismissal adds a ten-man midfield+defence interval, yielding nineteen distinct combined rows');
+  assert.equal(combinations.length, 22, 'MW7 adds three source-backed midfield+defence intervals, yielding twenty-two distinct combined rows');
 }
 
 console.log('midfield-influence tests passed');

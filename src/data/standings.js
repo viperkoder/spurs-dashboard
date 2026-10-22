@@ -29,7 +29,7 @@ export const STANDINGS = [
 // cup result was shown here in error previously — fixed 2026-09-21, see
 // project docs. Scorers are source-backed in seasonStats.js.
 export const LAST5 = [
-  {date:"19 Oct",home:"TOT",away:"COV",score:"3-1",r:"W",scorer:""},
+  {date:"19 Oct",home:"TOT",away:"COV",score:"3-1",r:"W",scorer:"Maddison 14; Marmoush 58; Davies 90+6"},
   {date:"10 Oct",home:"MUN",away:"TOT",score:"1-1",r:"D",scorer:"Solanke 90+2"},
   {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:"Gallagher 86; van Hecke 90+8"},
   {date:"12 Sep",home:"TOT",away:"EVE",score:"0-0",r:"D",scorer:""},
@@ -38,19 +38,21 @@ export const LAST5 = [
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.
 export const SCORERS = [
+  {name:"Dominic Solanke",g:2,a:1,apps:7},
+  {name:"Ben Davies",g:2,a:0,apps:2},
   {name:"Mikey Moore",g:1,a:1,apps:3},
   {name:"Sávio",g:1,a:1,apps:4},
-  {name:"Ben Davies",g:1,a:0,apps:1},
-  {name:"Conor Gallagher",g:1,a:0,apps:3},
-  {name:"Dominic Solanke",g:2,a:0,apps:6},
+  {name:"Conor Gallagher",g:1,a:0,apps:4},
+  {name:"James Maddison",g:1,a:0,apps:4},
   {name:"Jan Paul van Hecke",g:1,a:0,apps:6},
   {name:"Kevin Danso",g:1,a:0,apps:1},
-  {name:"Mateus Fernandes",g:0,a:2,apps:6},
-  {name:"Archie Gray",g:0,a:1,apps:5},
+  {name:"Omar Marmoush",g:1,a:0,apps:5},
+  {name:"Andy Robertson",g:0,a:2,apps:6},
+  {name:"Mateus Fernandes",g:0,a:2,apps:7},
+  {name:"Mohammed Kudus",g:0,a:2,apps:5},
+  {name:"Archie Gray",g:0,a:1,apps:6},
   {name:"Rodrigo Bentancur",g:0,a:1,apps:6},
-  {name:"Sandro Tonali",g:0,a:1,apps:4},
-  {name:"Mohammed Kudus",g:0,a:1,apps:4},
-  {name:"Andy Robertson",g:0,a:1,apps:5},
+  {name:"Sandro Tonali",g:0,a:1,apps:5},
 ];
 
 // Goals, then assists, then source order. The final index comparison makes

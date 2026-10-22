@@ -245,11 +245,21 @@ function extractGoalEvents(evidence, finalScore) {
     // final-score recap that follows means both team names are often
     // present in the same line -- so whichever name occurs EARLIEST in the
     // text is the scorer, never just "whichever team name appears".
-    const withPosition = (evidence.event?.competitors || [])
+    const competitors = evidence.event?.competitors || [];
+    // ESPN supplies the scoring team on the play itself. Prefer that
+    // structured field: the prose starts with the current scoreline, whose
+    // first team is not necessarily the scorer (for example an away
+    // equaliser still reads "Tottenham 1, Coventry 1"). Keep the prose
+    // fallback for older payloads that genuinely omit play.team.
+    const structuredTeamName = event.play?.team?.displayName;
+    const structuredTeam = structuredTeamName
+      ? competitors.find(c => c.team?.displayName === structuredTeamName)
+      : null;
+    const withPosition = competitors
       .map(c => ({ competitor: c, index: text.indexOf(c.team?.displayName || '\uffff') }))
       .filter(entry => entry.index >= 0)
       .sort((a, b) => a.index - b.index);
-    const scoringTeam = withPosition[0]?.competitor;
+    const scoringTeam = structuredTeam || withPosition[0]?.competitor;
     if (!scoringTeam) {
       problems.push(`Could not identify which team scored from: "${text}"`);
       continue;
@@ -264,7 +274,8 @@ function extractGoalEvents(evidence, finalScore) {
     // representation and takes priority over the raw clock/time value —
     // the base minute it states (45 or 90) is used directly, never
     // re-derived from elapsed seconds.
-    const stoppageMatch = text.match(/(?:^|\D)(45|90)\s*\+\s*(\d+)/);
+    const displayedClock = `${event.time?.displayValue || ''} ${event.play?.clock?.displayValue || ''}`;
+    const stoppageMatch = `${displayedClock} ${text}`.match(/(?:^|\D)(45|90)\s*'?\s*\+\s*(\d+)/);
     let minute;
     let stoppage = null;
     if (stoppageMatch) {
@@ -503,6 +514,23 @@ function calculatePlayerUsage(matches) {
   return [...players.values()];
 }
 
+function playerUpdatesFromLeagueMatch(match) {
+  const players = new Map((match?.appearances || []).map(appearance => [
+    appearance.player,
+    { name: appearance.player, appearance: 1, goals: 0, assists: 0 },
+  ]));
+  for (const goal of match?.goals || []) {
+    if (goal.team !== 'spurs') continue;
+    if (!goal.scorer || !players.has(goal.scorer)) throw new Error(`Verified Spurs scorer is missing from appearances: ${goal.scorer || 'unknown'}`);
+    players.get(goal.scorer).goals += 1;
+    if (goal.assist) {
+      if (!players.has(goal.assist)) throw new Error(`Verified Spurs assister is missing from appearances: ${goal.assist}`);
+      players.get(goal.assist).assists += 1;
+    }
+  }
+  return [...players.values()];
+}
+
 function readState(path) {
   if (!fs.existsSync(path)) return { processed: [] };
   return JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -521,6 +549,7 @@ module.exports = {
   getLeagueMatches,
   leagueLastFive,
   leagueMatchFromEvidence,
+  playerUpdatesFromLeagueMatch,
   readState,
   renderLastFive,
   renderScorers,

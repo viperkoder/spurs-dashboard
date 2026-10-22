@@ -192,6 +192,32 @@ function syntheticEvidence({ commentary, spursScore = 1, opponentScore = 0, rost
   };
 }
 
+// The scoreline text always puts the home team first, so an away equaliser
+// must use ESPN's structured play.team rather than the first team named.
+{
+  const commentary = [
+    {
+      text: 'Goal! Tottenham Hotspur 1, Everton 0. Starter 9 scored. Assisted by Starter 8.',
+      time: { value: 600 },
+      play: { team: { displayName: 'Tottenham Hotspur' }, participants: [{ athlete: { displayName: 'Starter 9' } }, { athlete: { displayName: 'Starter 8' } }] },
+    },
+    {
+      text: 'Goal! Tottenham Hotspur 1, Everton 1. Away Player scored.',
+      time: { value: 1200 },
+      play: { team: { displayName: 'Everton' }, participants: [{ athlete: { displayName: 'Away Player' } }] },
+    },
+  ];
+  const match = core.leagueMatchFromEvidence(
+    { mw: 7, opponent: 'Everton', venue: 'H', date: '2026-10-19T20:00:00+01:00', competition: 'Premier League' },
+    syntheticEvidence({ commentary, spursScore: 1, opponentScore: 1 })
+  );
+  assert.equal(match.goalReconciliation.status, 'reconciled');
+  assert.deepEqual(match.goals.map(goal => goal.team), ['spurs', 'opponent']);
+  const updates = core.playerUpdatesFromLeagueMatch(match);
+  assert.deepEqual(updates.find(player => player.name === 'Starter 9'), { name: 'Starter 9', appearance: 1, goals: 1, assists: 0 });
+  assert.deepEqual(updates.find(player => player.name === 'Starter 8'), { name: 'Starter 8', appearance: 1, goals: 0, assists: 1 });
+}
+
 // PART 7 — genuine 0-0: commentary present, no goal-prefixed entries, score
 // 0-0 -> a verified zero, not an absent/unknown result.
 {
@@ -251,8 +277,8 @@ function syntheticEvidence({ commentary, spursScore = 1, opponentScore = 0, rost
 // the 45+N fix above must not have disturbed it.
 {
   const commentary = [{
-    text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 tap-in (90+6\').',
-    time: { value: 5760 }, // 96 minutes elapsed clock
+    text: 'Goal!  Tottenham Hotspur 1, Everton 0. Starter 9 tap-in.',
+    time: { value: 5760, displayValue: "90'+6'" }, // provider clock carries added time
     play: { participants: [{ athlete: { displayName: 'Starter 9' } }] },
   }];
   const evidence = syntheticEvidence({ commentary, spursScore: 1, opponentScore: 0 });

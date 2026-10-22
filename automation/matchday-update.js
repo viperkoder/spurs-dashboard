@@ -92,6 +92,12 @@ function existingArray(source, name) {
   });
 }
 
+function squadAppearanceCount(source, playerName) {
+  const last = playerName.trim().split(/\s+/).pop().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = source.match(new RegExp(`\\{name:\"[^\"]*${last}[^\"]*\"[^{}]*?apps:(\\d+)`, 'i'));
+  return match ? Number(match[1]) : 0;
+}
+
 function validate(reconciliation, fixture, evidence) {
   if (!reconciliation.verified) return false;
   const r = reconciliation.result;
@@ -149,7 +155,7 @@ function validate(reconciliation, fixture, evidence) {
       const nextSeasonStats = core.upsertLeagueMatch(seasonStatsSource, leagueMatch);
       const seasonStatsChanged = nextSeasonStats !== seasonStatsSource;
       if (seasonStatsChanged) fs.writeFileSync(SEASON_STATS_PATH, nextSeasonStats);
-      const nextStandings = core.replaceExportedArray(
+      let nextStandings = core.replaceExportedArray(
         standingsSource,
         'LAST5',
         core.renderLastFive(core.leagueLastFive(core.getLeagueMatches(nextSeasonStats)))
@@ -160,6 +166,34 @@ function validate(reconciliation, fixture, evidence) {
         standingsSource = nextStandings;
       }
       leagueUsageChanged = seasonStatsChanged || recentFormChanged;
+      if (gr && gr.status === 'reconciled') {
+        // League score, lineup, goals and assists all come from the same
+        // structured evidence and have already passed exact score-count and
+        // appearance validation. Materialise player totals here so the
+        // dashboard does not depend on a paid model for factual statistics.
+        const players = core.playerUpdatesFromLeagueMatch(leagueMatch);
+        const nextSquad = core.updateSquad(squadSource, players);
+        const scorers = existingArray(nextStandings, 'SCORERS');
+        for (const player of players) {
+          let row = scorers.find(candidate => candidate.name === player.name);
+          if (!row && (player.goals > 0 || player.assists > 0)) {
+            row = { name: player.name, g: 0, a: 0, apps: squadAppearanceCount(nextSquad, player.name) };
+            scorers.push(row);
+          }
+          if (!row) continue;
+          if (row.apps !== squadAppearanceCount(nextSquad, player.name)) row.apps += player.appearance;
+          row.g += player.goals;
+          row.a += player.assists;
+        }
+        nextStandings = core.replaceExportedArray(nextStandings, 'SCORERS', core.renderScorers(scorers));
+        fs.writeFileSync(STANDINGS_PATH, nextStandings);
+        fs.writeFileSync(SQUAD_PATH, nextSquad);
+        state.processed = [...new Set([...(state.processed || []), core.fixtureKey(fixture)])];
+        state.lastProcessed = { fixture: core.fixtureKey(fixture), eventId: evidence.event.id, at: new Date().toISOString(), reconciliation: 'structured-evidence' };
+        fs.writeFileSync(STATE_PATH, `${JSON.stringify(state, null, 2)}\n`);
+        console.log(`Updated completed match: ${fixture.opponent} ${leagueMatch.score.spurs}-${leagueMatch.score.opponent}`);
+        continue;
+      }
     }
     let result;
     try {

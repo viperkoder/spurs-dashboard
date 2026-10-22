@@ -980,6 +980,48 @@ export const LEAGUE_MATCHES = [
       "Callum Olusesi",
       "Marcos Senesi",
       "Luca Williams-Barnett"
+    ],
+    "goals": [
+      {
+        "team": "spurs",
+        "scorer": "James Maddison",
+        "assist": "Mohammed Kudus",
+        "minute": 14,
+        "stoppage": null,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401879257"
+      },
+      {
+        "team": "opponent",
+        "scorer": "Jack Rudoni",
+        "assist": "Brandon Thomas-Asante",
+        "minute": 49,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401879257"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Omar Marmoush",
+        "assist": "Andy Robertson",
+        "minute": 58,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401879257"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Ben Davies",
+        "assist": "Dominic Solanke",
+        "minute": 90,
+        "stoppage": 6,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401879257"
+      }
     ]
   }
 ];
