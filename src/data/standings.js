@@ -2,24 +2,24 @@
 // standings data as results arrive across each multi-day matchweek.
 export const STANDINGS = [
   {pos:1,team:"Manchester City",w:7,d:0,l:1,gf:20,ga:9,gd:11,pts:21},
-  {pos:2,team:"Arsenal",w:6,d:0,l:1,gf:11,ga:5,gd:6,pts:18},
+  {pos:2,team:"Arsenal",w:7,d:0,l:1,gf:13,ga:5,gd:8,pts:21},
   {pos:3,team:"Brighton & Hove Albion",w:5,d:1,l:1,gf:23,ga:5,gd:18,pts:16},
-  {pos:4,team:"Chelsea",w:4,d:1,l:2,gf:17,ga:13,gd:4,pts:13},
+  {pos:4,team:"Chelsea",w:4,d:1,l:3,gf:17,ga:15,gd:2,pts:13},
   {pos:5,team:"Liverpool",w:3,d:3,l:1,gf:9,ga:8,gd:1,pts:12},
   {pos:6,team:"Aston Villa",w:3,d:2,l:3,gf:9,ga:12,gd:-3,pts:11},
   {pos:7,team:"Brentford",w:2,d:4,l:1,gf:13,ga:8,gd:5,pts:10},
   {pos:8,team:"Leeds United",w:2,d:4,l:1,gf:9,ga:6,gd:3,pts:10},
-  {pos:9,team:"Everton",w:2,d:4,l:1,gf:8,ga:7,gd:1,pts:10},
+  {pos:9,team:"Everton",w:2,d:4,l:2,gf:8,ga:9,gd:-1,pts:10},
   {pos:10,team:"Ipswich Town",w:3,d:1,l:4,gf:12,ga:16,gd:-4,pts:10},
   {pos:11,team:"Hull City",w:2,d:3,l:2,gf:8,ga:7,gd:1,pts:9},
-  {pos:12,team:"Newcastle United",w:2,d:2,l:3,gf:10,ga:14,gd:-4,pts:8},
-  {pos:13,team:"Manchester United",w:1,d:4,l:2,gf:10,ga:10,gd:0,pts:7},
-  {pos:14,team:"Crystal Palace",w:2,d:1,l:4,gf:9,ga:17,gd:-8,pts:7},
-  {pos:15,team:"AFC Bournemouth",w:1,d:3,l:3,gf:9,ga:13,gd:-4,pts:6},
-  {pos:16,team:"Nottingham Forest",w:1,d:3,l:4,gf:6,ga:10,gd:-4,pts:6},
-  {pos:17,team:"Tottenham Hotspur",w:1,d:3,l:3,gf:6,ga:10,gd:-4,pts:6,isSpurs:true},
-  {pos:18,team:"Coventry City",w:2,d:0,l:5,gf:6,ga:14,gd:-8,pts:6},
-  {pos:19,team:"Fulham",w:1,d:2,l:4,gf:7,ga:10,gd:-3,pts:5},
+  {pos:12,team:"Tottenham Hotspur",w:2,d:3,l:3,gf:8,ga:10,gd:-2,pts:9,isSpurs:true},
+  {pos:13,team:"Fulham",w:2,d:2,l:4,gf:8,ga:10,gd:-2,pts:8},
+  {pos:14,team:"Newcastle United",w:2,d:2,l:3,gf:10,ga:14,gd:-4,pts:8},
+  {pos:15,team:"Manchester United",w:1,d:4,l:2,gf:10,ga:10,gd:0,pts:7},
+  {pos:16,team:"Crystal Palace",w:2,d:1,l:4,gf:9,ga:17,gd:-8,pts:7},
+  {pos:17,team:"AFC Bournemouth",w:1,d:3,l:3,gf:9,ga:13,gd:-4,pts:6},
+  {pos:18,team:"Nottingham Forest",w:1,d:3,l:4,gf:6,ga:10,gd:-4,pts:6},
+  {pos:19,team:"Coventry City",w:2,d:0,l:6,gf:6,ga:15,gd:-9,pts:6},
   {pos:20,team:"Sunderland",w:1,d:1,l:5,gf:6,ga:14,gd:-8,pts:4},
 ];
 
@@ -29,11 +29,11 @@ export const STANDINGS = [
 // cup result was shown here in error previously — fixed 2026-09-21, see
 // project docs. Scorers are source-backed in seasonStats.js.
 export const LAST5 = [
+  {date:"24 Oct",home:"CHE",away:"TOT",score:"0-2",r:"W",scorer:""},
   {date:"19 Oct",home:"TOT",away:"COV",score:"3-1",r:"W",scorer:"Maddison 14; Marmoush 58; Davies 90+6"},
   {date:"10 Oct",home:"MUN",away:"TOT",score:"1-1",r:"D",scorer:"Solanke 90+2"},
   {date:"19 Sep",home:"TOT",away:"AVL",score:"2-3",r:"L",scorer:"Gallagher 86; van Hecke 90+8"},
   {date:"12 Sep",home:"TOT",away:"EVE",score:"0-0",r:"D",scorer:""},
-  {date:"5 Sep",home:"NFO",away:"TOT",score:"0-0",r:"D",scorer:""},
 ];
 
 // Competitive 2026/27 totals. The Spurs match reconciliation updates these.

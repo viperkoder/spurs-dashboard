@@ -1023,6 +1023,124 @@ export const LEAGUE_MATCHES = [
         "source": "https://www.espn.com/soccer/match/_/gameId/401879257"
       }
     ]
+  },
+  {
+    "mw": 8,
+    "opponent": "Chelsea",
+    "venue": "A",
+    "date": "2026-10-24T15:00:00",
+    "score": {
+      "spurs": 2,
+      "opponent": 0
+    },
+    "sourceEventId": "401878767",
+    "sources": [
+      "https://www.espn.com/soccer/match/_/gameId/401878767"
+    ],
+    "appearances": [
+      {
+        "player": "Antonín Kinsky",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Micky van de Ven",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Jan Paul van Hecke",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Andy Robertson",
+        "started": true,
+        "on": 0,
+        "off": 65
+      },
+      {
+        "player": "Archie Gray",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "James Maddison",
+        "started": true,
+        "on": 0,
+        "off": 51
+      },
+      {
+        "player": "Sandro Tonali",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Mateus Fernandes",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Omar Marmoush",
+        "started": true,
+        "on": 0,
+        "off": 65
+      },
+      {
+        "player": "Mathys Tel",
+        "started": true,
+        "on": 0,
+        "off": 89
+      },
+      {
+        "player": "Mohammed Kudus",
+        "started": true,
+        "on": 0,
+        "off": 89
+      },
+      {
+        "player": "Dejan Kulusevski",
+        "started": false,
+        "on": 89,
+        "off": 90
+      },
+      {
+        "player": "Conor Gallagher",
+        "started": false,
+        "on": 51,
+        "off": 90
+      },
+      {
+        "player": "Ben Davies",
+        "started": false,
+        "on": 89,
+        "off": 90
+      },
+      {
+        "player": "Pedro Porro",
+        "started": false,
+        "on": 65,
+        "off": 90
+      },
+      {
+        "player": "Dominic Solanke",
+        "started": false,
+        "on": 65,
+        "off": 90
+      }
+    ],
+    "unused": [
+      "Callum Olusesi",
+      "Martin Dúbravka",
+      "Marcos Senesi",
+      "Luca Williams-Barnett"
+    ]
   }
 ];
 
