@@ -7,9 +7,9 @@ export const STANDINGS = [
   {pos:4,team:"Liverpool",w:4,d:3,l:1,gf:11,ga:8,gd:3,pts:15},
   {pos:5,team:"Chelsea",w:4,d:1,l:3,gf:17,ga:15,gd:2,pts:13},
   {pos:6,team:"Brentford",w:2,d:5,l:1,gf:14,ga:9,gd:5,pts:11},
-  {pos:7,team:"Newcastle United",w:3,d:2,l:3,gf:12,ga:14,gd:-2,pts:11},
-  {pos:8,team:"Aston Villa",w:3,d:2,l:3,gf:9,ga:12,gd:-3,pts:11},
-  {pos:9,team:"Leeds United",w:2,d:4,l:1,gf:9,ga:6,gd:3,pts:10},
+  {pos:7,team:"Leeds United",w:2,d:5,l:1,gf:9,ga:6,gd:3,pts:11},
+  {pos:8,team:"Newcastle United",w:3,d:2,l:3,gf:12,ga:14,gd:-2,pts:11},
+  {pos:9,team:"Aston Villa",w:3,d:2,l:3,gf:9,ga:12,gd:-3,pts:11},
   {pos:10,team:"Hull City",w:2,d:4,l:2,gf:9,ga:8,gd:1,pts:10},
   {pos:11,team:"Everton",w:2,d:4,l:2,gf:8,ga:9,gd:-1,pts:10},
   {pos:12,team:"Ipswich Town",w:3,d:1,l:4,gf:12,ga:16,gd:-4,pts:10},
@@ -20,7 +20,7 @@ export const STANDINGS = [
   {pos:17,team:"Crystal Palace",w:2,d:1,l:5,gf:9,ga:19,gd:-10,pts:7},
   {pos:18,team:"Nottingham Forest",w:1,d:3,l:4,gf:6,ga:10,gd:-4,pts:6},
   {pos:19,team:"Coventry City",w:2,d:0,l:6,gf:6,ga:15,gd:-9,pts:6},
-  {pos:20,team:"Sunderland",w:1,d:1,l:5,gf:6,ga:14,gd:-8,pts:4},
+  {pos:20,team:"Sunderland",w:1,d:2,l:5,gf:6,ga:14,gd:-8,pts:5},
 ];
 
 // Latest first. Premier League results only — this sits directly under the
