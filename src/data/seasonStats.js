@@ -1141,6 +1141,146 @@ export const LEAGUE_MATCHES = [
       "Marcos Senesi",
       "Luca Williams-Barnett"
     ]
+  },
+  {
+    "mw": 9,
+    "opponent": "Crystal Palace",
+    "venue": "H",
+    "date": "2026-10-31T15:00:00",
+    "score": {
+      "spurs": 2,
+      "opponent": 0
+    },
+    "sourceEventId": "401878761",
+    "sources": [
+      "https://www.espn.com/soccer/match/_/gameId/401878761"
+    ],
+    "appearances": [
+      {
+        "player": "Antonín Kinsky",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Micky van de Ven",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Jan Paul van Hecke",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Andy Robertson",
+        "started": true,
+        "on": 0,
+        "off": 77
+      },
+      {
+        "player": "Archie Gray",
+        "started": true,
+        "on": 0,
+        "off": 45
+      },
+      {
+        "player": "Omar Marmoush",
+        "started": true,
+        "on": 0,
+        "off": 77
+      },
+      {
+        "player": "Mateus Fernandes",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Sandro Tonali",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Dominic Solanke",
+        "started": true,
+        "on": 0,
+        "off": 66
+      },
+      {
+        "player": "Mathys Tel",
+        "started": true,
+        "on": 0,
+        "off": 88
+      },
+      {
+        "player": "Mohammed Kudus",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Pedro Porro",
+        "started": false,
+        "on": 45,
+        "off": 90
+      },
+      {
+        "player": "Dejan Kulusevski",
+        "started": false,
+        "on": 77,
+        "off": 90
+      },
+      {
+        "player": "Luca Williams-Barnett",
+        "started": false,
+        "on": 88,
+        "off": 90
+      },
+      {
+        "player": "Destiny Udogie",
+        "started": false,
+        "on": 77,
+        "off": 90
+      },
+      {
+        "player": "Conor Gallagher",
+        "started": false,
+        "on": 66,
+        "off": 90
+      }
+    ],
+    "unused": [
+      "Ben Davies",
+      "Martin Dúbravka",
+      "Marcos Senesi",
+      "James Maddison"
+    ],
+    "goals": [
+      {
+        "team": "spurs",
+        "scorer": "Archie Gray",
+        "assist": "Mohammed Kudus",
+        "minute": 25,
+        "stoppage": null,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401878761"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Jan Paul van Hecke",
+        "assist": null,
+        "minute": 73,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401878761"
+      }
+    ]
   }
 ];
 
