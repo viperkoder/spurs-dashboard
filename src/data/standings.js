@@ -1,11 +1,11 @@
 // 2026/27 Premier League. The complete table is refreshed from structured
 // standings data as results arrive across each multi-day matchweek.
 export const STANDINGS = [
-  {pos:1,team:"Manchester City",w:7,d:0,l:2,gf:20,ga:10,gd:10,pts:21},
-  {pos:2,team:"Arsenal",w:7,d:0,l:1,gf:13,ga:5,gd:8,pts:21},
+  {pos:1,team:"Arsenal",w:8,d:0,l:1,gf:14,ga:5,gd:9,pts:24},
+  {pos:2,team:"Manchester City",w:7,d:0,l:2,gf:20,ga:10,gd:10,pts:21},
   {pos:3,team:"Brighton & Hove Albion",w:6,d:1,l:2,gf:24,ga:7,gd:17,pts:19},
   {pos:4,team:"Chelsea",w:5,d:1,l:3,gf:19,ga:15,gd:4,pts:16},
-  {pos:5,team:"Liverpool",w:4,d:3,l:1,gf:11,ga:8,gd:3,pts:15},
+  {pos:5,team:"Liverpool",w:4,d:3,l:2,gf:11,ga:9,gd:2,pts:15},
   {pos:6,team:"Brentford",w:3,d:5,l:1,gf:16,ga:9,gd:7,pts:14},
   {pos:7,team:"AFC Bournemouth",w:3,d:3,l:3,gf:14,ga:13,gd:1,pts:12},
   {pos:8,team:"Tottenham Hotspur",w:3,d:3,l:3,gf:10,ga:10,gd:0,pts:12,isSpurs:true},
