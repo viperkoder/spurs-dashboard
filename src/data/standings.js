@@ -1,8 +1,8 @@
 // 2026/27 Premier League. The complete table is refreshed from structured
 // standings data as results arrive across each multi-day matchweek.
 export const STANDINGS = [
-  {pos:1,team:"Arsenal",w:8,d:0,l:1,gf:14,ga:5,gd:9,pts:24},
-  {pos:2,team:"Manchester City",w:7,d:0,l:2,gf:20,ga:10,gd:10,pts:21},
+  {pos:1,team:"Arsenal",w:9,d:0,l:1,gf:15,ga:5,gd:10,pts:27},
+  {pos:2,team:"Manchester City",w:7,d:0,l:3,gf:21,ga:13,gd:8,pts:21},
   {pos:3,team:"Brighton & Hove Albion",w:6,d:1,l:2,gf:24,ga:7,gd:17,pts:19},
   {pos:4,team:"Chelsea",w:5,d:1,l:3,gf:19,ga:15,gd:4,pts:16},
   {pos:5,team:"Everton",w:4,d:4,l:2,gf:12,ga:10,gd:2,pts:16},
@@ -11,15 +11,15 @@ export const STANDINGS = [
   {pos:8,team:"Leeds United",w:3,d:5,l:2,gf:10,ga:8,gd:2,pts:14},
   {pos:9,team:"AFC Bournemouth",w:3,d:3,l:3,gf:14,ga:13,gd:1,pts:12},
   {pos:10,team:"Tottenham Hotspur",w:3,d:3,l:4,gf:10,ga:11,gd:-1,pts:12,isSpurs:true},
-  {pos:11,team:"Aston Villa",w:3,d:3,l:3,gf:10,ga:13,gd:-3,pts:12},
-  {pos:12,team:"Hull City",w:2,d:5,l:2,gf:11,ga:10,gd:1,pts:11},
-  {pos:13,team:"Newcastle United",w:3,d:2,l:4,gf:12,ga:15,gd:-3,pts:11},
+  {pos:11,team:"Newcastle United",w:3,d:3,l:4,gf:13,ga:16,gd:-3,pts:12},
+  {pos:12,team:"Aston Villa",w:3,d:3,l:3,gf:10,ga:13,gd:-3,pts:12},
+  {pos:13,team:"Hull City",w:2,d:5,l:3,gf:11,ga:11,gd:0,pts:11},
   {pos:14,team:"Ipswich Town",w:3,d:2,l:4,gf:14,ga:18,gd:-4,pts:11},
-  {pos:15,team:"Fulham",w:2,d:3,l:4,gf:9,ga:11,gd:-2,pts:9},
-  {pos:16,team:"Coventry City",w:3,d:0,l:7,gf:10,ga:19,gd:-9,pts:9},
-  {pos:17,team:"Manchester United",w:1,d:4,l:4,gf:10,ga:15,gd:-5,pts:7},
-  {pos:18,team:"Crystal Palace",w:2,d:1,l:6,gf:9,ga:21,gd:-12,pts:7},
-  {pos:19,team:"Nottingham Forest",w:1,d:3,l:5,gf:6,ga:12,gd:-6,pts:6},
+  {pos:15,team:"Fulham",w:2,d:4,l:4,gf:10,ga:12,gd:-2,pts:10},
+  {pos:16,team:"Nottingham Forest",w:2,d:3,l:5,gf:9,ga:13,gd:-4,pts:9},
+  {pos:17,team:"Coventry City",w:3,d:0,l:7,gf:10,ga:19,gd:-9,pts:9},
+  {pos:18,team:"Manchester United",w:1,d:4,l:4,gf:10,ga:15,gd:-5,pts:7},
+  {pos:19,team:"Crystal Palace",w:2,d:1,l:6,gf:9,ga:21,gd:-12,pts:7},
   {pos:20,team:"Sunderland",w:1,d:2,l:6,gf:7,ga:17,gd:-10,pts:5},
 ];
 
