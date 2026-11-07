@@ -21,6 +21,7 @@ function fixtureSections(source) {
         status: value('status') || 'scheduled',
         competition: value('comp') || (name === 'PREMIER_LEAGUE_SCHEDULE' ? 'Premier League' : name === 'PRESEASON' ? 'Friendly' : 'Cup'),
         eliminated: /eliminated:true/.test(body),
+        kickoffTbc: /kickoffTbc:true/.test(body),
       };
     });
   });
@@ -32,7 +33,7 @@ function dueFixtures(source, state, now = new Date()) {
   return fixtureSections(source).filter(f => {
     const kickoff = ukLocalTimeMs(f.date);
     const key = fixtureKey(f);
-    return !f.eliminated && !['completed', 'postponed', 'cancelled', 'abandoned'].includes(f.status) && Number.isFinite(kickoff) &&
+    return !f.eliminated && !f.kickoffTbc && f.opponent !== 'TBD' && !['completed', 'postponed', 'cancelled', 'abandoned'].includes(f.status) && Number.isFinite(kickoff) &&
       nowMs >= kickoff + AFTER_KICKOFF_MS &&
       nowMs - kickoff <= MATCH_WINDOW_MS &&
       !done.has(key);

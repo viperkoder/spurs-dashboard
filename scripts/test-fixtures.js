@@ -48,4 +48,26 @@ assert.equal(matchDisplayState(selectedDuring,new Date('2026-11-07T17:00:00Z')),
 assert.equal(matchDisplayState({...selectedDuring,status:'delayed'},during),'delayed','confirmed delay must not claim match is underway');
 assert.equal(selectNextMatch([{...leeds,score:'2-1',status:'completed'},next],during).opponent,'Ipswich Town','verified final result advances next fixture');
 assert.equal(selectNextMatch([{...leeds,status:'postponed'},next],during).opponent,'Ipswich Town','terminal postponement advances next fixture');
+for(const [mw,kickoff,sgt] of [
+  [11,'2026-11-21T15:00:00Z','2026-11-21 23:00'],
+  [12,'2026-11-29T14:05:00Z','2026-11-29 22:05'],
+  [13,'2026-12-03T20:00:00Z','2026-12-04 04:00'],
+  [14,'2026-12-06T16:30:00Z','2026-12-07 00:30'],
+  [15,'2026-12-14T20:00:00Z','2026-12-15 04:00'],
+  [16,'2026-12-19T17:30:00Z','2026-12-20 01:30'],
+  [18,'2026-12-29T19:30:00Z','2026-12-30 03:30'],
+  [19,'2027-01-03T16:30:00Z','2027-01-04 00:30'],
+  [20,'2027-01-06T19:30:00Z','2027-01-07 03:30'],
+]){
+  const fixture=context.api.PREMIER_LEAGUE_SCHEDULE.find(f=>f.mw===mw);
+  assert.equal(fixture.date,kickoff,`matchweek ${mw} verified kickoff`);
+  assert.equal(fixture.verified,true);
+  assert.equal(fixture.provisional,false);
+  assert.equal(fixtureKickoffMs(fixture.date),Date.parse(kickoff));
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Singapore',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(kickoff)).map(p=>[p.type,p.value]));
+  const actual=`${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`;
+  assert.equal(actual,sgt,`matchweek ${mw} Singapore display`);
+}
+assert.equal(context.api.PREMIER_LEAGUE_SCHEDULE.find(f=>f.mw===17).provisional,true,'unselected Boxing Day kickoff remains provisional');
+assert.equal(context.api.PREMIER_LEAGUE_SCHEDULE.find(f=>f.mw===21).provisional,true,'later rounds remain provisional');
 console.log('PASS: verified next-fixture selection, status/competition validation, SGT conversion, countdown identity and rollover.');

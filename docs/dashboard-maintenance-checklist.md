@@ -44,6 +44,12 @@ confirmed result, injury, signing or departure.
 - [ ] Footer verification date and visible season labels are accurate
 - [ ] Live Pages deployment inspected after publishing
 
+## Fixture reconciliation — 7 November 2026
+
+- [x] Reviewed Premier League matchweeks 11–38 and remaining domestic-cup calendar entries against Tottenham's official fixture-change notices and the Premier League's current list. Preserved existing results and eliminated Carabao Cup placeholders.
+- [x] Confirmed Ipswich (21 November, 15:00 GMT); corrected Sunderland (29 November), Fulham home (3 December), Arsenal home (6 December), Hull away (14 December), Liverpool away (19 December), Brighton home (29 December), Manchester City away (3 January), and Fulham away (6 January). Each confirmed kickoff has an explicit UTC timestamp and official source in `src/data/fixtures.js`.
+- [ ] Bournemouth on 26 December and Premier League matchweeks 21–38 retain provisional kickoff times, subject to later broadcast selection. FA Cup opponents/times remain TBD until draws and announcements; the Fixtures panel labels those dates as round dates with kickoff TBC. Carabao Cup later-round rows are eliminated calendar placeholders, not matches. Neither type enters the matchday gate.
+
 ## Matchday update
 
 - [x] Leeds away on 7 November 2026 uses the club-confirmed 12:30 GMT / 20:30 SGT kickoff (`2026-11-07T12:30:00Z`); the countdown and fixture panel read the same fixture record.

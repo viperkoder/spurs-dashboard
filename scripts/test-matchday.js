@@ -28,6 +28,10 @@ const cupFixtures = `export const CUPS = [
 const cupDue = core.dueFixtures(cupFixtures, { processed: [] }, new Date('2026-08-26T21:00:00Z'))[0];
 assert.match(core.applyFixtureScore(cupFixtures, cupDue, { spurs: 2, opponent: 1 }), /score:"2-1"/);
 assert.equal(core.dueFixtures(cupFixtures.replace('score:null', 'score:null,eliminated:true'), { processed: [] }, new Date('2026-08-26T21:00:00Z')).length, 0);
+const undrawnCup = `export const CUPS = [
+  {comp:"Emirates FA Cup", round:"Round 3", opponent:"TBD", venue:"TBD", date:"2027-01-09T15:00:00", score:null, kickoffTbc:true},
+];`;
+assert.equal(core.dueFixtures(undrawnCup, { processed: [] }, new Date('2027-01-09T18:00:00Z')).length, 0,'undrawn round date is not a scheduled match');
 
 const standings = core.renderStandings([{ team: 'Tottenham Hotspur', w: 1, d: 0, l: 0, gf: 2, ga: 1, gd: 1, pts: 3 }]);
 assert.match(standings[0], /isSpurs:true/);

@@ -13,12 +13,14 @@ function monthKey(dateStr){
 function FixtureRow({f, label}){
   const played = f.score !== null && f.score !== undefined;
   const terminal = ["postponed","cancelled","abandoned"].includes(f.status);
-  const statusLabel = played ? "FINAL" : terminal ? f.status.toUpperCase() : f.eliminated ? "ELIMINATED" : "UPCOMING";
+  const statusLabel = played ? "FINAL" : terminal ? f.status.toUpperCase() : f.eliminated ? "ELIMINATED" : f.kickoffTbc ? "ROUND TBD" : "UPCOMING";
   const statusColor = played ? P.green : terminal ? P.amber : P.muted;
-  const venueLabel = f.venue==="H"?"(H)":f.venue==="A"?"(A)":"(N)";
+  const venueLabel = f.venue==="H"?"(H)":f.venue==="A"?"(A)":f.venue==="N"?"(N)":"";
   const d = new Date(fixtureKickoffMs(f.date));
-  const dateLabel = d.toLocaleDateString('en-GB',{timeZone:'Asia/Singapore',weekday:'short',day:'numeric',month:'short'});
-  const timeLabel = d.toLocaleTimeString('en-GB',{timeZone:'Asia/Singapore',hour:'2-digit',minute:'2-digit'})+' SGT';
+  const dateLabel = f.kickoffTbc
+    ? new Date(`${f.date.slice(0,10)}T12:00:00Z`).toLocaleDateString('en-GB',{timeZone:'Europe/London',weekday:'short',day:'numeric',month:'short'})
+    : d.toLocaleDateString('en-GB',{timeZone:'Asia/Singapore',weekday:'short',day:'numeric',month:'short'});
+  const timeLabel = f.kickoffTbc ? 'Kickoff TBC' : d.toLocaleTimeString('en-GB',{timeZone:'Asia/Singapore',hour:'2-digit',minute:'2-digit'})+' SGT';
   return (
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",background:P.bgCard,borderRadius:5,border:`1px solid ${P.border}`,borderLeft:`3px solid ${statusColor}`,gap:10}}>
       <div style={{flex:1,minWidth:0}}>
@@ -27,7 +29,7 @@ function FixtureRow({f, label}){
           <span style={{fontSize:13,fontWeight:700,color:P.white}}>{f.opponent} {venueLabel}</span>
           {f.provisional && <span title="Official date, provisional — subject to TV rescheduling" style={{fontSize:9,color:P.muted,border:`1px solid ${P.border}`,borderRadius:3,padding:"1px 5px"}}>PROV</span>}
         </div>
-        <div style={{fontSize:11,color:P.muted,marginTop:2}}>{dateLabel} · {timeLabel}{f.note?` — ${f.note}`:""}</div>
+        <div style={{fontSize:11,color:P.muted,marginTop:2}}>{f.kickoffTbc?'Round date: ':''}{dateLabel} · {timeLabel}{f.note?` — ${f.note}`:""}</div>
         {f.startingXI && <details style={{fontSize:11,color:P.text,marginTop:5,lineHeight:1.7}}>
           <summary style={{cursor:"pointer",color:P.gold}}>Line-up and substitutions</summary>
           <div>Starting XI: {f.startingXI}</div>
