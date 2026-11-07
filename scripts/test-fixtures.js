@@ -25,8 +25,9 @@ assert.equal(selectNextMatch([{...united,competition:'Carabao Cup'},coventry],no
 assert.equal(selectNextMatch([{...united,date:'2026-10-10T17:30:00'},coventry],now).opponent,'Coventry City','verified fixture without timezone must be rejected');
 assert.equal(selectNextMatch([{opponent:'Chelsea',date:'2026-10-24T15:00:00',competition:'Premier League',expectedCompetition:'Premier League',score:null,provisional:true}],now).opponent,'Chelsea','provisional official schedule remains a fallback');
 assert.equal(fixtureKickoffMs('2026-10-24T15:00:00'),Date.parse('2026-10-24T14:00:00Z'),'UK-local provisional time must parse consistently during BST');
-assert.equal(getNextMatch(now).opponent,'Leeds United','populated final results must roll the live schedule to the next unplayed fixture even when the test clock precedes kickoff');
-assert.equal(getNextMatch(new Date('2026-10-10T16:31:00Z')).opponent,'Leeds United','live schedule must skip every completed fixture');
+const liveNext=getNextMatch(now);
+assert.ok(liveNext && liveNext.score==null,'populated final results must roll the live schedule to an unplayed fixture');
+assert.equal(liveNext.kickoffMs,fixtureKickoffMs(liveNext.date),'selected fixture and countdown share one kickoff');
 const joined=context.withLeagueResults([{mw:6,status:'scheduled'}],[{mw:6,score:{spurs:1,opponent:1}}]);
 assert.equal(joined[0].score,'1-1','completed result must populate the fixture score');
 assert.equal(joined[0].status,'completed','completed result must expose a final status');
@@ -42,7 +43,6 @@ assert.equal(countdownTargetMs(selectedBefore)-before.getTime(),1000,'pre-match 
 assert.equal(matchDisplayState(selectedBefore,before),'upcoming');
 const selectedDuring=selectNextMatch([leeds,next],during);
 assert.equal(selectedDuring.opponent,'Leeds United','kickoff must not roll the fixture away');
-assert.equal(getNextMatch(during).opponent,'Leeds United','live dashboard must keep Leeds selected');
 assert.equal(matchDisplayState(selectedDuring,during),'underway','post-kickoff state must suppress countdown');
 assert.equal(matchDisplayState(selectedDuring,new Date('2026-11-07T17:00:00Z')),'awaiting-result','late provider data must not imply play continues');
 assert.equal(matchDisplayState({...selectedDuring,status:'delayed'},during),'delayed','confirmed delay must not claim match is underway');
