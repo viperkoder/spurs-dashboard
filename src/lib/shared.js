@@ -18,7 +18,7 @@ export function isSpursRelevant(title){
 // Shared small components used across every panel.
 // Edit this file alone to change Chip, widget headers, or bar styling globally.
 import { P } from '../data/theme.js';
-import { getNextMatch, countdownTargetMs } from '../data/fixtures.js';
+import { getNextMatch, countdownTargetMs, matchDisplayState } from '../data/fixtures.js';
 import { NEWS, RSS_SOURCES, CORS_PROXIES } from '../data/news.js';
 
 // ── Shared live-news hook ────────────────────────────────────────────────
@@ -262,14 +262,15 @@ export function Clock(){
 // Dynamic: pulls the soonest not-yet-played fixture from fixtures.js (friendly
 // or competitive) — never hardcode a specific match/date here again.
 export function Countdown(){
-  const match = getNextMatch();
+  const [now,setNow]=useState(()=>Date.now());
+  useEffect(()=>{const i=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(i);},[]);
+  const match = getNextMatch(new Date(now));
   const target = match ? new Date(countdownTargetMs(match)) : null;
-  const [diff,setDiff]=useState(target?Math.max(0,target-new Date()):0);
-  useEffect(()=>{
-    if(!target) return;
-    const i=setInterval(()=>setDiff(Math.max(0,target-new Date())),1000);
-    return()=>clearInterval(i);
-  },[match&&match.date]);
+  const diff=target?Math.max(0,target.getTime()-now):0;
+  const displayState=matchDisplayState(match,now);
+  const underway=displayState==="underway";
+  const delayed=displayState==="delayed";
+  const awaitingResult=displayState==="awaiting-result";
   if(!match){
     return (
       <div style={{background:`linear-gradient(145deg,${P.bgCard},${P.bgPanel})`,border:`2px solid ${P.gold}`,borderRadius:8,padding:"14px 16px",textAlign:"center",boxShadow:`0 0 20px ${P.gold}22`}}>
@@ -283,17 +284,17 @@ export function Countdown(){
   const vs = match.venue==="H"?"(H)":match.venue==="A"?"(A)":"(N)";
   return (
     <div style={{background:`linear-gradient(145deg,${P.bgCard},${P.bgPanel})`,border:`2px solid ${P.gold}`,borderRadius:8,padding:"14px 16px",textAlign:"center",boxShadow:`0 0 20px ${P.gold}22`}}>
-      <div style={{fontSize:11,color:P.gold,letterSpacing:"0.18em",marginBottom:10,fontWeight:900}}>NEXT MATCH</div>
+      <div style={{fontSize:11,color:P.gold,letterSpacing:"0.18em",marginBottom:10,fontWeight:900}}>{delayed?"KICKOFF DELAYED":awaitingResult?"AWAITING MATCH RESULT":underway?"MATCH UNDERWAY":"NEXT MATCH"}</div>
       <div style={{fontSize:14,color:P.white,fontWeight:800,marginBottom:2}}>{match.opponent.toUpperCase()} {vs} · {match.comp}</div>
       <div style={{fontSize:10,color:P.muted,marginBottom:12}}>{match.note || new Intl.DateTimeFormat("en-SG",{timeZone:"Asia/Singapore",weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit",hour12:true}).format(target)+" SGT"}</div>
-      <div style={{display:"flex",gap:8,justifyContent:"center",alignItems:"baseline"}}>
+      {underway||delayed||awaitingResult?<div style={{fontSize:14,color:P.gold,fontWeight:800,marginTop:12}}>{delayed?"Awaiting confirmed kickoff":awaitingResult?"Full-time not yet verified":"Awaiting verified full-time"}</div>:<div style={{display:"flex",gap:8,justifyContent:"center",alignItems:"baseline"}}>
         {[[p(d),"DAYS"],[p(h),"HRS"],[p(m),"MIN"],[p(s),"SEC"]].map(([v,l])=>(
           <div key={l} style={{textAlign:"center",flex:1}}>
             <div style={{fontSize:34,fontWeight:900,color:P.gold,fontVariantNumeric:"tabular-nums",lineHeight:1,textShadow:`0 0 12px ${P.gold}66`}}>{v}</div>
             <div style={{fontSize:9,color:P.muted,marginTop:4,fontWeight:800,letterSpacing:"0.12em"}}>{l}</div>
           </div>
         ))}
-      </div>
+      </div>}
     </div>
   );
 }

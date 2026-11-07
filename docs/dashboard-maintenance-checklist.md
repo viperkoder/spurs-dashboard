@@ -46,6 +46,8 @@ confirmed result, injury, signing or departure.
 
 ## Matchday update
 
+- [x] Leeds away on 7 November 2026 uses the club-confirmed 12:30 GMT / 20:30 SGT kickoff (`2026-11-07T12:30:00Z`); the countdown and fixture panel read the same fixture record.
+- [x] Keep a kicked-off fixture in the Next Match area until the existing completed-match record or terminal fixture status confirms transition. Show Match Underway without a countdown, then an awaiting-result state if final evidence is delayed; an explicitly delayed kickoff has its own label.
 - [ ] Full league table refresh runs independently after every club's completed match
 - [ ] Matchweeks spanning Friday–Monday remain live and update as results arrive
 - [ ] Matchday workflow becomes eligible at kickoff + 2 hours and retries until final evidence exists

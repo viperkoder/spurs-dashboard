@@ -36,7 +36,7 @@ export const PREMIER_LEAGUE_SCHEDULE = [
   {mw:7,  opponent:"Coventry City",         venue:"H", date:"2026-10-19T20:00:00+01:00", score:null, provisional:false, status:"scheduled", verified:true, source:"https://www.tottenhamhotspur.com/fixtures/men/", note:"Mon 19 Oct · 8:00 PM BST / Tue 20 Oct · 3:00 AM SGT"},
   {mw:8,  opponent:"Chelsea",               venue:"A", date:"2026-10-24T15:00:00", score:null, provisional:true},
   {mw:9,  opponent:"Crystal Palace",        venue:"H", date:"2026-10-31T15:00:00", score:null, provisional:true},
-  {mw:10, opponent:"Leeds United",          venue:"A", date:"2026-11-07T15:00:00", score:null, provisional:true},
+  {mw:10, opponent:"Leeds United",          venue:"A", date:"2026-11-07T12:30:00Z", score:null, provisional:false, verified:true, source:"https://www.tottenhamhotspur.com/news/1091527/premier-league-fixture-changes-november-2026"},
   {mw:11, opponent:"Ipswich Town",          venue:"H", date:"2026-11-21T15:00:00", score:null, provisional:true},
   {mw:12, opponent:"Sunderland",            venue:"A", date:"2026-11-28T15:00:00", score:null, provisional:true, note:"May move to Sun/Mon — opponent's Europa League involvement"},
   {mw:13, opponent:"Fulham",                venue:"H", date:"2026-12-02T20:00:00", score:null, provisional:true},
@@ -109,17 +109,29 @@ export function selectNextMatch(fixtures,now){
     if(!f || f.eliminated || f.score!=null || f.opponent==="TBD" || TERMINAL_STATUSES.has(f.status)) return false;
     if(f.expectedCompetition && f.competition!==f.expectedCompetition) return false;
     const kickoffMs=fixtureKickoffMs(f.date);
-    return Number.isFinite(kickoffMs) && kickoffMs>nowMs && (!f.verified || OFFSET_DATE.test(f.date));
+    return Number.isFinite(kickoffMs) && (!f.verified || OFFSET_DATE.test(f.date));
   }).map(f=>({...f,kickoffMs:fixtureKickoffMs(f.date)}));
-  const verified=eligible.filter(f=>f.verified).sort((a,b)=>a.kickoffMs-b.kickoffMs);
-  const fallback=eligible.filter(f=>!f.verified).sort((a,b)=>a.kickoffMs-b.kickoffMs);
-  return verified[0]||fallback[0]||null;
+  // A kicked-off fixture remains current until the existing result/status
+  // ingestion verifies its end. Do not infer full-time from elapsed minutes.
+  const inProgress=eligible.filter(f=>f.kickoffMs<=nowMs).sort((a,b)=>a.kickoffMs-b.kickoffMs);
+  if(inProgress.length) return inProgress[0];
+  return eligible.sort((a,b)=>a.kickoffMs-b.kickoffMs)[0]||null;
 }
 
 export function countdownTargetMs(match){return match?match.kickoffMs:NaN;}
 
-// Combines all supported competitions. Verified, explicitly timestamped rows
-// take precedence; provisional schedule rows are only a safe fallback.
+export function matchDisplayState(match,now=Date.now()){
+  if(!match) return "none";
+  if(match.status==="delayed") return "delayed";
+  const nowMs=now instanceof Date?now.getTime():Number(now);
+  const elapsed=nowMs-countdownTargetMs(match);
+  if(elapsed<0) return "upcoming";
+  // A very late provider update should not imply play is still continuing.
+  return elapsed>=4*60*60*1000?"awaiting-result":"underway";
+}
+
+// Combines all supported competitions in kickoff order. Confirmed rows must
+// carry an explicit timezone; provisional rows retain their UK-local fallback.
 export function getNextMatch(now){
   const all = [
     ...PRESEASON.map(f=>({...f, comp:"Pre-Season Friendly",competition:"Pre-Season Friendly",expectedCompetition:"Pre-Season Friendly"})),

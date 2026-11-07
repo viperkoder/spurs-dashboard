@@ -9,8 +9,8 @@ vm.runInNewContext(`${seasonSource.replace(/^export\s+/gm,'')}\nthis.withLeagueR
 const fixtureSource = fs.readFileSync(path.join(__dirname,'../src/data/fixtures.js'),'utf8')
   .replace(/^import .*$/gm,'')
   .replace(/^export\s+/gm,'');
-vm.runInNewContext(`${fixtureSource}\nthis.api={fixtureKickoffMs,selectNextMatch,countdownTargetMs,getNextMatch};`,context);
-const {fixtureKickoffMs,selectNextMatch,countdownTargetMs,getNextMatch}=context.api;
+vm.runInNewContext(`${fixtureSource}\nthis.api={fixtureKickoffMs,selectNextMatch,countdownTargetMs,matchDisplayState,getNextMatch,PREMIER_LEAGUE_SCHEDULE};`,context);
+const {fixtureKickoffMs,selectNextMatch,countdownTargetMs,matchDisplayState,getNextMatch}=context.api;
 
 const now=new Date('2026-10-10T12:30:00Z');
 const united={opponent:'Manchester United',date:'2026-10-10T17:30:00+01:00',competition:'Premier League',expectedCompetition:'Premier League',status:'scheduled',score:null,verified:true};
@@ -25,9 +25,27 @@ assert.equal(selectNextMatch([{...united,competition:'Carabao Cup'},coventry],no
 assert.equal(selectNextMatch([{...united,date:'2026-10-10T17:30:00'},coventry],now).opponent,'Coventry City','verified fixture without timezone must be rejected');
 assert.equal(selectNextMatch([{opponent:'Chelsea',date:'2026-10-24T15:00:00',competition:'Premier League',expectedCompetition:'Premier League',score:null,provisional:true}],now).opponent,'Chelsea','provisional official schedule remains a fallback');
 assert.equal(fixtureKickoffMs('2026-10-24T15:00:00'),Date.parse('2026-10-24T14:00:00Z'),'UK-local provisional time must parse consistently during BST');
-assert.equal(getNextMatch(now).opponent,'Chelsea','populated final results must roll the live schedule to the next unplayed fixture even when the test clock precedes kickoff');
-assert.equal(getNextMatch(new Date('2026-10-10T16:31:00Z')).opponent,'Chelsea','live schedule must skip every completed fixture');
+assert.equal(getNextMatch(now).opponent,'Leeds United','populated final results must roll the live schedule to the next unplayed fixture even when the test clock precedes kickoff');
+assert.equal(getNextMatch(new Date('2026-10-10T16:31:00Z')).opponent,'Leeds United','live schedule must skip every completed fixture');
 const joined=context.withLeagueResults([{mw:6,status:'scheduled'}],[{mw:6,score:{spurs:1,opponent:1}}]);
 assert.equal(joined[0].score,'1-1','completed result must populate the fixture score');
 assert.equal(joined[0].status,'completed','completed result must expose a final status');
+const leeds=context.api.PREMIER_LEAGUE_SCHEDULE.find(f=>f.mw===10);
+assert.equal(leeds.date,'2026-11-07T12:30:00Z','revised Leeds kickoff must be the verified UTC instant');
+assert.equal(leeds.verified,true);
+const next={opponent:'Ipswich Town',date:'2026-11-21T15:00:00Z',score:null};
+const before=new Date('2026-11-07T12:29:59Z');
+const during=new Date('2026-11-07T12:30:01Z');
+const selectedBefore=selectNextMatch([leeds,next],before);
+assert.equal(selectedBefore.opponent,'Leeds United');
+assert.equal(countdownTargetMs(selectedBefore)-before.getTime(),1000,'pre-match countdown uses revised kickoff');
+assert.equal(matchDisplayState(selectedBefore,before),'upcoming');
+const selectedDuring=selectNextMatch([leeds,next],during);
+assert.equal(selectedDuring.opponent,'Leeds United','kickoff must not roll the fixture away');
+assert.equal(getNextMatch(during).opponent,'Leeds United','live dashboard must keep Leeds selected');
+assert.equal(matchDisplayState(selectedDuring,during),'underway','post-kickoff state must suppress countdown');
+assert.equal(matchDisplayState(selectedDuring,new Date('2026-11-07T17:00:00Z')),'awaiting-result','late provider data must not imply play continues');
+assert.equal(matchDisplayState({...selectedDuring,status:'delayed'},during),'delayed','confirmed delay must not claim match is underway');
+assert.equal(selectNextMatch([{...leeds,score:'2-1',status:'completed'},next],during).opponent,'Ipswich Town','verified final result advances next fixture');
+assert.equal(selectNextMatch([{...leeds,status:'postponed'},next],during).opponent,'Ipswich Town','terminal postponement advances next fixture');
 console.log('PASS: verified next-fixture selection, status/competition validation, SGT conversion, countdown identity and rollover.');
