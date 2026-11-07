@@ -1281,6 +1281,136 @@ export const LEAGUE_MATCHES = [
         "source": "https://www.espn.com/soccer/match/_/gameId/401878761"
       }
     ]
+  },
+  {
+    "mw": 10,
+    "opponent": "Leeds United",
+    "venue": "A",
+    "date": "2026-11-07T12:30:00Z",
+    "score": {
+      "spurs": 0,
+      "opponent": 1
+    },
+    "sourceEventId": "401878758",
+    "sources": [
+      "https://www.espn.com/soccer/match/_/gameId/401878758"
+    ],
+    "appearances": [
+      {
+        "player": "Antonín Kinsky",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Micky van de Ven",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Jan Paul van Hecke",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Andy Robertson",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Pedro Porro",
+        "started": true,
+        "on": 0,
+        "off": 65
+      },
+      {
+        "player": "Mateus Fernandes",
+        "started": true,
+        "on": 0,
+        "off": 65
+      },
+      {
+        "player": "Archie Gray",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Sandro Tonali",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Omar Marmoush",
+        "started": true,
+        "on": 0,
+        "off": 65
+      },
+      {
+        "player": "Mathys Tel",
+        "started": true,
+        "on": 0,
+        "off": 43
+      },
+      {
+        "player": "Mohammed Kudus",
+        "started": true,
+        "on": 0,
+        "off": 83
+      },
+      {
+        "player": "Rodrigo Bentancur",
+        "started": false,
+        "on": 65,
+        "off": 90
+      },
+      {
+        "player": "Luca Williams-Barnett",
+        "started": false,
+        "on": 83,
+        "off": 90
+      },
+      {
+        "player": "Dejan Kulusevski",
+        "started": false,
+        "on": 65,
+        "off": 90
+      },
+      {
+        "player": "Conor Gallagher",
+        "started": false,
+        "on": 65,
+        "off": 90
+      },
+      {
+        "player": "Dominic Solanke",
+        "started": false,
+        "on": 43,
+        "off": 90
+      }
+    ],
+    "unused": [
+      "Ben Davies",
+      "James Maddison",
+      "Luca Gunter",
+      "Marcos Senesi"
+    ],
+    "goals": [
+      {
+        "team": "opponent",
+        "scorer": "Noah Okafor",
+        "assist": null,
+        "minute": 79,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401878758"
+      }
+    ]
   }
 ];
 
