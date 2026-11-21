@@ -1,7 +1,7 @@
 // 2026/27 Premier League. The complete table is refreshed from structured
 // standings data as results arrive across each multi-day matchweek.
 export const STANDINGS = [
-  {pos:1,team:"Arsenal",w:9,d:0,l:1,gf:15,ga:5,gd:10,pts:27},
+  {pos:1,team:"Arsenal",w:9,d:1,l:1,gf:17,ga:7,gd:10,pts:28},
   {pos:2,team:"Brighton & Hove Albion",w:7,d:1,l:2,gf:26,ga:7,gd:19,pts:22},
   {pos:3,team:"Manchester City",w:7,d:1,l:3,gf:22,ga:14,gd:8,pts:22},
   {pos:4,team:"AFC Bournemouth",w:5,d:3,l:3,gf:18,ga:14,gd:4,pts:18},
@@ -12,7 +12,7 @@ export const STANDINGS = [
   {pos:9,team:"Tottenham Hotspur",w:4,d:3,l:4,gf:12,ga:11,gd:1,pts:15,isSpurs:true},
   {pos:10,team:"Brentford",w:3,d:5,l:2,gf:16,ga:11,gd:5,pts:14},
   {pos:11,team:"Aston Villa",w:3,d:5,l:3,gf:14,ga:17,gd:-3,pts:14},
-  {pos:12,team:"Newcastle United",w:3,d:3,l:4,gf:13,ga:16,gd:-3,pts:12},
+  {pos:12,team:"Newcastle United",w:3,d:4,l:4,gf:15,ga:18,gd:-3,pts:13},
   {pos:13,team:"Coventry City",w:4,d:0,l:7,gf:13,ga:21,gd:-8,pts:12},
   {pos:14,team:"Hull City",w:2,d:5,l:3,gf:11,ga:11,gd:0,pts:11},
   {pos:15,team:"Fulham",w:2,d:5,l:4,gf:11,ga:13,gd:-2,pts:11},
