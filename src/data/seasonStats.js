@@ -1411,6 +1411,146 @@ export const LEAGUE_MATCHES = [
         "source": "https://www.espn.com/soccer/match/_/gameId/401878758"
       }
     ]
+  },
+  {
+    "mw": 11,
+    "opponent": "Ipswich Town",
+    "venue": "H",
+    "date": "2026-11-21T15:00:00Z",
+    "score": {
+      "spurs": 2,
+      "opponent": 0
+    },
+    "sourceEventId": "401878754",
+    "sources": [
+      "https://www.espn.com/soccer/match/_/gameId/401878754"
+    ],
+    "appearances": [
+      {
+        "player": "Antonín Kinsky",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Marcos Senesi",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Jan Paul van Hecke",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Destiny Udogie",
+        "started": true,
+        "on": 0,
+        "off": 79
+      },
+      {
+        "player": "Pedro Porro",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "James Maddison",
+        "started": true,
+        "on": 0,
+        "off": 64
+      },
+      {
+        "player": "Mateus Fernandes",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Conor Gallagher",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Dominic Solanke",
+        "started": true,
+        "on": 0,
+        "off": 64
+      },
+      {
+        "player": "Luca Williams-Barnett",
+        "started": true,
+        "on": 0,
+        "off": 64
+      },
+      {
+        "player": "Mohammed Kudus",
+        "started": true,
+        "on": 0,
+        "off": 90
+      },
+      {
+        "player": "Lucas Bergvall",
+        "started": false,
+        "on": 64,
+        "off": 90
+      },
+      {
+        "player": "Archie Gray",
+        "started": false,
+        "on": 90,
+        "off": 90
+      },
+      {
+        "player": "Andy Robertson",
+        "started": false,
+        "on": 79,
+        "off": 90
+      },
+      {
+        "player": "Omar Marmoush",
+        "started": false,
+        "on": 64,
+        "off": 90
+      },
+      {
+        "player": "Sávio",
+        "started": false,
+        "on": 64,
+        "off": 90
+      }
+    ],
+    "unused": [
+      "Dejan Kulusevski",
+      "Micky van de Ven",
+      "Rodrigo Bentancur",
+      "Martin Dúbravka"
+    ],
+    "goals": [
+      {
+        "team": "spurs",
+        "scorer": "Luca Williams-Barnett",
+        "assist": "Pedro Porro",
+        "minute": 15,
+        "stoppage": null,
+        "period": "H1",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401878754"
+      },
+      {
+        "team": "spurs",
+        "scorer": "Dominic Solanke",
+        "assist": null,
+        "minute": 51,
+        "stoppage": null,
+        "period": "H2",
+        "order": null,
+        "source": "https://www.espn.com/soccer/match/_/gameId/401878754"
+      }
+    ]
   }
 ];
 

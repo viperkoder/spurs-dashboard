@@ -12,12 +12,13 @@
     "2026-10-10T17:30:00+01:00|Manchester United|Premier League",
     "2026-10-19T20:00:00+01:00|Coventry City|Premier League",
     "2026-10-31T15:00:00|Crystal Palace|Premier League",
-    "2026-11-07T12:30:00Z|Leeds United|Premier League"
+    "2026-11-07T12:30:00Z|Leeds United|Premier League",
+    "2026-11-21T15:00:00Z|Ipswich Town|Premier League"
   ],
   "lastProcessed": {
-    "fixture": "2026-11-07T12:30:00Z|Leeds United|Premier League",
-    "eventId": "401878758",
-    "at": "2026-11-07T14:41:15.377Z",
+    "fixture": "2026-11-21T15:00:00Z|Ipswich Town|Premier League",
+    "eventId": "401878754",
+    "at": "2026-11-21T19:13:37.346Z",
     "reconciliation": "structured-evidence"
   }
 }
