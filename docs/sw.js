@@ -2,12 +2,12 @@
 // Strategy: network-first for navigation/app-shell requests so a completed
 // match deployment is visible immediately, with cache fallback for offline
 // use. Other requests also try the network before their cached fallback.
-// CACHE_NAME is auto-versioned by build.js on every build (see mwz6qqke
+// CACHE_NAME is auto-versioned by build.js on every build (see mwzul7oi
 // below) — this used to be a static string that never changed, meaning the
 // browser could never detect a new deploy and kept serving old cached
 // index.html indefinitely. Now every `node build.js` run bakes in a fresh
 // timestamp, so returning visitors always pick up the latest build.
-const CACHE_NAME = 'thfc-dashboard-mwz6qqke';
+const CACHE_NAME = 'thfc-dashboard-mwzul7oi';
 const SHELL_FILES = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (event) => {
